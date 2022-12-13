@@ -1,0 +1,36 @@
+{% extends '::base.html.twig' %}
+
+{% block pagecontent %}
+
+<div id='form'>
+
+{{ form_start(form,{'attr': {'id':'formReportes', 'name':'formReportes'} } ) }}
+	{{ form_widget(form.filtro, {
+        'attr': {
+            'class': 'form-control select2',
+            'onChange':'javascript:FormActions.optionFilter();',            
+        }
+    }) }}
+
+    {{ form_widget(form.option, {    	
+        'attr': {        	
+            'class': 'form-control select2'
+        }
+    }) }}
+
+{{ form_end(form) }}
+
+</div>
+
+
+<script src="{{asset('js/Reportes/FormActions.js')}}" type="text/javascript"></script>
+<script type="text/javascript">    
+        var routesReportes = {
+            myroutes:{
+              Seleccion:"{{ path('reportes_reportes_seleccion') }}",              
+            },
+        };
+</script>
+
+
+{% endblock %}

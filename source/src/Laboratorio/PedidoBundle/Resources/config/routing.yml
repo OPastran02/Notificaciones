@@ -1,0 +1,115 @@
+laboratorio_pedido_tablapedido:
+  path:     laboratorio/pedido
+  defaults: { _controller: LaboratorioPedidoBundle:Pedido:tablaPedidoPage}
+
+laboratorio_pedido_tablapedidodata:
+  path:     laboratorio/tablapedido
+  defaults: { _controller: LaboratorioPedidoBundle:Pedido:tablaPedido}
+
+laboratorio_pedido_excelpedido:
+  path:     laboratorio/excelpedido
+  defaults: { _controller: LaboratorioPedidoBundle:Pedido:excelPedido}
+
+laboratorio_pedido_pedido:
+  path:     laboratorio/pedido/{id}/{idEstablecimiento}
+  defaults: { _controller: LaboratorioPedidoBundle:Pedido:pedido, id:0,idEstablecimiento:0 }
+
+laboratorio_pedido_autorizar_pedido:
+  path:     laboratorio/autorizar/pedido/{id}/{numeroMuestra}
+  defaults: { _controller: LaboratorioPedidoBundle:Pedido:autorizarPedido }
+
+laboratorio_pedido_anular_pedido:
+  path:     laboratorio/anular/pedido/{id}
+  defaults: { _controller: LaboratorioPedidoBundle:Pedido:anularPedido }
+
+laboratorio_pedido_eliminar_pedido:
+  path:     laboratorio/eliminar/pedido/{id}
+  defaults: { _controller: LaboratorioPedidoBundle:Pedido:eliminarPedido }
+
+laboratorio_pedido_tablamuestra:
+  path:     laboratorio/muestrainicio
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:tablaMuestraPage}
+
+laboratorio_pedido_muestra:
+  path:     laboratorio/muestra/{idMuestra}/{idArea}
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:muestra}
+
+laboratorio_pedido_muestra_area:
+  path:     laboratorio/muestra/areaNoParticipa
+  defaults:  { _controller: LaboratorioPedidoBundle:Muestra:areaNoParticipante }
+
+laboratorio_pedido_muestraderivador:
+  path:     laboratorio/muestraderivador/{idMuestra}
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:derivadorMuestra}
+
+laboratorio_pedido_tablamuestradata:
+  path:     laboratorio/tablamuestra
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:tablaMuestra}
+
+laboratorio_pedido_excelmuestra:
+  path:     laboratorio/excelmuestra
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:excelMuestra}
+
+laboratorio_pedido_supervisar_muestra:
+  path:     laboratorio/supervisar/muestra/{idMuestra}
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:supervisar}
+
+laboratorio_pedido_des_supervisar_muestra:
+  path:     laboratorio/dessupervisar/muestra/{idMuestra}
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:desSupervisar}
+
+laboratorio_pedido_autorizar_muestra:
+  path:     laboratorio/autorizar/muestra/{idMuestra}
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:autorizar}
+
+laboratorio_pedido_des_autorizar_muestra:
+  path:     laboratorio/desautorizar/muestra/{idMuestra}
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:desAutorizar}
+
+laboratorio_pedido_finalizar_muestra:
+  path:     laboratorio/finalizar/muestra/{idMuestra}/{idArea}
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:finalizarMuestra}
+
+laboratorio_pedido_des_finalizar_muestra:
+  path:     laboratorio/desfinalizar/muestra/{idMuestra}/{idArea}
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:desFinalizarMuestra}
+
+laboratorio_pedido_bloqueo_muestra:
+  path:     laboratorio/resultado/muestra/bloqueo/{idResultado}/{bloquear}
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:bloquearResultado}
+
+laboratorio_pedido_protocolo_intermedio:
+  path:     laboratorio/protocoloIntermedio/{idMuestra}/{idArea}
+  defaults: { _controller: LaboratorioPedidoBundle:Protocolo:protocoloIntermedio}
+
+laboratorio_pedido_protocolo_index:
+  path:     laboratorio/indexProtocolo
+  defaults: { _controller: LaboratorioPedidoBundle:Protocolo:indexProtocolo}
+
+laboratorio_pedido_protocolo_protocolo1:
+  path:     laboratorio/protocolo1/{idMuestra1}/{idMuestra2}/{idMuestra3}/{idMuestra4}/{idMuestra5}/{idMuestra6}
+  defaults: { _controller: LaboratorioPedidoBundle:Protocolo:protocolo1, idMuestra1:0, idMuestra2:0, idMuestra3:0, idMuestra4:0, idMuestra5:0, idMuestra6:0 }
+
+laboratorio_pedido_protocolo_protocolo:
+  path:     laboratorio/protocolo/{idMuestra}/{ausenciaGerente}
+  defaults: { _controller: LaboratorioPedidoBundle:Protocolo:protocoloAguas }
+
+laboratorio_pedido_decidir_autorizacion_pedido:
+  path:     laboratorio/decidirAutorizacion/pedido
+  defaults: { _controller: LaboratorioPedidoBundle:Pedido:decidirAutorizacion }
+
+laboratorio_pedido_premuestreo:
+  path:     laboratorio/premuestreo
+  defaults: { _controller: LaboratorioPedidoBundle:Pedido:premuestreo }
+
+laboratorio_pedido_crear_premuestra:
+  path:     laboratorio/crear/premuestra/{numeroMuestra}/{fechaMuestra}/{idPrograma}
+  defaults: { _controller: LaboratorioPedidoBundle:Pedido:crearPremuestra }
+
+laboratorio_pedido_muestra_pendientes:
+  path:     laboratorio/muestraspendientes/{anio}
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:pendientes }
+
+laboratorio_pedido_muestra_todas_pendientes:
+  path:     laboratorio/autorizartodaslaspendientes
+  defaults: { _controller: LaboratorioPedidoBundle:Muestra:autorizarTodasLasPendientes }

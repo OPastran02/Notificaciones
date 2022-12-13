@@ -1,0 +1,30 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
+security:
+    firewalls:
+        frontend:
+            pattern:    ^/
+            #provider:   usuarios
+            anonymous:   ~
+            #form_login:
+            #    login_path: usuario_usuario_login
+            #    check_path: usuario_usuario_login_check
+            #    remember_me: true
+            #    default_target_path: home_home_homepage
+            #    always_use_default_target_path: true
+            logout:
+                handlers: [AppBundle_Logout]
+                path:   /logout
+            guard:
+                authenticators:
+                    - AppBundle\Security\ASIAuthenticator
+    access_control:
+        # (SEPARÉ Y ORDENÉ TODO POR BUNDLES Y LO ORDENÉ POR COMO ESTÁN DISPUESTAS LAS RUTAS EN EL ROUTING ↓)
+        ####ESTABLECIMIENTOS
+        
+    providers:
+        usuarios:
+            entity: { class: Usuario\UsuarioBundle\Entity\Usuarios, property: usuario }
+
+    encoders:
+        Usuario\UsuarioBundle\Entity\Usuarios: bcrypt

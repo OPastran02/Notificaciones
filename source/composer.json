@@ -1,0 +1,80 @@
+{
+    "name": "luciano.luna/notificaciones",
+    "license": "proprietary",
+    "type": "project",
+    "config": {
+        "platform-check": false
+    },
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        },
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.2",
+        "symfony/symfony": "^3.4",
+        "doctrine/orm": "^2.5",
+        "doctrine/doctrine-bundle": "^1.10",
+        "doctrine/doctrine-cache-bundle": "^1.4",
+        "symfony/swiftmailer-bundle": "^2.6",
+        "symfony/monolog-bundle": "^3.6",
+        "symfony/polyfill-apcu": "^1.22",
+        "sensio/distribution-bundle": "^5.0",
+        "sensio/framework-extra-bundle": "^3.0.2",
+        "incenteev/composer-parameter-handler": "^2.1",
+        "jms/serializer-bundle": "^2.4",
+        "liuggio/excelbundle": "^2.1",
+        "phpoffice/phpexcel": "^1.8",
+        "knplabs/knp-snappy-bundle": "^1.7",
+        "wemersonjanuario/wkhtmltopdf-windows": "0.12.2.3",
+        "php-64bit": ">=5.3.9",
+        "friendsofsymfony/rest-bundle": "^2.4",
+        "nelmio/cors-bundle": "^1.5",
+        "cmen/google-charts-bundle": "^3.1",
+        "rguedes/pdfmerger": "^1.0",
+        "xthiago/pdf-version-converter": "dev-master",
+        "google/recaptcha": "^1.2",
+        "h4cc/wkhtmltopdf-amd64": "0.12.4",
+        "knpuniversity/oauth2-client-bundle": "v1",
+        "aws/aws-sdk-php-symfony": "~2.0",
+        "aws/aws-sdk-php": "^3.223",
+        "firebase/php-jwt": "^6.2",
+        "oneup/flysystem-bundle": "^3.7",
+        "league/flysystem-aws-s3-v3": "~1.0"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "^3.4",
+        "sensio/generator-bundle": "^3.1"
+    },
+    "scripts": {
+        "symfony-scripts": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+        ],
+        "post-install-cmd": [
+            "@symfony-scripts"
+        ],
+        "post-update-cmd": [
+            "@symfony-scripts"
+        ]
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-bin-dir": "bin",
+        "symfony-var-dir": "var",
+        "symfony-web-dir": "web",
+        "symfony-tests-dir": "tests",
+        "symfony-assets-install": "relative"
+    },
+    "description": "SIGA"
+}

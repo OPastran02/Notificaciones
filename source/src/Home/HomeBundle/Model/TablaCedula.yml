@@ -1,0 +1,125 @@
+# TIPOS DE ARGUMENTOS QUE SE PUEDEN PASAR
+
+################
+# OBLIGATORIOS #
+################
+# campo: nombre de la columna, tiene que ser exacto
+# tipo:  tipo de columna puede ser Integer,String,Date,DateTime,Boolean
+
+###############
+# IMPORTANTES #
+###############
+# componente: Tipo de componente que se podra ver en la columna, puede ser Button,Ahref,Select2
+# date_format: Formato de la fecha en el caso que tipo de campo Fecha
+# tipoBoton: tipo de boton, submit o boton
+# attr: atributo del campo, puede ser hidden,disable,readonly
+# ruta: ruta a donde puede ir el Ahref, Button, o Select2
+# javascript: funcion de javascript que puede tener el boton o select2
+# argumentos: argumentos que puede tener la funcion javascript 
+
+################
+# SECUNDARIOS  #
+################
+# color: color de la letra o del boton
+# background-color:  color del fondo de la letra
+# font-family: tipo de letra
+# font-size: tamaño de letra
+# text-align: alineacion de la letra
+# padding: tamaño de los bordes
+# icono: icono del boton, consultar symfony
+# titulo: titulo del boton
+
+########################################
+NotificacionesNotificacionesBundle:Cedula c:
+    1:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                aHref
+            color:
+                blue-soft
+            titulo:
+                "ver"
+            ruta:
+                cedula
+            argumentos:
+                c.id
+            extra:
+                '<div class="btn-group col-md-12"><a class="btn btn-circle btn-outline btn-block sbold uppercase yellow" target="_blank" href="pdfcedula/verpdf/--arg--"><i class="fa fa-file-text-o"></i>Pdf Cédula</a></div>'
+            extraArg:
+                c.numero
+            decodificar:
+                si
+    2:
+        1: 
+            campo:
+                numero
+            tipo:
+                Integer
+
+unBundle:tipo tc:
+    3:
+        1:
+            campo:
+                TipoCedula
+            tipo:
+                String
+
+dosBundle:notificacion n:
+    4:
+        1:
+            campo:
+                fecha_notificacion
+            tipo:
+                Date
+
+    5:
+        1:
+            campo:
+                direccion_notificada
+            tipo:
+                String
+    6:
+        1:
+            campo:
+                comuna_notificada
+            tipo:
+                Integer
+    7:
+        1:
+            campo:
+                nocturnidad
+            tipo:
+                String
+tresBundle:estado e:
+    8:
+        1:
+            campo:
+                estado
+            tipo:
+                String
+
+cuatroBudnle:notificador u:
+    9:
+        1:
+            campo:
+                notificador
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                CONCAT(u.apellido,', ',u.nombre)
+    10:
+        1:
+            campo:
+                comuna
+            tipo:
+                Integer
+            tieneAlias:
+                no
+            nombreAlias:
+                d.comuna

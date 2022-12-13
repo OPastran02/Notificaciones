@@ -1,0 +1,199 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+	
+	{{ parent() }}
+
+	{# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+
+	{# SELECT2 #}
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+	{# TOASTR NOTIFICATIONS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
+
+   <!--DATEPICKER-->
+    <link href="{{ asset('public/assets/layouts/layout/css/datepicker.css')}}" rel="stylesheet" type="text/css">   
+
+{% endblock %}
+
+{% block pagecontent %}
+
+	{% for flash_message in app.session.flashBag.get('success') %}
+	    <input class="successFlashMessage" value="{{ flash_message }}" hidden>
+	{% endfor %}
+
+	{% for flash_message in app.session.flashBag.get('alert') %}
+	    <input class="alertFlashMessage" value="{{ flash_message }}" hidden>
+	{% endfor %}
+
+	{% for flash_message in app.session.flashBag.get('error') %}
+	    <input class="errorFlashMessage" value="{{ flash_message }}" hidden>
+	{% endfor %}
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-yellow">
+                        <span aria-hidden="true" class="icon-note font-yellow"></span>
+                        <span class="caption-subject bold uppercase">
+                            Envío a Boldt
+                        </span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+
+                    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'id': 'remitoForm', 'action': path('faltas_faltas_renitoActas') } }) }}
+
+                        <div class="form-group form-md-line-input has-info">
+
+                            <div class="col-md-2"> </div>
+
+                            {{ form_label(form.fechaInicial, 'F. inicial', {
+                                'label_attr': {
+                                    'class': 'col-md-1 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+                            <div class="col-md-2">
+                                <div class="input-icon">
+                                    {{ form_widget(form.fechaInicial, {
+                                        'attr': {
+                                            'name': 'fechaInicial',
+                                            'id': 'fechaInicial',
+                                            'class': 'form-control fecha-picker',
+                                            'placeholder': 'Fecha inicial',
+                                            'type': 'text'
+                                        }
+                                    }) }}
+                                    <div class="form-control-focus"> </div>
+                                    <span class="help-block">
+                                        ingrese fecha inicial
+                                    </span>
+                                    <i class="fa fa-calendar"></i>
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.fechaInicial) }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1"> </div>
+
+                            {{ form_label(form.fechaFinal, 'F. final', {
+                                'label_attr': {
+                                    'class': 'col-md-1 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+                            <div class="col-md-2">
+                                <div class="input-icon">
+                                    {{ form_widget(form.fechaFinal, {
+                                        'attr': {
+                                            'name': 'fechaFinal',
+                                            'id': 'fechaFinal',
+                                            'class': 'form-control fecha-picker',
+                                            'placeholder': 'Fecha final',
+                                            'type': 'text'
+                                        }
+                                    }) }}
+                                    <div class="form-control-focus"> </div>
+                                    <span class="help-block">
+                                        ingrese fecha final
+                                    </span>
+                                    <i class="fa fa-calendar"></i>
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.fechaFinal) }}
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group form-md-line-input has-info">
+
+                            <div class="col-md-2"></div>
+
+                            {{ form_label(form.areas, 'Áreas', {
+                                'label_attr': {
+                                    'class': 'col-md-1 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+                            <div class="col-md-2">
+                                {{ form_widget(form.areas, {
+                                    'attr': {
+                                        'name': 'areas',
+                                        'id': 'areas',
+                                        'class': 'form-control select2'
+                                    }
+                                }) }}
+                                <span class="help-block help-block-error" style="color: red;">
+                                    {{ form_errors(form.areas) }}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <div class="col-md-offset-5">
+                                <button type="button" data-loading-text="Loading..." class="btn blue mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" onClick="javascript:Actas.buscarRemitos();">
+                                    <span class="ladda-label">
+                                        Buscar
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                    {{ form_end(form) }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ----------- #}
+
+    <div id="dragon" name="dragon">
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+	{{ parent() }}
+	
+	<script src="{{ asset('Js/Faltas/FaltasBundle/Actas.js') }}" type="text/javascript"></script>
+	<script type="text/javascript">
+        var routesActa = {
+            myroutes:{
+                gif: "{{ asset('public/assets/global/img/loading-spinner-grey.gif') }}",
+            },
+        };
+        jQuery(document).ready(function() {                                        
+           $('.fecha-picker').datepicker({ dateFormat: "dd-mm-yy" });
+        });
+    </script>
+
+    {# ↓ LO USO PARA OPERAR CON LAS FECHAS EN EL JS #}
+    {#<script src="http://momentjs.com/downloads/moment.min.js"></script>#}
+    <script src="{{ asset('public/assets/global/plugins/moment.min.js') }}" type="text/javascript"></script>
+
+    {# SPINNER BUTTONS #}
+    <script src="{{ asset('public/assets/global/plugins/ladda/spin.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/ladda/ladda.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-buttons.min.js') }}" type="text/javascript"></script>
+
+    {# SELECT2 #}
+    <script src="{{ asset('public/assets/global/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/components-select2.min.js') }}" type="text/javascript"></script>
+
+    {# TOASTR NOTIFICATIONS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('Js/CoreBundle/ui-toastr.js') }}" type="text/javascript"></script>
+
+{% endblock %}

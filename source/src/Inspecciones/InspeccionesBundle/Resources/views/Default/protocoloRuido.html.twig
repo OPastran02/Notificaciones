@@ -1,0 +1,974 @@
+{# acordarse de poner la ruta de twig en app/config.yml #}
+
+<hr style="page-break-after:always;">
+
+<div align="center">
+		<strong>ANEXO II: PROTOCOLO DE MEDICIONES DE NIVELES SONOROS</strong>
+</div>
+<br>
+
+<hr>	
+<div align="center">
+		DATOS DEL INSTRUMENTO
+</div>
+<hr>
+<br>
+
+<div style="text-align: justify; font-size: 15px; ">
+	<label ><b>Marca de instrumento de medición:</b></label>
+	<label >{{ruidos.medidorMarca}}</label>
+	<label ><b>Modelo:</b></label>
+	<label >{{ruidos.medidorModelo}}</label>
+	<label ><b>Serie:</b></label>
+	<label >{{ruidos.medidorSerie}}</label>
+	<label ><b>Clase:</b></label>
+	<label >{{ruidos.medidorClase}}</label>
+</div>
+<div style="text-align: justify; font-size: 15px; ">
+	<label ><b>Valor mínimo del rango de medición:</b></label>
+	<label >..................</label>
+	<label ><b>Error:</b></label>
+	<label >..................</label>
+</div>
+
+<br>
+<div style="text-align: justify; font-size: 15px; ">
+
+		<label><b>Marca de instrumento de calibración:</b><label>
+		<label>{{ruidos.calibradorMarca}}</label>
+		<label><b>Serie:</b><label>
+		<label>{{ruidos.calibradorSerie}}<label>
+		<label><b>Clase:</b><label>
+		<label>{{ruidos.calibradorClase}}<label>
+</div>
+<div style="text-align: justify; font-size: 15px; ">
+	
+		<label><b>Valor inicial (dB):</b><label>
+		<label>{{ruidos.367.respuesta}}<label>
+		<label><b>Hora</b><label>
+		<label>{{ruidos.368.respuesta}}<label>
+		<label><b>Valor final (dB):</b><label>
+		<label>{{ruidos.369.respuesta}}<label>
+		<label><b>Hora</b><label>
+		<label>{{ruidos.370.respuesta}}<label>
+</div>
+<br>
+<hr>	
+<div align="center">
+		MEDICIONES DE INMISIÓN DE RUIDOS AL AMBIENTE INTERIOR
+</div>
+<hr>
+<br>
+<div style="text-align: justify; font-size: 15px; ">
+		<label><b>LMP's:</b><label>
+		{% if ruidos.373.respuesta|first == "R" and ruidos.373.respuesta|last != ")" %}
+			<label>{{ruidos.LmpHI}} dBA o LF+7dBA</label>
+		{% else %}
+			<label>{{ruidos.LmpHI}} dBA</label>
+		{% endif %}
+		<label><b>ASA TIPO</b><label>
+		<label>{{ruidos.interiorAsaTipo}}<label>
+		<label><b>HORARIO:</b><label>
+		<label>{{ruidos.372.respuesta}}<label>
+		<label><b>ZONIFICACION:</b><label>
+		<label>{{ruidos.373.respuesta}}<label>
+</div>
+<div style="text-align: justify; font-size: 15px; ">
+	<label><b>USO DEL RECINTO: </b><label>Habitable
+</div>
+<br>
+<div style="text-align: justify; font-size: 15px; ">	
+		<label><b>LMP's:</b><label>
+		{% if ruidos.373.respuesta|first == "R" and ruidos.373.respuesta|last != ")" %}
+			<label>{{ruidos.LmpSI}} dBA o LF+7dBA</label>
+		{% else %}
+			<label>{{ruidos.LmpSI}} dBA</label>
+		{% endif %}
+		<label><b>ASA TIPO</b><label>
+		<label>{{ruidos.interiorAsaTipo}}<label>
+		<label><b>HORARIO:</b><label>
+		<label>{{ruidos.372.respuesta}}<label>
+		<label><b>ZONIFICACION:</b><label>
+		<label>{{ruidos.373.respuesta}}<label>
+</div>
+<div style="text-align: justify; font-size: 15px; ">
+	<label><b>USO DEL RECINTO: </b><label> Servicios
+</div>
+
+<br>
+<div align="center">
+		<b>MEDICION 1</b>
+</div>
+<table border="1" style="border: 1px solid black; border-collapse: collapse;">
+	<tr>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			FUENTE
+		</td>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			AMBIENTE
+		</td>					
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE ON
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LM</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE OFF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LF</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			LM - LF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			&Delta;
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LE</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L1</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L2</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L3</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L4</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L5</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L6</b></td>
+	</tr>
+	<tr>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.374.respuesta}}</td>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.375.respuesta}}</td>
+		{% if ruidos.IMedicion1 is defined %}
+    		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.L1}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.L2}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.L3}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.LM}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.L4}}</td>
+			<td align="center"  style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.L5}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.L6}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.LF}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.VARIACION}}</td>
+			<td align="center"style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.DELTA}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion1.LE}}</td>
+		{% else %}
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+		{% endif %}
+		
+	</tr>
+</table>
+<br>
+<br>
+<table style="width:100%;">
+	{% if ruidos.IMedicion1 is defined %}
+	<tr >
+		<td style="width:20%;">
+			<input type="radio" {% if ruidos.IMedicion1.METODO == 1 %}checked{% endif %}><b> LM - LF < 3</b>
+		</td>
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.IMedicion1.METODO == 2 %}checked{% endif %}> <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.IMedicion1.METODO == 3 %}checked{% endif %}> <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% else %}
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" ><b> LM - LF < 3</b>
+		</td>	
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% endif %}
+</table>
+
+<br>
+<div align="center">
+		<b>MEDICION 2</b>
+</div>
+<table border="1" style="border: 1px solid black; border-collapse: collapse;">
+	<tr>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			FUENTE
+		</td>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			AMBIENTE
+		</td>					
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE ON
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LM</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE OFF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LF</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			LM - LF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			&Delta;
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LE</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L1</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L2</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L3</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L4</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L5</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L6</b></td>
+	</tr>
+	<tr>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.384.respuesta}}</td>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.385.respuesta}}</td>
+		{% if ruidos.IMedicion2 is defined %}
+    		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.L1}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.L2}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.L3}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.LM}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.L4}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.L5}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.L6}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.LF}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.VARIACION}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.DELTA}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion2.LE}}</td>
+		{% else %}
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+		{% endif %}
+	</tr>
+</table>
+<br>
+<br>
+<table style="width:100%;">
+	{% if ruidos.IMedicion2 is defined %}
+	<tr>
+		<td >
+			<input type="radio" {% if ruidos.IMedicion2.METODO == 1 %}checked{% endif %}><b> LM - LF < 3</b>
+		</td>
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.IMedicion2.METODO == 2 %}checked{% endif %}> <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.IMedicion2.METODO == 3 %}checked{% endif %}> <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% else %}
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" ><b> LM - LF < 3</b>
+		</td>	
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% endif %}
+</table>
+
+<br>
+<div align="center">
+		<b>MEDICION 3</b>
+</div>
+<table border="1" style="border: 1px solid black; border-collapse: collapse;">
+	<tr>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			FUENTE
+		</td>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			AMBIENTE
+		</td>					
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE ON
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LM</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE OFF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LF</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			LM - LF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			&Delta;
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LE</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L1</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L2</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L3</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L4</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L5</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L6</b></td>
+	</tr>
+	<tr>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.394.respuesta}}</td>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.395.respuesta}}</td>
+		{% if ruidos.IMedicion3 is defined %}
+    		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.L1}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.L2}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.L3}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.LM}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.L4}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.L5}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.L6}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.LF}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.VARIACION}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.DELTA}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.IMedicion3.LE}}</td>
+		{% else %}
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+		{% endif %}
+	</tr>
+</table>
+<br>
+<br>
+<table style="width:100%;">
+	{% if ruidos.IMedicion3 is defined %}
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.IMedicion3.METODO == 1 %}checked{% endif %}><b> LM - LF < 3</b>
+		</td>
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.IMedicion3.METODO == 2 %}checked{% endif %}> <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.IMedicion3.METODO == 3 %}checked{% endif %}> <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% else %}
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" ><b> LM - LF < 3</b>
+		</td>	
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% endif %}
+</table>
+
+<br>
+
+
+
+<b>Según Decreto Reglamentario N° 740 - LEY N° 1.540, los niveles de evaluación sonora obtenidos en el procedimiento:</b>
+
+<br>
+<br>
+
+<div >
+	<input type="radio" {% if ruidos.resultadoI == 1 %}checked{% endif %}><b> SUPERA </b>
+	<br>
+	<input type="radio" {% if ruidos.resultadoI == 3 %}checked{% endif %}> <b> NO SUPERA </b>
+	<br>
+	<input type="radio" {% if ruidos.resultadoI == 2 %}checked{% endif %}> <b> NO EVALUABLE POR ENMASCARAMIENTO</b>
+</div>
+
+<br>
+<hr>
+<div style="page-break-after:always;" align="right">
+<label > ANEXO II: PROTOCOLO DE MEDICIONES DE NIVELES SONOROS. Página 1/2</label>
+</div>
+
+
+<hr>	
+<div align="center">
+		MEDICIONES SOBRE SISTEMAS DE AVISO ACÚSTICO
+</div>
+<hr>
+<br>
+
+<div style="text-align: justify; font-size: 15px; ">
+	<label ><b>LMP's:</b></label>
+	<label >70 dBa</label>
+	<label ><b>Medido a tres metros de distancia en la dirección de maxima emisión</b></label>	
+</div>
+<br>
+<div style="text-align: justify; font-size: 15px; ">
+	<label ><b>LE 1:</b></label>
+	<label >{{ruidos.404.respuesta}} dBa</label>
+	<label ><b>Sector: </b></label>
+	<label >{{ruidos.405.respuesta}} </label>
+</div>
+<br>
+<div style="text-align: justify; font-size: 15px; ">
+	<label ><b>LE 2:</b></label>
+	<label >{{ruidos.406.respuesta}} dBa</label>
+	<label ><b>Sector: </b></label>
+	<label >{{ruidos.407.respuesta}}</label>
+</div>
+<br>
+<br>
+<b>Los niveles de evaluación sonora obtenidos en el procedimiento
+
+{% if ruidos.AvisoAcusticoSupera == -1 %}
+    SUPERAN // NO SUPERAN
+{% endif %}
+{% if ruidos.AvisoAcusticoSupera == 1 %}
+    SUPERAN
+{% endif %}
+{% if ruidos.AvisoAcusticoSupera == 0 %}
+    NO SUPERAN
+{% endif %}
+
+
+los Límites Máximos Permisibles (LMP´s) establecidos. DECRETO REGLAMENTARIO N° 740 - LEY N° 1.540</b>
+<br>
+<br>
+
+<hr>	
+<div align="center">
+		MEDICIONES DE INMISIÓN DE RUIDOS AL AMBIENTE EXTERIOR
+</div>
+<hr>
+<br>
+<div style="text-align: justify; font-size: 15px; ">
+		<label><b>LMP's: </b><label>
+		<label>{{ruidos.LmpE}} dBA</label>
+		<label><b>ASAE TIPO</b><label>
+		<label>{{ruidos.exteriorAsaTipo}}<label>
+		<label><b>HORARIO:</b><label>
+		<label>{{ruidos.409.respuesta}}<label>
+		<label><b>ZONIFICACION:</b><label>
+		<label>{{ruidos.410.respuesta}}.<label>
+</div>
+<br>
+
+<br>
+<div align="center">
+		<b>MEDICION 1</b>
+</div>
+<table border="1" style="border: 1px solid black; border-collapse: collapse;">
+	<tr>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			FUENTE
+		</td>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			AMBIENTE
+		</td>					
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE ON
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LM</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE OFF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LF</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			LM - LF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			&Delta;
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LE</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L1</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L2</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L3</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L4</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L5</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L6</b></td>
+	</tr>
+	<tr>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.411.respuesta}}</td>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.412.respuesta}}</td>
+		{% if ruidos.EMedicion1 is defined %}
+    		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.L1}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.L2}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.L3}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.LM}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.L4}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.L5}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.L6}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.LF}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.VARIACION}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.DELTA}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion1.LE}}</td>
+		{% else %}
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+		{% endif %}
+	</tr>
+</table>
+<br>
+<br>
+<table style="width:100%;">
+	{% if ruidos.EMedicion1 is defined %}
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.EMedicion1.METODO == 1 %}checked{% endif %}><b> LM - LF < 3</b>
+		</td>
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.EMedicion1.METODO == 2 %}checked{% endif %}> <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.EMedicion1.METODO == 3 %}checked{% endif %}> <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% else %}
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" ><b> LM - LF < 3</b>
+		</td>	
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% endif %}
+</table>
+
+<br>
+<div align="center">
+		<b>MEDICION 2</b>
+</div>
+<table border="1" style="border: 1px solid black; border-collapse: collapse;">
+	<tr>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			FUENTE
+		</td>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			AMBIENTE
+		</td>					
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE ON
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LM</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE OFF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LF</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			LM - LF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			&Delta;
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LE</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L1</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L2</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L3</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L4</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L5</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L6</b></td>
+	</tr>
+	<tr>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.421.respuesta}}</td>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.422.respuesta}}</td>
+		{% if ruidos.EMedicion2 is defined %}
+    		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.L1}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.L2}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.L3}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.LM}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.L4}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.L5}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.L6}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.LF}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.VARIACION}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.DELTA}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion2.LE}}</td>
+		{% else %}
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+		{% endif %}
+	</tr>
+</table>
+<br>
+<br>
+<table style="width:100%;">
+	{% if ruidos.EMedicion2 is defined %}
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.EMedicion2.METODO == 1 %}checked{% endif %}><b> LM - LF < 3</b>
+		</td>
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.EMedicion2.METODO == 2 %}checked{% endif %}> <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.EMedicion2.METODO == 3 %}checked{% endif %}> <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% else %}
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" ><b> LM - LF < 3</b>
+		</td>	
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% endif %}
+</table>
+
+<br>
+<div align="center">
+		<b>MEDICION 3</b>
+</div>
+<table border="1" style="border: 1px solid black; border-collapse: collapse;">
+	<tr>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			FUENTE
+		</td>
+		<td style="width:25%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			AMBIENTE
+		</td>					
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE ON
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LM</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" colspan="3">
+			FUENTE OFF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LF</b>
+		</td>
+		<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			LM - LF
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			&Delta;
+		</td>
+		<td style="width:5%; text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;" rowspan="2">
+			<b>LE</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L1</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L2</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L3</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L4</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L5</b></td>
+		<td style="text-align: center; border: 1px solid black; border-collapse: collapse; padding: 5px;"><b>L6</b></td>
+	</tr>
+	<tr>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.431.respuesta}}</td>
+		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.432.respuesta}}</td>
+		{% if ruidos.EMedicion3 is defined %}
+    		<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.L1}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.L2}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.L3}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.LM}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.L4}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.L5}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.L6}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.LF}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.VARIACION}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.DELTA}}</td>
+			<td align="center" style="border: 1px solid black; border-collapse: collapse; padding: 5px;">{{ruidos.EMedicion3.LE}}</td>
+		{% else %}
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+			<td style="border: 1px solid black; border-collapse: collapse; padding: 5px;"></td>
+		{% endif %}
+	</tr>
+</table>
+<br>
+<br>
+<table style="width:100%;">
+	{% if ruidos.EMedicion3 is defined %}
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.EMedicion3.METODO == 1 %}checked{% endif %}><b> LM - LF < 3</b>
+		</td>
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.EMedicion3.METODO == 2 %}checked{% endif %}> <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" {% if ruidos.EMedicion3.METODO == 3 %}checked{% endif %}> <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% else %}
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" ><b> LM - LF < 3</b>
+		</td>	
+		<td >
+			<b>Ruidos NO EVALUABLES por existir enmascaramiento</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>3 &le; LM - LF < 10 </b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES con correción &Delta;</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="width:30%;">
+			<input type="radio" > <b>LM - LF &ge; 10</b>
+		</td>	
+		<td >
+			<b>Ruidos EVALUABLES sin correción</b>
+		</td>
+	</tr>
+	{% endif %}
+</table>
+
+<br>
+<br>
+
+<b>Según Decreto Reglamentario N° 740 - LEY N° 1.540, los niveles de evaluación sonora obtenidos en el procedimiento:</b>
+
+<br>
+<br>
+<div >
+	<input type="radio" {% if ruidos.resultadoE == 1 %}checked{% endif %}><b> SUPERA </b>
+	<br>
+	<input type="radio" {% if ruidos.resultadoE == 3 %}checked{% endif %}> <b> NO SUPERA </b>
+	<br>
+	<input type="radio" {% if ruidos.resultadoE == 2 %}checked{% endif %}> <b> NO EVALUABLE POR ENMASCARAMIENTO</b>
+</div>
+
+<br>
+
+<hr>
+<div style="page-break-after:always;" align="right">
+<label > ANEXO II: PROTOCOLO DE MEDICIONES DE NIVELES SONOROS. Página 2/2</label>
+</div>

@@ -1,0 +1,120 @@
+# TIPOS DE ARGUMENTOS QUE SE PUEDEN PASAR
+
+################
+# OBLIGATORIOS #
+################
+# campo: nombre de la columna, tiene que ser exacto
+# tipo:  tipo de columna puede ser Integer,String,Date,DateTime,Boolean
+
+###############
+# IMPORTANTES #
+###############
+# componente: Tipo de componente que se podra ver en la columna, puede ser Button,Ahref,Select2
+# date_format: Formato de la fecha en el caso que tipo de campo Fecha
+# tipoBoton: tipo de boton, submit o boton
+# attr: atributo del campo, puede ser hidden,disable,readonly
+# ruta: ruta a donde puede ir el Ahref, Button, o Select2
+# javascript: funcion de javascript que puede tener el boton o select2
+# argumentos: argumentos que puede tener la funcion javascript 
+
+################
+# SECUNDARIOS  #
+################
+# color: color de la letra o del boton
+# background-color:  color del fondo de la letra
+# font-family: tipo de letra
+# font-size: tamaño de letra
+# text-align: alineacion de la letra
+# padding: tamaño de los bordes
+# icono: icono del boton, consultar symfony
+# titulo: titulo del boton
+
+########################################
+InspeccionesInspeccionesBundle:OrdenInspeccion oi:
+    1:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                Button
+            color:
+                red-soft
+            titulo:
+                "Eliminar"
+            javascript:
+                MapaProgramacion.eliminarOrden
+            argumentos:
+                oi.id
+            icono:
+                fa fa-trash-o
+            decodificar:
+                si
+            extra:
+                <a class="btn btn-circle btn-outline btn-block sbold uppercase blue-soft" href="javascript:modaltablaprogramacionarea('--arg--');"><i class="fa fa-search"></i>Ver</a>
+            extraArg:
+                oi.id
+            encriptArg:
+                si
+            permisos:
+                ROLE_PROGRAMACION_EDIT
+    2:
+        1: 
+            campo:
+                id_sap
+            tipo:
+                String
+            tieneAlias:
+                no
+            extra:
+                '<input type="Text" class="form-control" id="id_sap--arg--" name="id_sap--arg--"></input>'
+            extraArg:
+                oi.id
+1Bundle:nombre no:
+    3:
+        1: 
+            campo:
+                nombre
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                nombre
+
+2Bundle:circuito ci:
+
+    4:
+        1: 
+            campo:
+                circuito
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                circuito
+
+3Bundle:direcciones di:
+    5:
+        1:
+            campo:
+                direcciones
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                direcciones
+4Bundle:inspeccion i:
+    6:
+        1: 
+            campo:
+                fecha_programado
+            tipo:
+                Date
+            tieneAlias:
+                no
+            nombreAlias:
+                fecha_programado

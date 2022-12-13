@@ -1,0 +1,7 @@
+###> parameters ###
+
+source/app/config/parameters.yml
+source/vendor
+source/var
+
+###< parameters ###

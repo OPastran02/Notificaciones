@@ -1,0 +1,79 @@
+#pagina donde estan los datos de la faja
+faltas_faltas_homepage:
+    path:     /fajas/datos/{id}
+    defaults: { _controller: FaltasFaltasBundle:Faja:datosFaja, id: 0 }
+#pagina donde esta la tabla de las fajas
+faltas_faltas_fajas:
+    path:     /fajas
+    defaults: { _controller: FaltasFaltasBundle:Faja:Fajas}
+#tabla de la faja
+faltas_faltas_tablaFajas:
+    path:     /tablafajas
+    defaults: { _controller: FaltasFaltasBundle:Faja:tablaFajas}
+
+faltas_faltas_excel_tabla_Fajas:
+    path:     /excelfajas
+    defaults: { _controller: FaltasFaltasBundle:Faja:excelFajas}
+
+faltas_faltas_datosAsignacionFaja:
+    path:     /asignacionfaja
+    defaults: { _controller: FaltasFaltasBundle:AsignacionFaja:asignacionFaja }
+
+faltas_faltas_asignacionFaja:
+    path:     /tablaAsignacion
+    defaults: { _controller: FaltasFaltasBundle:AsignacionFaja:tablaAsignacionFaja }
+
+faltas_faltas_excel_asignacionFaja:
+    path:     /excelAsignacion
+    defaults: { _controller: FaltasFaltasBundle:AsignacionFaja:exceltablaAsignacionFaja }
+
+faltas_faltas_fajasAsignadas:
+    path:     /fajasAsignadas/{id}
+    defaults: { _controller: FaltasFaltasBundle:AsignacionFaja:fajasAsignadas}
+##############
+#ACTAS
+############
+faltas_faltas_asignacionActas:
+    path:     /asignacionactas
+    defaults: { _controller: FaltasFaltasBundle:AsignacionActa:asignacionActas }
+
+faltas_faltas_actasasignadas:
+    path:     /actasAsignadas/{id}
+    defaults: { _controller: FaltasFaltasBundle:AsignacionActa:actasAsignadas}
+
+faltas_faltas_asignacionActas_tabla:
+    path:     /Asignacionactas/tabla
+    defaults: { _controller: FaltasFaltasBundle:AsignacionActa:tablaAsignacionActas }
+
+faltas_faltas_asignacionActas_excel:
+    path:     /Asignacionactas/excel
+    defaults: { _controller: FaltasFaltasBundle:AsignacionActa:excelAsignacionActas }
+
+faltas_faltas_actas:
+    path:     /actas
+    defaults: { _controller: FaltasFaltasBundle:Acta:actas }
+
+faltas_faltas_actas_tabla:
+    path:     /actas/tabla
+    defaults: { _controller: FaltasFaltasBundle:Acta:tablaActas }
+
+faltas_faltas_actas_excel:
+    path:     /actas/excel
+    defaults: { _controller: FaltasFaltasBundle:Acta:excelActas }
+
+faltas_faltas_datos_actas:
+    path:     /actas/datos/{id}
+    defaults: { _controller: FaltasFaltasBundle:Acta:datosActas, id: 0  }
+
+faltas_faltas_anular_actas:
+    path:     /actas/anular/{id}
+    defaults: { _controller: FaltasFaltasBundle:Acta:anularActa }
+##############
+#REmito
+############ 
+faltas_faltas_renitoActas:
+    path:     /remitoactas
+    defaults: { _controller: FaltasFaltasBundle:Acta:remitoActas }
+faltas_faltas_renitoActas_saveboldt:
+    path:     /remitoactas/saveBoldt/{cantidad}
+    defaults: { _controller: FaltasFaltasBundle:Acta:saveBoldt }

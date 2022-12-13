@@ -1,0 +1,345 @@
+{# SELECT2 #}
+<link href="{{ asset('public/assets/global/plugins/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('public/assets/global/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+   <!--DATEPICKER-->
+    <link href="{{ asset('public/assets/layouts/layout/css/datepicker.css')}}" rel="stylesheet" type="text/css">  
+
+
+{% if datos %}
+    <h5 align="center"><u>Establecimiento</u></h5>
+    <h6 align="center"><a target="_blank" href='{{ path("establecimiento_establecimiento_homepage", { "id" : datos.idEstalblecimiento|encriptar }) }}'>{{ datos.idEstalblecimiento }}</a></h6>
+
+    {% set direcciones = datos.direcciones|split('   ') %}
+    {% set direcciones = direcciones[:((direcciones|length)-1)] %}
+
+    {% if direcciones|length == 1 %}
+            <h5 align="center"><u>Dirección</u></h5>
+            <h6 align="center">{{ direcciones|first }}</h6>
+        {% else %}
+            <h5 align="center"><u>Direcciones</u></h5>
+            {% for d in direcciones %}
+                <h6 align="center">- {{ d }}</h6>
+            {% endfor %}
+    {% endif %}
+{% endif %}
+
+
+
+{{ form_start(form , { 'attr': {'class': 'form-horizontal', 'id': 'modalForm', 'name':'modalForm', 'action':path('inspecciones_inspecciones_edit' ,{'idOrderInspeccion' : form.vars.data.id|encriptar} )} }) }}
+
+<div class="form-group form-md-line-input has-info">
+    {{ form_label(form.checklist, 'CheckList', {
+        'label_attr': {
+            'class': 'col-md-2 control-label',
+            'style': 'color: grey;'
+        }
+    }) }}
+    <div class="col-md-3">
+        <div class="input-icon">
+            {{ form_widget(form.checklist, {
+                'attr': {
+                    'readonly':'readonly',
+                    'class': 'form-control',
+                    'placeholder': 'CheckList'
+                }
+            }) }}
+            <div class="form-control-focus"> </div>
+            <span class="help-block">
+                ingrese check
+            </span>
+            <i class="fa fa-check-square-o"></i>
+            <span class="help-block help-block-error" style="color: red;">
+                {{ form_errors(form.checklist) }}
+            </span>
+        </div>
+    </div>
+
+    {{ form_label(form.idSap, 'Id SAP', {
+        'label_attr': {
+            'class': 'col-md-2 control-label',
+            'style': 'color: grey;'
+        }
+    }) }}
+    <div class="col-md-4">
+        <div class="input-icon">
+            {{ form_widget(form.idSap, {
+                'attr': {
+                    'class': 'form-control',
+                    'placeholder': 'ID SAP'
+                }
+            }) }}
+            <div class="form-control-focus"> </div>
+            <span class="help-block">
+                ingrese id SAP
+            </span>
+            <i class="fa fa-cube"></i>
+            <span class="help-block help-block-error" style="color: red;">
+                {{ form_errors(form.idSap) }}
+            </span>
+        </div>
+    </div>
+
+</div>
+
+<div class="form-group form-md-line-input has-info">
+
+    {{ form_label(form.area, 'Área', {
+        'label_attr': {
+            'class': 'col-md-2 control-label',
+            'style': 'color: grey;'
+        }
+    }) }}
+    <div class="col-md-3">
+        {{ form_widget(form.area, {
+            'attr': {
+                'class': 'form-control select2'
+            }
+        }) }}
+        <span class="help-block help-block-error" style="color: red;">
+            {{ form_errors(form.area) }}
+        </span>
+    </div>
+
+    {{ form_label(form.circuito, 'Circuito', {
+        'label_attr': {
+            'class': 'col-md-2 control-label',
+            'style': 'color: grey;'
+        }
+    }) }}
+    <div class="col-md-4">
+        {{ form_widget(form.circuito, {
+            'attr': {
+                'class': 'form-control select2'
+            }
+        }) }}
+        <span class="help-block help-block-error" style="color: red;">
+            {{ form_errors(form.circuito) }}
+        </span>
+    </div>
+</div>
+
+<div class="form-group form-md-line-input has-info">
+    {{ form_label(form.inspecciones[0].fechaProgramado, 'Programado', {
+        'label_attr': {
+            'class': 'col-md-2 control-label',
+            'style': 'color: grey;'
+        }
+    }) }}
+    <div class="col-md-4">
+        <div class="input-icon">
+            {{ form_widget(form.inspecciones[0].fechaProgramado, {
+                'attr': {
+                    'class': 'form-control fecha-picker new-fecha-picker',
+                    'placeholder': 'Fecha'
+                }
+            }) }}
+            <div class="form-control-focus"> </div>
+            <span class="help-block">
+                ingrese fecha programacion
+            </span>
+            <i class="fa fa-calendar-check-o"></i>
+            <span class="help-block help-block-error" style="color: red;">
+                {{ form_errors(form.inspecciones[0].fechaProgramado) }}
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="form-group form-md-line-input has-info">
+    {{ form_label(form.inspecciones[0].inspectores, 'Inspectores', {
+        'label_attr': {
+            'class': 'col-md-2 control-label',
+            'style': 'color: grey;'
+        }
+    }) }}
+    <div class="col-md-9">
+        {{ form_widget(form.inspecciones[0].inspectores, {
+            'attr': {
+                'class': 'form-control select2'
+            }
+        }) }}
+        <span class="help-block help-block-error" style="color: red;">
+            {{ form_errors(form.inspecciones[0].inspectores) }}
+        </span>
+    </div>
+</div>
+
+{% if datos %}
+    <h5 align="center">No hay direcciones provisorias</h5>
+{% else  %}
+    <table class="table table-hover" id="direcciones" data-prototype="{{ form_widget(form.direcciones.vars.prototype)|e('html_attr') }}" style="empty-cells: hide;">
+        <thead>
+            <tr class="uppercase">
+                <th style="text-align: center; width: 5%">Calle</th>
+                <th style="text-align: center; width: 1%">Altura</th>
+                <th style="text-align: center; width: 1%">Piso</th>
+                <th style="text-align: center; width: 1%">Dpto</th>
+                <th style="text-align: center; width: 1%">Local</th>                
+                <th style="text-align: center; width: 1%"></th>
+            </tr>
+        </thead>
+
+        {# {{ dump(form.direcciones.children) }} #}
+
+        <tbody>
+            {% for direccion in form.direcciones %}
+                <tr class='listAdress'>
+                    <td>
+                         <input required="required" class="form-control input-sm" readonly="readonly" style="text-align: center;" value="{{ direccion.calle.vars.data.calle }}" type="text">
+                    </td>
+                    <td>
+                        {{ form_widget(direccion.altura, {
+                            'attr': {
+                                'class': 'form-control input-sm',
+                                'readonly': 'readonly'
+                            }
+                        }) }}
+                    </td>
+                    <td>
+                        {{ form_widget(direccion.piso, {
+                            'attr': {
+                                'class': 'form-control input-sm',
+                                'readonly':'readonly'
+                            }
+                        }) }}
+                    </td>
+                    <td>
+                        {{ form_widget(direccion.dpto, {
+                            'attr': {
+                                'class': 'form-control input-sm',
+                                'readonly':'readonly'
+                            }
+                        }) }}
+                    </td>
+                    <td>
+                        {{ form_widget(direccion.local, {
+                            'attr': {
+                                'class': 'form-control input-sm',
+                                'readonly':'readonly'
+                            }
+                        }) }}
+                    </td>                   
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+
+
+{{ form_widget(form.direcciones, {
+    'attr': {
+        'hidden': 'true'
+    }
+}) }}
+
+{{ form_end(form)}}
+
+
+{# SELECT2 #}
+<script src="{{ asset('public/assets/global/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('public/assets/pages/scripts/components-select2.min.js') }}" type="text/javascript"></script>
+
+
+<script>
+
+$(".modal-header").html('<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button><h4 class="modal-title">Full Width</h4>');
+
+//DIRECCIONES ↓
+
+var $collectionHolder;
+
+// setup an "add a tag" link
+var $addDireccionLink = $('<a href="javascript:;" id="newAdress" class="btn white btn-block"><i class="fa fa-plus"></i></a>');
+var $newLinkLi = $('<tr></tr>').append($addDireccionLink);
+
+$(document).ready(function(){
+    
+    // Get the ul that holds the collection of tags
+    $collectionHolder = $('table#direcciones');
+     // add the "add a tag" anchor and li to the tags ul
+    $collectionHolder.append($newLinkLi);
+    // add a delete link to all of the existing tag form li elements
+    $collectionHolder.find('.listAdress').each(function() {
+        addTagFormDeleteLink($(this));        
+    });
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+    $('#newAdress').on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();            
+        // add a new tag form (see next code block)
+        addAdressForm($collectionHolder, $newLinkLi);
+        ComponentsSelect2.init();
+    });
+
+    function addAdressForm($collectionHolder, $newLinkLi) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+        //console.log(prototype);
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+        //console.log(index);
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+        //console.log(newForm);
+        var arrayHtml = newForm.split("<div>");
+        //console.log(arrayHtml);
+        var Html1 = '';
+        var Html2 = '';       
+        
+        for (var i = 0 ; i <= arrayHtml.length - 1; i++) {
+            if(i == 0){
+                //console.log(arrayHtml[i]);
+                //Html1 = arrayHtml[i].replace(/<div /g, '').replace(/> /,'');
+                //console.log(Html1);
+            }else if(i <= arrayHtml.length - 1){
+                Html2 = Html2 + "<td>" + arrayHtml[i].replace(/<\/div>/g, "<\/td>");
+                //console.log(Html2);
+            }else{
+                newForm += arrayHtml[i];
+                //console.log(newForm);
+            }            
+        }
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<tr class="listAdress"'+Html1+'></tr>').append(Html2);
+        //console.log($newFormLi);
+        $newLinkLi.before($newFormLi);
+        //console.log($newFormLi);
+        addTagFormDeleteLink($newFormLi);
+    }
+
+
+    function addTagFormDeleteLink($tagFormLi) {
+        var $removeFormA = $('<td style="text-align: center; vertical-align: middle;"><a href="javascript:;" class="btn btn-circle btn-xs red"><i class="glyphicon glyphicon-trash"> </i></a></td>');
+        $tagFormLi.append($removeFormA);
+
+        $removeFormA.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // remove the li for the tag form
+            $tagFormLi.remove();
+        });
+    }
+
+
+    $( "#modalForm" ).on( "submit", function( event ) {
+        $('.fecha-picker').datepicker({ dateFormat: "dd-mm-yy" });
+        event.preventDefault();        
+        ReporteDiario.editarCheckListSend();
+    });
+});
+</script>
+<script src="{{asset('Js/CoreBundle/DateValidatorModal.js')}}" type="text/javascript"></script>
+

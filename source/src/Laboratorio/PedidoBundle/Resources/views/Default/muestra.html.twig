@@ -1,0 +1,1694 @@
+{% extends '::base.html.twig' %}
+
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    {# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# SELECT2 #}
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# TOASTR NOTIFICATIONS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+
+{% block pagecontent %}
+
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <input class="successFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashBag.get('alert') %}
+        <input class="alertFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashBag.get('error') %}
+        <input class="errorFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+    {# -------------------------------------------------------------------- #}
+
+    {#{% for item in form.resultados.children if item.vars.value.historial is not empty %}
+        {{dump(item.vars.data.historial)}}
+    {% endfor %}#}
+
+    {# {{ dump(((form.resultados.children)[2])) }} #}
+
+    {# {{ dump(app.user) }} #}
+
+    {{ form_start(form) }}
+
+        <div class="form-body">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <span class="caption-subject bold font-dark uppercase">
+                                {{ numeroMuestraCompleto }}
+                            </span>
+                            <span class="caption-subject uppercase">
+                                &nbsp; &nbsp; &nbsp;
+                            </span>
+                            {% if app.user.id == 328 or app.user.id == 88 %} {# Gerente #}
+                                {% if form.vars.value.autorizado %}
+                                    <button type="button" class="btn green-jungle mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-loading-text="cargando..." data-style="slide-right" title="Click para deshacer" onClick="javascript:Muestra.desAutorizar('{{ form.vars.data.id|encriptar }}');">
+                                        <span class="ladda-label">
+                                            Autorizada
+                                        </span>
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                {% else %}
+                                    <button type="button" class="btn green-jungle mt-ladda-btn ladda-button mt-progress-demo btn-circle btn-outline" data-loading-text="cargando..." data-style="slide-right" title="Click para autorizar esta muestra" onClick="javascript:Muestra.autorizar('{{ form.vars.data.id|encriptar }}');">
+                                        <span class="ladda-label">
+                                            Autorizar
+                                        </span>
+                                    </button>
+                                {% endif %}
+                            {% else %}
+                                {# los demás usuarios #}
+                                {% if form.vars.value.autorizado %}
+                                    <button type="button" class="btn green-jungle ladda-button btn-circle disabled">
+                                        <span class="ladda-label">
+                                            Autorizada
+                                        </span>
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if app.user.id == 285 or app.user.id == 88 %} {# Director técnico #}
+                                {% if app.user.id == 88 %}
+                                    {% if form.vars.value.supervisado %}
+                                        <button type="button" class="btn btn-link" title="Click para deshacer" title="Click para deshacer" onClick="javascript:Muestra.desSupervisar('{{ form.vars.data.id|encriptar }}');">
+                                            <span class="ladda-label">
+                                                DT
+                                            </span>
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-link" title="Click para aprobar por el DT" onClick="javascript:Muestra.supervisar('{{ form.vars.data.id|encriptar }}');">
+                                            <span class="ladda-label">
+                                                DT
+                                            </span>
+                                        </button>
+                                    {% endif %}
+                                {% else %}
+                                    {% if form.vars.value.supervisado %}
+                                        <button type="button" class="btn blue-hoki ladda-button btn-circle" title="Click para deshacer" title="Click para deshacer" onClick="javascript:Muestra.desSupervisar('{{ form.vars.data.id|encriptar }}');">
+                                            <span class="ladda-label">
+                                                Aprobada
+                                            </span>
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    {% else %}
+                                        <button type="button" class="btn blue-hoki ladda-button btn-circle btn-outline" title="Click para aprobar" onClick="javascript:Muestra.supervisar('{{ form.vars.data.id|encriptar }}');">
+                                            <span class="ladda-label">
+                                                Aprobar
+                                            </span>
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                {# los demás usuarios #}
+                                {% if form.vars.value.supervisado %}
+                                    <button type="button" class="btn green-dark ladda-button btn-circle btn-outline disabled">
+                                        <span class="ladda-label">
+                                            DT
+                                        </span>
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if app.user.id == 330 or app.user.id == 294 or app.user.id == 88 %} {# Subgerente/s #}
+                                {% set estado = '' %}
+                                {% if form.estados.children %}
+                                    {% for e in form.estados.children if e.vars.value.area.id == number %}
+                                        {% set estado = e.vars.value.estado.estado %}
+                                    {% endfor %}
+                                {% endif %}
+
+                                {% if estado != '' %}
+                                    {% if app.user.id == 88 %}
+                                        {% if estado == 'Aprobada' %}
+                                            <button type="button" class="btn btn-link" title="Click para deshacer" onClick="javascript:Muestra.desFinalizar('{{ form.vars.data.id|encriptar }}', '{{ number|encriptar }}');">
+                                                <span class="ladda-label">
+                                                    SGTE
+                                                </span>
+                                                <i class="fa fa-check"></i>
+                                            </button>
+                                        {% else %}
+                                            <button type="button" class="btn btn-link" title="Click para aprobar por el subgerente" onClick="javascript:Muestra.finalizar('{{ form.vars.data.id|encriptar }}', '{{ number|encriptar }}');">
+                                                <span class="ladda-label">
+                                                    SGTE
+                                                </span>
+                                            </button>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if app.user.id == 330 and (number == 20 or number == 21 or number == 22) %}
+                                            {% if estado == 'Aprobada' %}
+                                                <button type="button" class="btn blue-hoki ladda-button btn-circle" title="Click para deshacer" onClick="javascript:Muestra.desFinalizar('{{ form.vars.data.id|encriptar }}', '{{ number|encriptar }}');">
+                                                    <span class="ladda-label">
+                                                        Aprobada
+                                                    </span>
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            {% else %}
+                                                <button type="button" class="btn blue-hoki ladda-button btn-circle btn-outline" title="Click para aprobar" onClick="javascript:Muestra.finalizar('{{ form.vars.data.id|encriptar }}', '{{ number|encriptar }}');">
+                                                    <span class="ladda-label">
+                                                        Aprobar
+                                                    </span>
+                                                </button>
+                                            {% endif %}
+                                        {% elseif app.user.id == 294 and number == 19 %}
+                                            {% if estado == 'Aprobada' %}
+                                                <button type="button" class="btn blue-hoki ladda-button btn-circle" title="Click para deshacer" onClick="javascript:Muestra.desFinalizar('{{ form.vars.data.id|encriptar }}', '{{ number|encriptar }}');">
+                                                    <span class="ladda-label">
+                                                        Aprobada
+                                                    </span>
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            {% else %}
+                                                <button type="button" class="btn blue-hoki ladda-button btn-circle btn-outline" title="Click para aprobar" onClick="javascript:Muestra.finalizar('{{ form.vars.data.id|encriptar }}', '{{ number|encriptar }}');">
+                                                    <span class="ladda-label">
+                                                        Aprobar
+                                                    </span>
+                                                </button>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if estado == 'Aprobada' %}
+                                                <button type="button" class="btn yellow-soft ladda-button btn-circle btn-outline disabled">
+                                                    <span class="ladda-label">
+                                                        SGTE
+                                                    </span>
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                {# los demás usuarios #}
+                                {% set estado = '' %}
+                                {% if form.estados.children %}
+                                    {% for e in form.estados.children if e.vars.value.area.id == number %}
+                                        {% set estado = e.vars.value.estado.estado %}
+                                    {% endfor %}
+                                {% endif %}
+
+                                {% if estado != '' %}
+                                    {% if estado == 'Aprobada' %}
+                                        <button type="button" class="btn green-dark ladda-button btn-circle btn-outline disabled">
+                                            <span class="ladda-label">
+                                                SGTE
+                                            </span>
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+
+                        {#
+                        {% set usuarioPuedeVerAreas = false %}
+                        {% if app.user.id == 88 or app.user.id == 285 or app.user.id == 294 or app.user.id == 330 or app.user.id == 328 %}
+                            {% set usuarioPuedeVerAreas = true %}
+                        {% else %}
+                            {% if app.user.area.id == 23 %}
+                                {% set usuarioPuedeVerAreas = true %}
+                            {% endif %}
+                        {% endif %}
+                        #}
+                        {% set usuarioPuedeVerAreas = true %}
+
+                        {% if usuarioPuedeVerAreas %}
+                            <div class="actions">
+                                <div class="btn-group">
+                                    <a class="btn blue-soft btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Área
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <br>
+                                        <li>
+                                            {% if number == 19 %}
+                                                    <em>&nbsp;&nbsp;Estás en CAMPO</em>
+                                                {% elseif number == 20 %}
+                                                    <em>&nbsp;&nbsp;Estás en BIOLOGICO</em>
+                                                {% elseif number == 21 %}
+                                                    <em>&nbsp;&nbsp;Estás en INSTRUMENTAL</em>    
+                                                {% elseif number == 22 %}
+                                                    <em>&nbsp;&nbsp;Estás en FÍSICO-QUÍMICA</em>
+                                            {% endif %}
+                                        </li>
+                                        {% if form.estados.children %}
+                                            {% if form.estados.children|length > 1 %}
+                                                    <li class="divider"> </li>
+                                                    <li>
+                                                        &nbsp;&nbsp;ir a...
+                                                    </li>
+                                                    {% for em in form.estados.children if em.vars.value.area.id != number %}
+                                                        <li>
+                                                            <a onClick="javascript:Muestra.cambiarArea('{{ form.vars.data.id|encriptar }}','{{em.vars.value.area.id|encriptar}}');">
+                                                                <strong>
+                                                                    {{ em.vars.value.area.area }}
+                                                                    {# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                    {% if ((form.vars.value.pedido.programa.programa)|length) > ((em.vars.value.area.area)|length) %}
+                                                                        {% for i in 0..(((form.vars.value.pedido.programa.programa|length) - (em.vars.value.area.area|length)) - 10) %}
+                                                                            &nbsp;
+                                                                        {% endfor %}
+                                                                    {% endif %} #}
+                                                                </strong>
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <br>
+                                            {% endif %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="portlet-body">
+
+                        {% if form.vars.value.autorizado %}
+                            <div align="center" style="padding-top: 15px;">
+                                {% if app.user.area.id == 23 or app.user.id == 328 or app.user.id == 330 or app.user.id == 294 or app.user.id == 285 or app.user.id == 88 %}
+                                    <button type="button" class="btn blue-hoki ladda-button btn-circle btn-outline" onclick="javascript:Protocolo.protocolo('{{ form.vars.data.id|encriptar }}');">
+                                {% else %}
+                                    <button type="button" class="btn blue-hoki ladda-button btn-circle btn-outline" title="No posee permisos para realizar esta acción" disabled>
+                                {% endif %}
+                                    <span class="ladda-label">
+                                        Generar protocolo
+                                    </span>
+                                    <i class="fa fa-file-text-o"></i>
+                                </button>
+                            </div>
+                            <br>
+                        {% else %}
+                            {% if app.user.id == 285 or app.user.id == 294 or app.user.id == 330 %}
+                                <div align="center" style="padding-top: 15px;">
+                                    <button type="button" class="btn blue-hoki ladda-button btn-circle btn-outline" onclick="javascript:Protocolo.protocolo('{{ form.vars.data.id|encriptar }}', true);">
+                                        <span class="ladda-label">
+                                            Generar protocolo (ausencia gerente)
+                                        </span>
+                                        <i class="fa fa-file-text-o"></i>
+                                    </button>
+                                </div>
+                                <br>
+                            {% endif %}
+                        {% endif %}
+
+                        <h4 align="center"><u><strong> {{ form.vars.value.pedido.programa.programa|upper }} </strong></u></h4>
+
+                        <br>
+
+                        <h5 align="center">
+                            <strong>
+                                Fecha de toma de muestra: {{ form.vars.value.pedido.fechaProgramacion|date('d-m-Y') }}
+                            </strong>
+                        </h5>
+
+                        {% if number == 19 and (number == app.user.area.id or app.user.id == 330 or app.user.id == 88 or app.user.area.id == 23) %}
+                            {#
+                                328 - Mercadé (no está porque ya es del área 19)
+                                330 - Vanderhoeven
+                                294 - Guzzo (no está porque ya es del área 19)
+                                88 - Ita
+                            #}
+                            <br>
+
+                            {% if form.vars.value.pedido.establecimiento %}
+                                <h5 align="center">
+                                    <strong>
+                                        <i>
+                                            {% set razonSocial = (form.vars.value.pedido.establecimiento.razonesSociales|first) %}
+
+                                            {% if razonSocial %}
+                                                {% set razonSocial = razonSocial.razonSocial %}
+                                                {% set nombreUno = razonSocial.nombre1 %}
+                                                {% set nombreDos = razonSocial.nombre2 %}
+                                                
+                                                {% if (nombreUno is defined) or (nombreDos is defined) %}
+                                                        {% set tipo = razonSocial.tipo %}
+                                                        {% if tipo == 'F' %}
+                                                                {% set nombreRS = nombreUno ~ ' ' ~ nombreDos %}
+                                                            {% else %}
+                                                                {# NOMBRE FANTASÍA #}
+                                                                {% if nombreDos %}
+                                                                        {% set nombreRS = nombreDos %}
+                                                                    {% else %}
+                                                                        {% set nombreRS = nombreUno %}
+                                                                {% endif %}
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% set nombreRS = '' %}
+                                                {% endif %}
+
+                                                {% if razonSocial.cuit > 44444444444 %}
+                                                    {{ nombreRS }}
+                                                {% else %}
+                                                    {{ razonSocial.cuit ~ ' ~ ' ~ nombreRS }}
+                                                {% endif %}
+                                            {% endif %}
+                                        </i>
+                                    </strong>
+                                </h5>
+                                <h5 align="center">
+                                    <i>
+                                        {% if form.vars.value.pedido.establecimiento.direcciones|length == 1 %}
+                                            {% set domicilio = form.vars.value.pedido.establecimiento.direcciones|first %}
+                                            {{ domicilio.calle.calle ~ ' ' ~ domicilio.altura }}
+                                        {% else %}
+                                            <ul>
+                                                {% for d in form.vars.value.pedido.establecimiento.direcciones %}
+                                                    <li>
+                                                        {{ d.calle.calle ~ ' ' ~ d.altura }}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </i>
+                                </h5>
+
+                                {# ↓ #}
+                                {# botón para modificar el establecimiento asociado ???? #}
+                            {% else %}
+                                {# No hay un establecimiento relacionado a la muestra #}
+                                {#
+                                <div align="center">
+                                    <a href="#">
+                                        Si querés asociar un establecimiento, hacé click acá
+                                    </a>
+                                </div>
+                                #}
+                                {# Si desea asociar una institución, haga click aquí #}
+                            {% endif %}
+                        {% endif %}
+
+                        {% if form.vars.data.anulada %}
+                            <h3 align="center"><strong><U> MUESTRA ANULADA </U></strong></h3>
+                        {% endif %}
+
+                        {% if number == 19 and (number == app.user.area.id or app.user.id == 88 or app.user.id == 330 or app.user.area.id == 23) %}
+                                <hr>
+
+                                <div class="form-group form-md-line-input has-info">
+                                    {{ form_label(form.auxiliares, 'Auxiliares', {
+                                        'label_attr': {
+                                            'class': 'col-md-2 control-label',
+                                            'style': 'color: grey;'
+                                        }
+                                    }) }}
+                                    <div class="col-md-6">
+                                        {% if estado != 'Aprobada' %}
+                                                {{ form_widget(form.auxiliares, {
+                                                    'attr': {
+                                                        'class': 'form-control select2'
+                                                    }
+                                                }) }}
+                                            {% else %}
+                                                {{ form_widget(form.auxiliares, {
+                                                    'attr': {
+                                                        'class': 'form-control select2',
+                                                        'disabled': 'true'
+                                                    }
+                                                }) }}
+                                        {% endif %}
+                                        <span class="help-block help-block-error" style="color: red;">
+                                            {{ form_errors(form.auxiliares) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-md-line-input has-info">
+                                    <label class="col-md-2 control-label" style="color: grey;">
+                                        Lugar de extracción
+                                        {# Por alguna razón, el 'form_label' no sirve acá #}
+                                    </label>
+                                    <div class="col-md-6">
+                                        <div class="input-icon"> {# se lo tuve que dejar #}
+                                            {% if estado != 'Aprobada' %}
+                                                    {{ form_widget(form.lugarExtraccion, {
+                                                        'attr': {
+                                                            'class': 'form-control',
+                                                            'placeholder': 'Lugar de extracción'
+                                                        }
+                                                    }) }}
+                                                {% else %}
+                                                    {{ form_widget(form.lugarExtraccion, {
+                                                        'attr': {
+                                                            'class': 'form-control',
+                                                            'readonly': 'true',
+                                                            'placeholder': 'Lugar de extracción'
+                                                        }
+                                                    }) }}
+                                            {% endif %}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                ingrese lugar de extracción...
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.lugarExtraccion) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <br>
+                            {% else %}
+                                <br>
+                        {% endif %}
+
+                        {% if form.resultados.children %}
+                            {% set cv = 0 %}
+                            {% for rx in form.resultados.children if not rx.children %}
+                                {% set cv = cv + 1 %}
+                            {% endfor %}
+
+                            {% if cv != ((form.resultados.children)|length) %}
+                                <div class="table">
+                                    <table width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th width="35%" style="text-align: center; vertical-align: middle;">
+                                                    Determinación
+                                                </th>
+                                                <th width="31%" style="text-align: center; vertical-align: middle; padding-right: 10px;">
+                                                    Metodología
+                                                </th>
+                                                <th width="10%" style="text-align: center; vertical-align: middle;">
+                                                    Resultado
+                                                </th>
+                                                <th width="10%" style="text-align: center; vertical-align: middle; padding-right: 33px;">
+                                                    Unidad de medida
+                                                </th>
+                                                <th width="14%" style="text-align: center; vertical-align: middle; padding-right: 15px;">
+                                                    Fecha de ejecución
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {# NO FUNCIONA 'scrollable' PORQUE LOS ELEMENTOS DEL FORMULARIO (PARECIERA) VIENEN CON UN ANCHO DETERMINADO, ONDA, VIENEN 'full-width' DE MOVIDA Y NO SE PUEDEN PONER EN UNA TABLE SI EL ANCHO DE LOS MISMOS NO ES MODIFICADO #}
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                    {% for resultado in form.resultados.children %}
+                                        {% if resultado.children %}
+                                                <div class="row" style="vertical-align: middle;">
+                                                    <div class="form-group" style="vertical-align: middle;">
+                                                        {% if estado == 'Aprobada' or form.vars.value.supervisado or form.vars.value.autorizado or app.user.area.id != number %}
+                                                                <div class="col-md-4" align="left" style="padding-left: 50px;">
+                                                                    <strong>
+                                                                        {{ resultado.vars.value.determinacion.nombre }}
+                                                                    </strong>
+                                                                    {#
+                                                                    {% set histo = '' %}
+                                                                    {% for h in resultado.vars.value.historial %}
+                                                                        {% set histo = histo ~ h.resultado ~ ' (' ~ h.usuario ~ ')' ~ ' || ' %}
+                                                                    {% endfor %}
+
+                                                                    {% if histo == '' %}
+                                                                            {% set texto = meto %}
+                                                                        {% else %}
+                                                                            {% set histo = histo|split(' || ') %}
+                                                                            {% set histo = histo[:((histo|length)-2)] %}
+                                                                            {% set histo = histo|join(' - ') %}
+
+                                                                            {% if histo != '' %}
+                                                                                    {% set texto = meto ~ ' ~ Historial: ' ~ histo %}
+                                                                                {% else %}
+                                                                                    {% set texto = meto %}
+                                                                            {% endif %}
+                                                                    {% endif %}
+                                                                    
+                                                                    <button class="btn btn-default popovers" data-container="body" data-trigger="hover" data-placement="top" data-content="{{ texto }}" data-original-title="{{ resultado.vars.value.determinacion.nombre }}">
+                                                                        {% if number == 22 %}
+                                                                                {% if resultado.vars.value.determinacion.nombre|length > 10 %}
+                                                                                        {{ resultado.vars.value.determinacion.nombre[:9] ~ '...' }}
+                                                                                    {% else %}
+                                                                                        {{ resultado.vars.value.determinacion.nombre }}
+                                                                                {% endif %}
+                                                                            {% else %}
+                                                                                {% if resultado.vars.value.determinacion.nombre|length > 7 %}
+                                                                                        {{ resultado.vars.value.determinacion.nombre[:6] ~ '...' }}
+                                                                                    {% else %}
+                                                                                        {{ resultado.vars.value.determinacion.nombre }}
+                                                                                {% endif %}
+                                                                        {% endif %}
+                                                                    </button>
+                                                                    #}
+                                                                </div>
+
+                                                                <div class="col-md-4" align="center">
+                                                                    {% if resultado.vars.value.determinacion.metodologia %}
+                                                                        {% if resultado.vars.value.determinacion.id in [16, 69, 86] %} {# pH #}
+                                                                            SM 4500-H<sup>+</sup>-B-23rd
+                                                                        {% elseif resultado.vars.value.determinacion.id == 17 %} {# Nitritos #}
+                                                                            SM 4500-NO<sub>2</sub><sup>-</sup>-B-23rd
+                                                                        {% elseif resultado.vars.value.determinacion.id == 18 %} {# Nitrógeno Amoniacal #}
+                                                                            SM 4500-NH<sub>3</sub>-C-18th
+                                                                        {% elseif resultado.vars.value.determinacion.id == 19 %} {# Nitratos #}
+                                                                            SM 4500-NO<sub>3</sub><sup>-</sup>-D 23rd
+                                                                        {% else %}
+                                                                            {{ resultado.vars.value.determinacion.metodologia }}
+                                                                        {% endif %}
+                                                                    {% else %}
+                                                                        {{ '-' }}
+                                                                    {% endif %}
+                                                                </div>
+
+                                                                <div class="col-md-1">
+                                                                    {% if resultado.resultado.vars.value == '' %}
+                                                                            {% if resultado.resultado.vars.attr is empty %}
+                                                                                    {# NO ES NADA #}
+                                                                                    {{ form_widget(resultado.resultado, {
+                                                                                        'attr': {
+                                                                                            'class': 'form-control',
+                                                                                            'disabled': 'true',
+                                                                                            'style': 'text-align: center;'
+                                                                                        }
+                                                                                    }) }}
+                                                                                {% else %}
+                                                                                    {# RESULTADO CERO #}
+                                                                                    {# CUANDO resultado.resultado.vars.value == 0 #}
+                                                                                    {{ form_widget(resultado.resultado, {
+                                                                                        'attr': {
+                                                                                            'class': 'form-control',
+                                                                                            'disabled': 'true',
+                                                                                            'style': 'text-align: center;'
+                                                                                        }
+                                                                                    }) }}
+                                                                            {% endif %}
+                                                                        {% else %}
+                                                                            {% if resultado.resultado.vars.attr is empty %}
+                                                                                    {# NO ES NADA #}
+                                                                                    {% if resultado.resultado.vars.value == 0 %}
+                                                                                        {% if resultado.vars.value.determinacion.limiteCuantificable == '' %}
+                                                                                            {{ form_widget(resultado.resultado, {
+                                                                                                'attr': {
+                                                                                                    'value': '(S/LC)',
+                                                                                                    'class': 'form-control',
+                                                                                                    'disabled': 'true',
+                                                                                                    'style': 'text-align: center;'
+                                                                                                }
+                                                                                            }) }}
+                                                                                        {% else %}
+                                                                                            {{ form_widget(resultado.resultado, {
+                                                                                                'attr': {
+                                                                                                    'value': resultado.vars.value.determinacion.limiteCuantificable,
+                                                                                                    'class': 'form-control',
+                                                                                                    'disabled': 'true',
+                                                                                                    'style': 'text-align: center;'
+                                                                                                }
+                                                                                            }) }}
+                                                                                        {% endif %}
+                                                                                    {% else %}
+                                                                                        {{ form_widget(resultado.resultado, {
+                                                                                            'attr': {
+                                                                                                'class': 'form-control',
+                                                                                                'disabled': 'true',
+                                                                                                'style': 'text-align: center;'
+                                                                                            }
+                                                                                        }) }}
+                                                                                    {% endif %}
+                                                                                {% else %}
+                                                                                    {# 0 / -2 #}
+                                                                                    {% if resultado.resultado.vars.attr.value == 0 %}
+                                                                                            {% if resultado.vars.value.determinacion.limiteCuantificable == '' %}
+                                                                                                    {{ form_widget(resultado.resultado, {
+                                                                                                        'attr': {
+                                                                                                            'value': '(S/LC)',
+                                                                                                            'class': 'form-control',
+                                                                                                            'disabled': 'true',
+                                                                                                            'style': 'text-align: center;'
+                                                                                                        }
+                                                                                                    }) }}
+                                                                                                {% else %}
+                                                                                                    {{ form_widget(resultado.resultado, {
+                                                                                                        'attr': {
+                                                                                                            'value': resultado.vars.value.determinacion.limiteCuantificable,
+                                                                                                            'class': 'form-control',
+                                                                                                            'disabled': 'true',
+                                                                                                            'style': 'text-align: center;'
+                                                                                                        }
+                                                                                                    }) }}
+                                                                                            {% endif %}
+                                                                                        {% elseif resultado.resultado.vars.attr.value == -2 %} {# PARA BIOLÓGICOS #}
+                                                                                            {% if resultado.vars.value.determinacion.id == 11 or resultado.vars.value.determinacion.id == 12 %} {# o 12 #}
+                                                                                                    {# Pseudomonas aeruginosa #}
+                                                                                                    {# PRESENCIA #}
+                                                                                                    {{ form_widget(resultado.resultado, {
+                                                                                                        'attr': {
+                                                                                                            'value': 'PRESENCIA',
+                                                                                                            'class': 'form-control',
+                                                                                                            'disabled': 'true',
+                                                                                                            'style': 'text-align: center;'
+                                                                                                        }
+                                                                                                    }) }}
+                                                                                                {% elseif resultado.vars.value.determinacion.id == 13 %}
+                                                                                                    {# Recuento bacterias aerobias mesófilas #}
+                                                                                                    {# > 3x10^3 #}
+                                                                                                    {# <sup></sup> #}
+                                                                                                    {# ^ #}
+                                                                                                    {# &Hat; #}
+                                                                                                    {{ form_widget(resultado.resultado, {
+                                                                                                        'attr': {
+                                                                                                            'value': '> 3E3',
+                                                                                                            'class': 'form-control',
+                                                                                                            'disabled': 'true',
+                                                                                                            'style': 'text-align: center;'
+                                                                                                        }
+                                                                                                    }) }}
+                                                                                                {% else %}
+                                                                                                    {# Ninguna de las anteriores #}
+                                                                                                    {{ form_widget(resultado.resultado, {
+                                                                                                        'attr': {
+                                                                                                            'value': '(S/LM)',
+                                                                                                            'class': 'form-control',
+                                                                                                            'disabled': 'true',
+                                                                                                            'style': 'text-align: center;'
+                                                                                                        }
+                                                                                                    }) }}
+                                                                                            {% endif %}
+                                                                                        {% elseif resultado.resultado.vars.attr.value == -3 %} {# PARA BIOLÓGICOS #}
+                                                                                            {# > 3x10^4 #}
+                                                                                            {{ form_widget(resultado.resultado, {
+                                                                                                'attr': {
+                                                                                                    'value': '> 3E4',
+                                                                                                    'class': 'form-control',
+                                                                                                    'disabled': 'true',
+                                                                                                    'style': 'text-align: center;'
+                                                                                                }
+                                                                                            }) }}
+                                                                                        {% elseif resultado.resultado.vars.attr.value == -4 %} {# PARA BIOLÓGICOS #}
+                                                                                            {# > 3x10^5 #}
+                                                                                            {{ form_widget(resultado.resultado, {
+                                                                                                'attr': {
+                                                                                                    'value': '> 3E5',
+                                                                                                    'class': 'form-control',
+                                                                                                    'disabled': 'true',
+                                                                                                    'style': 'text-align: center;'
+                                                                                                }
+                                                                                            }) }}
+                                                                                        {% else %}
+    {# Pongo este choclazo acá porque sino no se ve una mierda #}
+    {% set numero = resultado.resultado.vars.value|split('.') %}
+        {#{{ dump(numero) }}#}
+    {% if numero|length == 1 %}
+            {# NÚMERO ENTERO #}
+            {% if resultado.resultado.vars.value >= 1000 %}
+                    {% set numero = resultado.resultado.vars.value|split('') %}
+                    {% set ultimoNumero = 0 %}
+                    {% for n in numero if n != 0 %}
+                        {% set ultimoNumero = loop.index0 %}
+                    {% endfor %}
+
+                    {% if numero[ultimoNumero] != 0 %}
+                            {% set ceros = numero|slice((ultimoNumero + 1), ((numero|length) - 1)) %}
+
+                            {% if ceros is not empty %}
+                                    {% if ceros|length >= 3 %}
+                                            {% set numero = numero|slice(0, (ultimoNumero + 1)) %}
+                                            {% set ceros = ceros|length %}
+                                            {% if resultado.resultado.vars.value > 0 %}
+                                                    {# {{ numero|join ~ 'E' ~ ceros }} #}
+                                                    {{ form_widget(resultado.resultado, {
+                                                        'attr': {
+                                                            'value': (numero|join ~ 'E' ~ ceros),
+                                                            'class': 'form-control',
+                                                            'disabled': 'true',
+                                                            'style': 'text-align: center;'
+                                                        }
+                                                    }) }}
+                                                {% else %}
+                                                    {# {{ '-' ~ numero|join ~ 'E' ~ ceros }} #}
+                                                    {{ form_widget(resultado.resultado, {
+                                                        'attr': {
+                                                            'value': ('-' ~ numero|join ~ 'E' ~ ceros),
+                                                            'class': 'form-control',
+                                                            'disabled': 'true',
+                                                            'style': 'text-align: center;'
+                                                        }
+                                                    }) }}
+                                            {% endif %}
+                                        {% else %}
+                                            {# {{ resultado.resultado.vars.value }} #}
+                                            {{ form_widget(resultado.resultado, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'disabled': 'true',
+                                                    'style': 'text-align: center;'
+                                                }
+                                            }) }}
+                                    {% endif %}
+                                {% else %}
+                                    {# {{ resultado.resultado.vars.value }} #}
+                                    {{ form_widget(resultado.resultado, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'disabled': 'true',
+                                            'style': 'text-align: center;'
+                                        }
+                                    }) }}
+                            {% endif %}
+                        {% else %}
+                            {# {{ resultado.resultado.vars.value }} #}
+                            {{ form_widget(resultado.resultado, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'disabled': 'true',
+                                    'style': 'text-align: center;'
+                                }
+                            }) }}
+                    {% endif %}
+                {% else %}
+                    {# {{ resultado.resultado.vars.value }} #}
+                    {{ form_widget(resultado.resultado, {
+                        'attr': {
+                            'class': 'form-control',
+                            'disabled': 'true',
+                            'style': 'text-align: center;'
+                        }
+                    }) }}
+            {% endif %}
+        {% else %}
+            {#{{ dump(numero) }}#}
+            {# NÚMERO CON DECIMALES #}
+            {% set decimales = (numero|last)|split('') %}
+            {% set ex = false %}
+            {% for d in decimales if d == 'E' %}
+                {% set ex = true %}
+            {% endfor %}
+            {# (me imagino que no serán tan hdp como para ponerme un exponente con decimales, porque no lo estaría considerando) #}
+            {% if ex %}
+                    {{ form_widget(resultado.resultado, {
+                        'attr': {
+                            'class': 'form-control',
+                            'disabled': 'true',
+                            'style': 'text-align: center;'
+                        }
+                    }) }}
+                {% else %}
+                    {#{{ dump(numero) }}#}
+                    {% if decimales|length >= 3 %}
+                            {% if resultado.resultado.vars.value > -1 and resultado.resultado.vars.value < 1 %}
+                                    {# -1 < x < 1  (x != 0) #}
+                                    {#{{ dump(numero) }}#}
+                                    {% set primerNumero = 0 %}
+                                    {% for d in decimales if d != 0 and primerNumero == 0 %}
+                                        {% set primerNumero = loop.index0 %}
+                                    {% endfor %}
+
+                                    {% if numero[primerNumero] != 0 %}
+                                            {% set ceros = numero|slice(0, (primerNumero + 1)) %}
+
+                                            {% if ceros is not empty %}
+                                                    {% if ceros|length >= 3 %}
+                                                            {% set numero = numero|slice((primerNumero + 1), ((numero|length) - 1)) %}
+                                                            {% set ceros = ceros|length %}
+                                                            {% if resultado.resultado.vars.value > 0 %}
+                                                                    {# {{ numero|join ~ 'E-' ~ ceros }} #}
+                                                                    {{ form_widget(resultado.resultado, {
+                                                                        'attr': {
+                                                                            'value': (numero|join ~ 'E-' ~ ceros),
+                                                                            'class': 'form-control',
+                                                                            'disabled': 'true',
+                                                                            'style': 'text-align: center;'
+                                                                        }
+                                                                    }) }}
+                                                                {% else %}
+                                                                    {# {{ '-' ~ numero|join ~ 'E-' ~ ceros }} #}
+                                                                    {{ form_widget(resultado.resultado, {
+                                                                        'attr': {
+                                                                            'value': ('-' ~ numero|join ~ 'E-' ~ ceros),
+                                                                            'class': 'form-control',
+                                                                            'disabled': 'true',
+                                                                            'style': 'text-align: center;'
+                                                                        }
+                                                                    }) }}
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {# {{ resultado.resultado.vars.value }} #}
+                                                            {{ form_widget(resultado.resultado, {
+                                                                'attr': {
+                                                                    'class': 'form-control',
+                                                                    'disabled': 'true',
+                                                                    'style': 'text-align: center;'
+                                                                }
+                                                            }) }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {# {{ resultado.resultado.vars.value }} #}
+                                                    {{ form_widget(resultado.resultado, {
+                                                        'attr': {
+                                                            'class': 'form-control',
+                                                            'disabled': 'true',
+                                                            'style': 'text-align: center;'
+                                                        }
+                                                    }) }}
+                                            {% endif %}
+                                        {% else %}
+                                            {# {{ resultado.resultado.vars.value }} #}
+                                            {{ form_widget(resultado.resultado, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'disabled': 'true',
+                                                    'style': 'text-align: center;'
+                                                }
+                                            }) }}
+                                    {% endif %}
+                                {% else %}
+                                    {# -1 > x > 1 #} {# POR DEFINIR #}
+                                    {# NÚMEROS CON PARTE ENTERA != 0 #}
+                                    {# NUMEROS GRANDES CON DECIMALES #}
+                                    {# {% set entero = numero|first %} #}
+
+                                    {# {{ resultado.resultado.vars.value }} #}
+                                    {{ form_widget(resultado.resultado, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'disabled': 'true',
+                                            'style': 'text-align: center;'
+                                        }
+                                    }) }}
+                            {% endif %}
+                        {% else %}
+                            {# {{ resultado.resultado.vars.value }} #}
+                            {{ form_widget(resultado.resultado, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'disabled': 'true',
+                                    'style': 'text-align: center;'
+                                }
+                            }) }}
+                    {% endif %}
+            {% endif %}
+    {% endif %}
+                                                                
+                                                                                    {% endif %}
+
+                                                                            {% endif %}
+
+                                                                    {% endif %}
+
+                                                                    {{ form_widget(resultado.resultado, { 'attr': { 'hidden': 'true' } }) }}
+                                                                </div>
+
+                                                                <div class="col-md-1" align="center">
+                                                                    {% if resultado.vars.value.determinacion.unidadMedida %}
+                                                                        {% if resultado.vars.value.determinacion.id == 18 %} {# Nitrógeno Amoniacal #}
+                                                                            mg NH<sub>4</sub><sup>+</sup>/l
+                                                                        {% elseif resultado.vars.value.determinacion.id == 100 %} {# Conductividad (1:5) #}
+                                                                            ds.m<sup>-1</sup>
+                                                                        {% else %}
+                                                                            {{ resultado.vars.value.determinacion.unidadMedida }}
+                                                                        {% endif %}
+                                                                    {% else %}
+                                                                        {{ '-' }}
+                                                                    {% endif %}
+                                                                </div>
+
+                                                                {% if resultado.legislacion is defined %}
+                                                                    {{ form_widget(resultado.legislacion, { 'attr': { 'class': 'hidden' } }) }}
+                                                                {% endif %}
+                                                                {% if resultado.legislacionSinContacto is defined %}
+                                                                    {{ form_widget(resultado.legislacionSinContacto, { 'attr': { 'class': 'hidden' } }) }}
+                                                                {% endif %}
+                                                                {% if resultado.legislacionPasivo is defined %}
+                                                                    {{ form_widget(resultado.legislacionPasivo, { 'attr': { 'class': 'hidden' } }) }}
+                                                                {% endif %}
+
+                                                                <div class="col-md-2" align="center">
+                                                                    {% if number == app.user.area.id %}
+                                                                        {{ form_widget(resultado.fechaFinAnalisis, {
+                                                                            'attr': {
+                                                                                'class': 'form-control',
+                                                                                'style': 'text-align: center;',
+                                                                                'disabled': 'disabled'
+                                                                            }
+                                                                        }) }}
+                                                                    {% else %}
+                                                                        {% if resultado.fechaFinAnalisis.vars.value %}
+                                                                            <input type="text" class="form-control" style="text-align: center;" value="{{ resultado.fechaFinAnalisis.vars.data|date('d-m-Y') }}" disabled>
+                                                                        {% else %}
+                                                                            <input type="text" class="form-control" style="text-align: center;" value="" disabled>
+                                                                        {% endif %}
+                                                                        {{ form_widget(resultado.fechaFinAnalisis, { 'attr': { 'class': 'hidden' } }) }}
+                                                                    {% endif %}
+                                                                </div>
+                                                            {% else %}
+                                                                {#
+                                                                <div class="col-md-1" align="center">
+                                                                    {% if resultado.vars.value.id %}
+                                                                            <a href="javascript:Muestra.bloquear('{{ resultado.vars.value.id|encriptar }}', 1);" class="btn btn-icon-only">
+                                                                                <i class="fa fa-unlock"></i>
+                                                                            </a>
+                                                                        {% else %}
+                                                                            <i class="fa fa-minus"></i>
+                                                                    {% endif %}
+                                                                </div>
+                                                                #}
+                                                                <div class="col-md-4" align="left" style="padding-left: 50px;">
+                                                                    <strong>
+                                                                        {{ resultado.vars.value.determinacion.nombre }}
+                                                                    </strong>
+                                                                    {#
+                                                                    {% set histo = '' %}
+                                                                    {% for h in resultado.vars.value.historial %}
+                                                                        {% set histo = histo ~ h.resultado ~ ' (' ~ h.usuario ~ ')' ~ ' || ' %}
+                                                                    {% endfor %}
+
+                                                                    {% if histo == '' %}
+                                                                            {% set texto = meto %}
+                                                                        {% else %}
+                                                                            {% set histo = histo|split(' || ') %}
+                                                                            {% set histo = histo[:((histo|length)-2)] %}
+                                                                            {% set histo = histo|join(' - ') %}
+                                                                            {% set texto = meto ~ ' ~ Historial: ' ~ histo %}
+                                                                    {% endif %}
+                                                                    
+                                                                    <button class="btn btn-default popovers" data-container="body" data-trigger="hover" data-placement="top" data-content="{{ texto }}" data-original-title="{{ resultado.vars.value.determinacion.nombre }}">
+                                                                        {% if number == 22 %}
+                                                                                {% if resultado.vars.value.determinacion.nombre|length > 10 %}
+                                                                                        {{ resultado.vars.value.determinacion.nombre[:9] ~ '...' }}
+                                                                                    {% else %}
+                                                                                        {{ resultado.vars.value.determinacion.nombre }}
+                                                                                {% endif %}
+                                                                            {% else %}
+                                                                                {% if resultado.vars.value.determinacion.nombre|length > 7 %}
+                                                                                        {{ resultado.vars.value.determinacion.nombre[:6] ~ '...' }}
+                                                                                    {% else %}
+                                                                                        {{ resultado.vars.value.determinacion.nombre }}
+                                                                                {% endif %}
+                                                                        {% endif %}
+                                                                    </button>
+                                                                    #}
+                                                                </div>
+
+                                                                <div class="col-md-4" align="center">
+                                                                    {% if resultado.vars.value.determinacion.metodologia %}
+                                                                        {% if resultado.vars.value.determinacion.id in [16, 69, 86] %} {# pH #}
+                                                                            SM 4500-H<sup>+</sup>-B-23rd
+                                                                        {% elseif resultado.vars.value.determinacion.id == 17 %} {# Nitritos #}
+                                                                            SM 4500-NO<sub>2</sub><sup>-</sup>-B-23rd
+                                                                        {% elseif resultado.vars.value.determinacion.id == 18 %} {# Nitrógeno Amoniacal #}
+                                                                            SM 4500-NH<sub>3</sub>-C-18th
+                                                                        {% elseif resultado.vars.value.determinacion.id == 19 %} {# Nitratos #}
+                                                                            SM 4500-NO<sub>3</sub><sup>-</sup>-D 23rd
+                                                                        {% else %}
+                                                                            {{ resultado.vars.value.determinacion.metodologia }}
+                                                                        {% endif %}
+                                                                    {% else %}
+                                                                        {{ '-' }}
+                                                                    {% endif %}
+                                                                </div>
+
+                                                                <div class="col-md-1">
+                                                                    {% if resultado.resultado.vars.attr.value is defined %}
+                                                                        {{ form_widget(resultado.resultado, {
+                                                                            'attr': {
+                                                                                'class': 'form-control',
+                                                                                'style': 'text-align: center;'
+                                                                            }
+                                                                        }) }}
+                                                                    {% else %}
+                                                                        {% if resultado.resultado.vars.value == '0' %}
+                                                                            {% if resultado.vars.value.determinacion.limiteCuantificable == '' %}
+                                                                                {{ form_widget(resultado.resultado, {
+                                                                                    'attr': {
+                                                                                        'value': '(S/LC)',
+                                                                                        'class': 'form-control',
+                                                                                        'disabled': 'true',
+                                                                                        'style': 'text-align: center;'
+                                                                                    }
+                                                                                }) }}
+                                                                            {% else %}
+                                                                                {{ form_widget(resultado.resultado, {
+                                                                                    'attr': {
+                                                                                        'value': resultado.vars.value.determinacion.limiteCuantificable,
+                                                                                        'class': 'form-control',
+                                                                                        'disabled': 'true',
+                                                                                        'style': 'text-align: center;'
+                                                                                    }
+                                                                                }) }}
+                                                                            {% endif %}
+                                                                        {% elseif resultado.resultado.vars.value == '-2' %} {# BIOLÓGICOS #}
+                                                                            {% set idDet = resultado.vars.value.determinacion.id %}
+                                                                            {% if idDet == 11 or idDet == 12 %} {# o 12 #}
+                                                                                {# Pseudomonas aeruginosa #}
+                                                                                {{ form_widget(resultado.resultado, {
+                                                                                    'attr': {
+                                                                                        'value': 'PRESENCIA',
+                                                                                        'class': 'form-control',
+                                                                                        'disabled': 'true',
+                                                                                        'style': 'text-align: center;'
+                                                                                    }
+                                                                                }) }}
+                                                                            {% elseif idDet == 13 %}
+                                                                                {# Recuento bacterias aerobias mesófilas #}
+                                                                                {# > 3x10^3 #}
+                                                                                {{ form_widget(resultado.resultado, {
+                                                                                    'attr': {
+                                                                                        'value': '> 3E3',
+                                                                                        'class': 'form-control',
+                                                                                        'disabled': 'true',
+                                                                                        'style': 'text-align: center;'
+                                                                                    }
+                                                                                }) }}
+                                                                            {% else %}
+                                                                                {{ form_widget(resultado.resultado, {
+                                                                                    'attr': {
+                                                                                        'value': '(S/LM)',
+                                                                                        'class': 'form-control',
+                                                                                        'disabled': 'true',
+                                                                                        'style': 'text-align: center;'
+                                                                                    }
+                                                                                }) }}
+                                                                            {% endif %}
+                                                                        {% elseif resultado.resultado.vars.value == '-3' %} {# BIOLÓGICOS #}
+                                                                            {# > 3x10^4 #}
+                                                                            {{ form_widget(resultado.resultado, {
+                                                                                'attr': {
+                                                                                    'value': '> 3E4',
+                                                                                    'class': 'form-control',
+                                                                                    'disabled': 'true',
+                                                                                    'style': 'text-align: center;'
+                                                                                }
+                                                                            }) }}
+                                                                        {% elseif resultado.resultado.vars.value == '-4' %} {# BIOLÓGICOS #}
+                                                                            {# > 3x10^5 #}
+                                                                            {{ form_widget(resultado.resultado, {
+                                                                                'attr': {
+                                                                                    'value': '> 3E5',
+                                                                                    'class': 'form-control',
+                                                                                    'disabled': 'true',
+                                                                                    'style': 'text-align: center;'
+                                                                                }
+                                                                            }) }}
+                                                                        {% else %}
+                                                                            
+    {# Pongo este choclazo acá porque sino no se ve una mierda #}
+    {% set numero = resultado.resultado.vars.value|split('.') %}
+    {% if numero|length == 1 %}
+            {# NÚMERO ENTERO #}
+            {% if resultado.resultado.vars.value >= 1000 %}
+                    {% set numero = resultado.resultado.vars.value|split('') %}
+                    {% set ultimoNumero = 0 %}
+                    {% for n in numero if n != 0 %}
+                        {% set ultimoNumero = loop.index0 %}
+                    {% endfor %}
+
+                    {% if numero[ultimoNumero] != 0 %}
+                            {% set ceros = numero|slice((ultimoNumero + 1), ((numero|length) - 1)) %}
+
+                            {% if ceros is not empty %}
+                                    {% if ceros|length >= 3 %}
+                                            {% set numero = numero|slice(0, (ultimoNumero + 1)) %}
+                                            {% set ceros = ceros|length %}
+                                            {% if resultado.resultado.vars.value > 0 %}
+                                                    {# {{ numero|join ~ 'E' ~ ceros }} #}
+                                                    {{ form_widget(resultado.resultado, {
+                                                        'attr': {
+                                                            'value': (numero|join ~ 'E' ~ ceros),
+                                                            'class': 'form-control',
+                                                            'disabled': 'true',
+                                                            'style': 'text-align: center;'
+                                                        }
+                                                    }) }}
+                                                {% else %}
+                                                    {# {{ '-' ~ numero|join ~ 'E' ~ ceros }} #}
+                                                    {{ form_widget(resultado.resultado, {
+                                                        'attr': {
+                                                            'value': ('-' ~ numero|join ~ 'E' ~ ceros),
+                                                            'class': 'form-control',
+                                                            'disabled': 'true',
+                                                            'style': 'text-align: center;'
+                                                        }
+                                                    }) }}
+                                            {% endif %}
+                                        {% else %}
+                                            {# {{ resultado.resultado.vars.value }} #}
+                                            {{ form_widget(resultado.resultado, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'disabled': 'true',
+                                                    'style': 'text-align: center;'
+                                                }
+                                            }) }}
+                                    {% endif %}
+                                {% else %}
+                                    {# {{ resultado.resultado.vars.value }} #}
+                                    {{ form_widget(resultado.resultado, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'disabled': 'true',
+                                            'style': 'text-align: center;'
+                                        }
+                                    }) }}
+                            {% endif %}
+                        {% else %}
+                            {# {{ resultado.resultado.vars.value }} #}
+                            {{ form_widget(resultado.resultado, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'disabled': 'true',
+                                    'style': 'text-align: center;'
+                                }
+                            }) }}
+                    {% endif %}
+                {% else %}
+                    {# {{ resultado.resultado.vars.value }} #}
+                    {% set idDet = resultado.vars.value.determinacion.id %}
+                    {% if idDet == 14 or idDet == 82 or idDet == 97 or idDet == 70 or idDet == 76 %}
+                        {{ form_widget(resultado.resultado, {
+                            'attr': {
+                                'class': 'form-control',
+                                'style': 'text-align: center;'
+                            }
+                        }) }}
+                    {% else %}
+                        {{ form_widget(resultado.resultado, {
+                            'attr': {
+                                'class': 'form-control',
+                                'disabled': 'true',
+                                'style': 'text-align: center;'
+                            }
+                        }) }}
+                    {% endif %}
+            {% endif %}
+        {% else %}
+            {#{{ dump(numero) }}#}
+            {# NÚMERO CON DECIMALES #}
+            {% set decimales = (numero|last)|split('') %}
+            {% set ex = false %}
+            {% for d in decimales if d == 'E' %}
+                {% set ex = true %}
+            {% endfor %}
+            {# (me imagino que no serán tan hdp como para ponerme un exponente con decimales, porque no lo estaría considerando) #}
+            {% if ex %}
+                    {{ form_widget(resultado.resultado, {
+                        'attr': {
+                            'class': 'form-control',
+                            'disabled': 'true',
+                            'style': 'text-align: center;'
+                        }
+                    }) }}
+                {% else %}
+                    {#{{ dump(numero) }}#}
+                    {% if decimales|length >= 3 %}
+                            {% if resultado.resultado.vars.value > -1 and resultado.resultado.vars.value < 1 %}
+                                    {# -1 < x < 1  (x != 0) #}
+                                    {#{{ dump(numero) }}#}
+                                    {% set primerNumero = 0 %}
+                                    {% for d in decimales if d != 0 and primerNumero == 0 %}
+                                        {% set primerNumero = loop.index0 %}
+                                    {% endfor %}
+
+                                    {% if numero[primerNumero] != 0 %}
+                                            {% set ceros = numero|slice(0, (primerNumero + 1)) %}
+
+                                            {% if ceros is not empty %}
+                                                    {% if ceros|length >= 3 %}
+                                                            {% set numero = numero|slice((primerNumero + 1), ((numero|length) - 1)) %}
+                                                            {% set ceros = ceros|length %}
+                                                            {% if resultado.resultado.vars.value > 0 %}
+                                                                    {# {{ numero|join ~ 'E-' ~ ceros }} #}
+                                                                    {{ form_widget(resultado.resultado, {
+                                                                        'attr': {
+                                                                            'value': (numero|join ~ 'E-' ~ ceros),
+                                                                            'class': 'form-control',
+                                                                            'disabled': 'true',
+                                                                            'style': 'text-align: center;'
+                                                                        }
+                                                                    }) }}
+                                                                {% else %}
+                                                                    {# {{ '-' ~ numero|join ~ 'E-' ~ ceros }} #}
+                                                                    {{ form_widget(resultado.resultado, {
+                                                                        'attr': {
+                                                                            'value': ('-' ~ numero|join ~ 'E-' ~ ceros),
+                                                                            'class': 'form-control',
+                                                                            'disabled': 'true',
+                                                                            'style': 'text-align: center;'
+                                                                        }
+                                                                    }) }}
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {# {{ resultado.resultado.vars.value }} #}
+                                                            {{ form_widget(resultado.resultado, {
+                                                                'attr': {
+                                                                    'class': 'form-control',
+                                                                    'disabled': 'true',
+                                                                    'style': 'text-align: center;'
+                                                                }
+                                                            }) }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {# {{ resultado.resultado.vars.value }} #}
+                                                    {{ form_widget(resultado.resultado, {
+                                                        'attr': {
+                                                            'class': 'form-control',
+                                                            'disabled': 'true',
+                                                            'style': 'text-align: center;'
+                                                        }
+                                                    }) }}
+                                            {% endif %}
+                                        {% else %}
+                                            {# {{ resultado.resultado.vars.value }} #}
+                                            {{ form_widget(resultado.resultado, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'disabled': 'true',
+                                                    'style': 'text-align: center;'
+                                                }
+                                            }) }}
+                                    {% endif %}
+                                {% else %}
+                                    {# -1 > x > 1 #} {# POR DEFINIR #}
+                                    {# NÚMEROS CON PARTE ENTERA != 0 #}
+                                    {# NUMEROS GRANDES CON DECIMALES #}
+                                    {# {% set entero = numero|first %} #}
+
+                                    {# {{ resultado.resultado.vars.value }} #}
+                                    {{ form_widget(resultado.resultado, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'disabled': 'true',
+                                            'style': 'text-align: center;'
+                                        }
+                                    }) }}
+                            {% endif %}
+                        {% else %}
+                            {# {{ resultado.resultado.vars.value }} #}
+                            {{ form_widget(resultado.resultado, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'disabled': 'true',
+                                    'style': 'text-align: center;'
+                                }
+                            }) }}
+                    {% endif %}
+            {% endif %}
+    {% endif %}
+
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                </div>
+
+                                                                <div class="col-md-1" align="center">
+                                                                    {% if resultado.vars.value.determinacion.unidadMedida %}
+                                                                        {% if resultado.vars.value.determinacion.id == 18 %} {# Nitrógeno Amoniacal #}
+                                                                            mg NH<sub>4</sub><sup>+</sup>/l
+                                                                        {% elseif resultado.vars.value.determinacion.id == 100 %} {# Conductividad (1:5) #}
+                                                                            ds.m<sup>-1</sup>
+                                                                        {% else %}
+                                                                            {{ resultado.vars.value.determinacion.unidadMedida }}
+                                                                        {% endif %}
+                                                                    {% else %}
+                                                                        {{ '-' }}
+                                                                    {% endif %}
+                                                                </div>
+
+                                                                {% if resultado.legislacion is defined %}
+                                                                    {{ form_widget(resultado.legislacion, { 'attr': { 'class': 'hidden' } }) }}
+                                                                {% endif %}
+                                                                {% if resultado.legislacionSinContacto is defined %}
+                                                                    {{ form_widget(resultado.legislacionSinContacto, { 'attr': { 'class': 'hidden' } }) }}
+                                                                {% endif %}
+                                                                {% if resultado.legislacionPasivo is defined %}
+                                                                    {{ form_widget(resultado.legislacionPasivo, { 'attr': { 'class': 'hidden' } }) }}
+                                                                {% endif %}
+
+                                                                <div class="col-md-2">
+                                                                    {% if number == app.user.area.id %}
+                                                                        {{ form_widget(resultado.fechaFinAnalisis, {
+                                                                            'attr': {
+                                                                                'class': 'form-control',
+                                                                                'style': 'text-align: center;'
+                                                                            }
+                                                                        }) }}
+                                                                    {% else %}
+                                                                        {% if resultado.fechaFinAnalisis.vars.value %}
+                                                                            <input type="text" class="form-control" style="text-align: center;" value="{{ resultado.fechaFinAnalisis.vars.data|date('d-m-Y') }}" readonly>
+                                                                        {% else %}
+                                                                            <input type="text" class="form-control" style="text-align: center;" value="" readonly>
+                                                                        {% endif %}
+                                                                        {{ form_widget(resultado.fechaFinAnalisis, { 'attr': { 'class': 'hidden' } }) }}
+                                                                    {% endif %}
+                                                                </div>
+                                                        {% endif %}
+                                                        <br>
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                {{ form_widget(resultado, { 'attr': { 'hidden': 'true' } }) }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+
+                                <div class="form-group form-md-line-input has-info">
+                                    {% for e in form.estados if e.children is not empty %}
+                                        <br>
+
+                                        <div class="col-md-3"></div>
+
+                                        {{ form_label(e.observacion, 'Observaciones incertidumbre', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey; top: 15px;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-4">
+                                            <div class="input-icon">
+                                                {% if estado == 'Aprobada' %}
+                                                        {{ form_widget(e.observacion, {
+                                                            'attr': {
+                                                                'class': 'form-control',
+                                                                'readonly': 'true'
+                                                            }
+                                                        }) }}
+                                                    {% else %}
+                                                        {{ form_widget(e.observacion, {
+                                                            'attr': {
+                                                                'class': 'form-control'
+                                                            }
+                                                        }) }}
+                                                {% endif %}
+                                                <div class="form-control-focus"> </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3"></div>
+
+                                        {{ form_widget(form.estados, { 'attr': { 'hidden': 'true' } }) }}
+                                    {% endfor %}
+
+                                    <br>
+                                    <br>
+                                </div>
+                            {% else %}
+                                <hr>
+
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-4" align="center">
+                                        <em>no hay determinaciones disponibles</em>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                </div>
+                                <br>
+
+                                <hr>
+
+                                <div class="form-group form-md-line-input has-info">
+                                    {% for e in form.estados if e.children is not empty %}
+                                        {{ form_label(e.observacion, 'Observaciones', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey; top: 15px;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-6">
+                                            <div class="input-icon">
+                                                {% if estado == 'Aprobada' %}
+                                                        {{ form_widget(e.observacion, {
+                                                            'attr': {
+                                                                'class': 'form-control',
+                                                                'readonly': 'true'
+                                                            }
+                                                        }) }}
+                                                    {% else %}
+                                                        {{ form_widget(e.observacion, {
+                                                            'attr': {
+                                                                'class': 'form-control'
+                                                            }
+                                                        }) }}
+                                                {% endif %}
+                                                <div class="form-control-focus"> </div>
+                                            </div>
+                                        </div>
+                                        {{ form_widget(form.estados, { 'attr': { 'hidden': 'true' } }) }}
+                                        {{ form_widget(form.resultados, { 'attr': { 'hidden': 'true' } }) }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <hr>
+
+                            <br>
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4" align="center">
+                                    <em>no hay determinaciones disponibles</em>
+                                </div>
+                                <div class="col-md-4"></div>
+                            </div>
+                            <br>
+
+                            <hr>
+
+                            <div class="form-group form-md-line-input has-info">
+                                {% for e in form.estados if e.children is not empty %}
+                                    {{ form_label(e.observacion, 'Observaciones', {
+                                        'label_attr': {
+                                            'class': 'col-md-2 control-label',
+                                            'style': 'color: grey; top: 15px;'
+                                        }
+                                    }) }}
+                                    <div class="col-md-6">
+                                        <div class="input-icon">
+                                            {% if estado == 'Aprobada' %}
+                                                    {{ form_widget(e.observacion, {
+                                                        'attr': {
+                                                            'class': 'form-control',
+                                                            'readonly': 'true'
+                                                        }
+                                                    }) }}
+                                                {% else %}
+                                                    {{ form_widget(e.observacion, {
+                                                        'attr': {
+                                                            'class': 'form-control'
+                                                        }
+                                                    }) }}
+                                            {% endif %}
+                                            <div class="form-control-focus"> </div>
+                                        </div>
+                                    </div>
+                                    {{ form_widget(form.estados, { 'attr': { 'hidden': 'true' } }) }}
+                                    {{ form_widget(form.resultados, { 'attr': { 'hidden': 'true' } }) }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <div class="col-md-4"></div>
+            <div class="col-md-4" align="center">
+                <button type="submit" data-loading-text="Loading..." class="btn yellow mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right">
+                    <span class="ladda-label">
+                        Guardar
+                    </span>
+                </button>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    {# SPINNER BUTTONS #}
+    <script src="{{ asset('public/assets/global/plugins/ladda/spin.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/ladda/ladda.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-buttons.min.js') }}" type="text/javascript"></script>
+
+    {# SELECT2 #}
+    <script src="{{ asset('public/assets/global/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/components-select2.min.js') }}" type="text/javascript"></script>
+
+    {# TOASTR NOTIFICATIONS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('Js/CoreBundle/ui-toastr.js') }}" type="text/javascript"></script>
+
+    {#  #}
+    <script src="{{asset('Js/Laboratorio/PedidoBundle/Muestra.js')}}" type="text/javascript"></script>
+    <script src="{{asset('Js/Laboratorio/PedidoBundle/Protocolo.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var rutaBloquear = "{{ path('laboratorio_pedido_bloqueo_muestra', { 'idResultado': 0, 'bloquear': '-1' }) }}";
+        var rutaSupervisar = "{{ path('laboratorio_pedido_supervisar_muestra', { 'idMuestra': 0 }) }}";
+        var rutaDesSupervisar = "{{ path('laboratorio_pedido_des_supervisar_muestra', { 'idMuestra': 0 }) }}";
+        var rutaAutorizar = "{{ path('laboratorio_pedido_autorizar_muestra', { 'idMuestra': 0 }) }}";
+        var rutaDesAutorizar = "{{ path('laboratorio_pedido_des_autorizar_muestra', { 'idMuestra': 0 }) }}";
+        var rutaFinalizar = "{{ path('laboratorio_pedido_finalizar_muestra', { 'idMuestra': 0, 'idArea': '-1' }) }}";
+        var rutaDesFinalizar = "{{ path('laboratorio_pedido_des_finalizar_muestra', { 'idMuestra': 0, 'idArea': '-1' }) }}";
+        var rutaCambiarArea = "{{ path('laboratorio_pedido_muestra', { 'idMuestra': 0, 'idArea': '-1' }) }}";
+        var rutaProtocolo = "{{ path('laboratorio_pedido_protocolo_protocolo', { 'idMuestra': 0, 'ausenciaGerente': '-1' }) }}";
+        var rutaProtocoloIntermedio = "{{ path('laboratorio_pedido_protocolo_intermedio', { 'idMuestra': 0, 'idArea': '-1' }) }}";
+
+        jQuery(document).ready(function() {
+            $('.btn-icon-only').on('click', function() {
+                $(this).attr('class', 'btn btn-icon-only disabled');
+            });
+
+            $(".select2").select2({
+                placeholder: "Seleccionar opción"
+            });
+
+            $("#laboratorio_pedidobundle_muestra_auxiliares").select2({
+                placeholder: "Seleccionar auxiliar/es..."
+            });
+
+            {% set numero = 0 %}
+            {% set usuario = '' %}
+            
+            {% if app.user.id == 304 %}
+                {% set usuario = 297 %}
+            {% elseif app.user.id == 303 %}
+                {% set usuario = 291 %}
+            {% else %}
+                {% set usuario = app.user.id %}
+            {% endif %}
+
+            {% for r in form.resultados.children %}
+                {% if not r.vars.value.bloqueado %}
+                    $("#laboratorio_pedidobundle_muestra_resultados_{{ numero }}_usuario").val('{{ usuario }}');
+                    $("#laboratorio_pedidobundle_muestra_resultados_{{ numero }}_usuario").trigger('change');
+                    {% if app.user.area.id == 19 or app.user.area.id == 20 %}
+                        if (!($('#laboratorio_pedidobundle_muestra_resultados_{{ numero }}_fechaFinAnalisis').is(':disabled')))
+                            $("#laboratorio_pedidobundle_muestra_resultados_{{ numero }}_fechaFinAnalisis").val('{{ form.vars.value.fechaTomaMuestra|date("d-m-Y") }}');
+                    {% endif %}
+                {% endif %}
+                {% set numero = numero+1 %}
+            {% endfor %}
+
+            {% if form.children.lugarExtraccion is defined %}
+                {% if form.children.lugarExtraccion.vars.value == '' %} //(quiere decir que es un pedido nuevo)
+                    {% if form.vars.value.pedido.establecimiento %}
+                        {% set rs = form.vars.value.pedido.establecimiento.razonesSociales|first %}
+
+                        {% if rs %}
+                            {% set rs = rs.razonSocial %}
+                            {% set nombreUno = rs.nombre1 %}
+                            {% set nombreDos = rs.nombre2 %}
+                            
+                            {% if (nombreUno is defined) or (nombreDos is defined) %}
+                                {% set sitioMuestreo = '' %}
+                                
+                                {% if rs.id == 12783 %} // {# MONITOREO ATMOSFÉRICO MANUAL #}
+                                    // {# ESTACIÓN NUEVA POMPEYA #}
+                                    {% set sitioMuestreo = 'Sobre Terraza' %}
+                                {% elseif rs.id == 12787 %}
+                                    // {# ESTACIÓN CHACARITA #}
+                                    {% set sitioMuestreo = 'Sobre Terraza' %}
+                                {% elseif rs.id == 12788 %}
+                                    // {# ESTACIÓN PALERMO #}
+                                    {% set sitioMuestreo = 'Sobre Terraza' %}
+                                {% elseif rs.id == 12789 %}
+                                    // {# ESTACIÓN VILLA SOLDATI #}
+                                    {% set sitioMuestreo = 'Sobre Terraza' %}
+                                {% elseif rs.id == 12790 %}
+                                    // {# ESTACIÓN LA BOCA #}
+                                    {% set sitioMuestreo = 'Sobre Terraza' %}
+                                {% elseif rs.id == 12760 %} // {# CALIDAD AIRE CUMAR #}
+                                    // {# PUENTE LA NORIA #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12755 %}
+                                    // {# PUENTE URIBURU #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12748 %}
+                                    // {# DESEMBOCADURA RIACHUELO #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12744 %} // {# LAGOS Y LAGUNAS #}
+                                    // {# LAGUNA LOS COIPOS #}
+                                    {% set sitioMuestreo = 'Cabecera Sur' %}
+                                {% elseif rs.id == 12747 %}
+                                    // {# LAGO VICTORIA OCAMPO #}
+                                    {% set sitioMuestreo = 'Sobre Puente' %}
+                                {% elseif rs.id == 12757 %}
+                                    // {# LAGO PLANETARIO #}
+                                    {% set sitioMuestreo = 'Árbol Caído' %}
+                                {% elseif rs.id == 12752 %}
+                                    // {# LAGO ROSEDAL #}
+                                    {% set sitioMuestreo = 'Frente a Isla' %}
+                                {% elseif rs.id == 12759 %}
+                                    // {# LAGO REGATAS #}
+                                    {% set sitioMuestreo = 'Frente a Golf Club' %}
+                                {% elseif rs.id == 12746 %}
+                                    // {# LAGO CENTENARIO #}
+                                    {% set sitioMuestreo = 'Frente a Isla' %}
+                                {% elseif rs.id == 12745 %}
+                                    // {# LAGO SAAVEDRA #}
+                                    {% set sitioMuestreo = 'Sobre Puente' %}
+                                {% elseif rs.id == 12749 %}
+                                    // {# LAGO LUGANO #}
+                                    {% set sitioMuestreo = 'Frente a Embarcadero' %}
+                                {% elseif rs.id == 12761 %}
+                                    // {# LAGO SOLDATI #}
+                                    {% set sitioMuestreo = 'Frente a Sala de Bombas' %}
+                                {% elseif rs.id == 12756 %} // {# RIO DE LA PLATA #}
+                                    // {# RESERVA ECOLOGICA COSTANERA SUR #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12769 %}
+                                    // {# CLUB DE PESCA #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12770 %}
+                                    // {# ABANICO #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12771 %}
+                                    // {# PARQUE DE LOS NIÑOS #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12751 %} // {# ARROYOS #}
+                                    // {# INGRESO MALDONADO #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12750 %}
+                                    // {# DESEMBOCADURA MALDONADO #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12753 %}
+                                    // {# INGRESO MEDRANO #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12754 %}
+                                    // {# DESEMBOCADURA MEDRANO #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12758 %}
+                                    // {# INGRESO CILDAÑEZ #}
+                                    {% set sitioMuestreo = '' %}
+                                {% elseif rs.id == 12772 %}
+                                    // {# DESEMBOCADURA CILDAÑEZ #}
+                                    {% set sitioMuestreo = '' %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if sitioMuestreo %}
+                                $('#laboratorio_pedidobundle_muestra_lugarExtraccion').val('{{ sitioMuestreo }}');
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        });
+
+    </script>
+
+{% endblock %}

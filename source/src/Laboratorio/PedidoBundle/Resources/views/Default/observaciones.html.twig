@@ -1,0 +1,47 @@
+{% block observaciones %}
+
+	<table style="width: 100%; border: 0; font-size: 13px;">
+	    {% if resultados.incertidumbre %}
+	        <tr>
+	            <td style="border-color: white;">
+	                <u>Observaciones</u>:
+	            </td>
+	        </tr>
+	        {% if not resultados.muestra.auxiliares or not resultados.muestra.auxiliares|first %}
+				<tr>
+					<td style="border-color: white;">
+						· Los resultados se aplican a la muestra recibida por el laboratorio (la toma de muestra estuvo a cargo del cliente)
+					</td>
+				</tr>
+		    {% endif %}
+	        {% for area, incertidumbres in resultados.incertidumbre %}
+	            {% for item in incertidumbres %}
+	                <tr>
+	                    <td style="border-color: white;">
+	                        {{ '· ' ~ item }}
+	                    </td>
+	                </tr>
+	            {% endfor %}
+	        {% endfor %}
+	    {% else %}
+	        <tr>
+	            <td style="border-color: white;">
+	                <u>Observaciones</u>:
+	                {% if resultados.muestra.auxiliares and resultados.muestra.auxiliares|first %}
+	                	-
+	                {% else %}
+		                	</td>
+		                </tr>
+		                <tr>
+		                	<td style="border-color: white;">
+		                		· Los resultados se aplican a la muestra recibida por el laboratorio (la toma de muestra estuvo a cargo del cliente)
+	                {% endif %}
+	            </td>
+	        </tr>
+	    {% endif %}
+	</table>
+
+	<br>
+	<br>
+
+{% endblock %}

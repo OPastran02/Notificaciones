@@ -1,0 +1,36 @@
+<table class="table table-hover" id="direcciones" style="empty-cells: hide;">
+    <thead>
+        <tr class="uppercase">
+            <th style="text-align: center; width: 5%">Direccion</th>
+            <th style="text-align: center; width: 5%">Razon Social</th>	            
+            <th style="text-align: center; width: 1%">Vincular</th>
+        </tr>
+    </thead>
+
+    {# {{ dump(form.direcciones.children) }} #}
+
+    <tbody>
+        {% for dato in datos %}
+            <tr class='listAdress'>
+                <td>
+                     <input required="required" class="form-control input-sm" readonly="readonly" style="text-align: center;" value="{{ dato.direcciones }}" type="text">
+                </td>
+                <td>
+                    <input required="required" class="form-control input-sm" readonly="readonly" style="text-align: center;" value="{{ dato.razonSocial }}" type="text">
+                </td>
+                <td>
+                	<div class="col-md-3"></div>
+                   <a class="btn btn-xs default green-meadow" href="javascript:ReporteDiario.vincularCheckListEstablecimiento({{ "'" ~ idOrden ~ "'" }}, {{ "'" ~ dato.id ~ "'" }});"><i class="fa fa-chain"></i>Vincular</a>
+                </td>	                	                	                
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+$(".modal-title").html("Vincular Orden de Inspección");
+
+$(".modal-footer").html('<button type="submit" data-toggle="modal" onClick="ReporteDiario.vincularCheckListNuevoEstablecimientoManual('+"'"+'{{idOrden}} '+"'"+')" class="btn btn-outline btn-circle blue" >NUEVO ESTABLECIMIENTO</button><button type="button" data-dismiss="modal" class="btn btn-outline btn-circle dark">Cerrar</button>');
+
+</script>

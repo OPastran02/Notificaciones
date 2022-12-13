@@ -1,0 +1,48 @@
+laboratorio_pedido:
+    resource: "@LaboratorioPedidoBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+establecimiento_establecimiento:
+    resource: "@EstablecimientoEstablecimientoBundle/Resources/config/routing.yml"
+    prefix:   /
+
+home_home:
+    resource: "@HomeHomeBundle/Resources/config/routing.yml"
+    prefix:   /
+
+publico_publico:
+    resource: "@PublicoPublicoBundle/Resources/config/routing.yml"
+    prefix:   /
+
+reportes_reportes:
+    resource: "@ReportesReportesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+encuesta_encuesta:
+    resource: "@EncuestaEncuestaBundle/Resources/config/routing.yml"
+    prefix:   /
+
+notificaciones_notificaciones:
+    resource: "@NotificacionesNotificacionesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+
+faltas_faltas:
+    resource: "@FaltasFaltasBundle/Resources/config/routing.yml"
+    prefix:   /
+
+core:
+    resource: "@CoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+usuario_usuario:
+    resource: "@UsuarioUsuarioBundle/Resources/config/routing.yml"
+    prefix:   /
+
+inspecciones_inspecciones:
+    resource: "@InspeccionesInspeccionesBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation

@@ -1,0 +1,22 @@
+
+
+{{ form_start(form,{'attr': {'id':'formReportes', 'name':'formReportes'} } ) }}
+	{{ form_widget(form.filtro, {
+        'attr': {
+            'class': 'form-control select2',
+            'onChange':'javascript:FormActions.optionFilter();',            
+        }
+    }) }}
+
+    {{ form_widget(form.option, {    	
+        'attr': {        	
+            'class': 'form-control select2'
+        }
+    }) }}
+
+{{ form_end(form) }}
+
+
+
+
+

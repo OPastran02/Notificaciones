@@ -1,0 +1,11 @@
+version: '3'
+services:
+  apache:
+    build: .docker/Apache
+    container_name: not
+    ports:
+      - 80:80
+    volumes:
+      - ./.docker/Apache/VirtualHost:/etc/apache2/sites-enabled
+      - ./:/var/www/html
+      - ./.docker/Apache/php/php.ini:/usr/local/etc/php/php.ini

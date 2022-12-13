@@ -1,0 +1,40 @@
+usuario_usuario_homepage:
+    path:     /usuario/
+    defaults: { _controller: UsuarioUsuarioBundle:Usuario:index }
+
+usuario_usuario_tablaUsuario:
+    path:     /usuario/tablausuario
+    defaults: { _controller: UsuarioUsuarioBundle:Usuario:tablaUsuario }
+
+usuario_usuario_excel_usuario:
+    path:     /usuario/excelusuario
+    defaults: { _controller: UsuarioUsuarioBundle:Usuario:excelUsuario }
+
+usuario_usuario_datos:
+    path:     /usuario/datos/{id}
+    defaults: { _controller: UsuarioUsuarioBundle:Usuario:datosUsuario, id: 0 }
+
+usuario_usuario_resetPassword:
+    path:     /resetPassword
+    defaults: { _controller: UsuarioUsuarioBundle:Usuario:resetPassword }
+
+usuario_usuario_changePassword:
+    path:     /changePassword
+    defaults: { _controller: UsuarioUsuarioBundle:Usuario:changePassword }
+
+usuario_usuario_log:
+    path:     /
+    defaults: { _controller: UsuarioUsuarioBundle:Usuario:login }
+
+usuario_usuario_login:
+    path:     /login/{captcha}
+    defaults: { _controller: UsuarioUsuarioBundle:Usuario:login, captcha:false }
+
+usuario_usuario_login_check:
+    path:     /login_check
+    defaults: { _controller: UsuarioUsuarioBundle:Usuario:loginCheck }
+    
+usuario_usuario_log_out:
+    path:     /logout
+    defaults: { _controller: UsuarioUsuarioBundle:Usuario:logout }
+

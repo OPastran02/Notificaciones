@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            html *
+            {
+                color: #000 !important;
+                font-family: Arial !important;
+            }
+
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+
+            }
+
+            .bordeGrueso {
+                border: 2px solid black;
+            }
+        </style>
+    </head>
+    <body style="border: 0; top: 45px; position: absolute;">
+        <table width="100%" style="font-size: .7em;">
+            <tr>
+                <th width="20%" class="bordeGrueso">
+                    Gerencia Operativa de <br> Determinaciones Ambientales y Laboratorio
+                </th>
+                <th width="65%" class="bordeGrueso">
+                    PROTOCOLO DE ANÁLISIS
+                </th>
+                <th width="15%" class="bordeGrueso">
+                    {% set codigo = '' %}
+                    {% set idPrograma = programa.id %}
+
+                    {% if idPrograma == 1 %}
+                        {# Natatorios #}
+                        {% set codigo = '155' %}
+                    {% elseif idPrograma == 2 %}
+                        {# Agua de bebida #}
+                        {% set codigo = '156' %}
+                    {% elseif idPrograma == 3 %}
+                        {# Lagos y lagunas #}
+                        {% set codigo = '157' %}
+                    {% elseif idPrograma == 4 %}
+                        {# CUMAR #}
+                        {% set codigo = '158' %}
+                    {% elseif idPrograma == 5 %}
+                        {# Río de la Plata #}
+                        {% set codigo = '159' %}
+                    {% elseif idPrograma == 6 %}
+                        {# Arroyos #}
+                        {% set codigo = '163' %}
+                    {% elseif idPrograma == 7 %}
+                        {# Aguas varias #}
+                        {% set codigo = '160' %}
+                    {% elseif idPrograma == 8 %}
+                        {# Efluentes #}
+                        {% set codigo = '164' %}
+                    {% elseif idPrograma == 9 %}
+                        {# Monitoreo Atmosférico Manual #}
+                        {% set codigo = '151' %}
+                    {% elseif idPrograma == 10 %}
+                        {# Calidad de Aire CUMAR - Subprograma I #}
+                        {% set codigo = '152' %}
+                    {% elseif idPrograma == 11 %}
+                        {# Contaminación atmosférica (fuentes fijas) #}
+                        {% set codigo = '153' %}
+                    {% elseif idPrograma == 12 %}
+                        {# Contaminación atmosférica (Fuentes móviles) #}
+                        {% set codigo = '154' %}
+                    {% elseif idPrograma == 13 %}
+                        {# Monitoreo Atmosférico Automático #}
+                        {% set codigo = '' %}
+                    {% elseif idPrograma == 14 %}
+                        {# Calidad de Suelos Varios #}
+                        {% set codigo = '' %}
+                    {% elseif idPrograma == 15 %}
+                        {# Calidad de Suelos en Plazas y Parques #}
+                        {% set codigo = '166' %}
+                    {% elseif idPrograma == 16 %}
+                        {# Calidad de Compost #}
+                        {% set codigo = '167' %}
+                    {% elseif idPrograma == 17 %}
+                        {# Calidad de Agua Juegos Acuáticos #}
+                        {% set codigo = '161' %}
+                    {% elseif idPrograma == 18 %}
+                        {# Calidad de Agua de Humedales #}
+                        {% set codigo = '162' %}
+                    {% elseif idPrograma == 19 %}
+                        {# Interlaboratorios #}
+                        {% set codigo = '' %}
+                    {% elseif idPrograma == 20 %}
+                        {# Intralaboratorios #}
+                        {% set codigo = '' %}
+                    {% else %}
+                        {# Ningún caso de los anteriores #}
+                        {% set codigo = '' %}
+                    {% endif %}
+
+                    {# R-117 #}
+                    {% if codigo %}
+                        R {{ codigo }}
+                    {% endif %}
+                </th>
+            </tr>
+            <tr height="10" style="border: none;">
+                <th style="border-color: transparent;"></th>
+            </tr>
+            <tr>
+                <th colspan="3" class="bordeGrueso">
+                    ANÁLISIS DE {{ programa.programa|upper }}
+                </th>
+            </tr>
+        </table>
+    </body>
+</html>

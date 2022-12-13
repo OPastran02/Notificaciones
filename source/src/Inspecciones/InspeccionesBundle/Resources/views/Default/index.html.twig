@@ -1,0 +1,521 @@
+{% extends '::base.html.twig' %}
+
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    {# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# SELECT2 #}
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# EXTENDED MODALS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css') }}" rel="stylesheet" type="text/css" />
+
+    {# TOASTR NOTIFICATIONS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
+
+   <!--DATEPICKER-->
+    <link href="{{ asset('public/assets/layouts/layout/css/datepicker.css')}}" rel="stylesheet" type="text/css">
+
+    <link href="{{ asset('public/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+
+{% block pagecontent %}
+    
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <input class="successFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashBag.get('alert') %}
+        <input class="alertFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashBag.get('error') %}
+        <input class="errorFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light">
+                <div class="portlet-title">
+                    <div class="actions">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <div class="input-group select2-bootstrap-prepend">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" data-select2-open="single-prepend-text">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </button>
+                                    </span>
+                                    <select id="single-prepend-text" class="form-control select2">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="input-group select2-bootstrap-append">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" data-select2-open="multi-append">
+                                            <span class="glyphicon glyphicon-map-marker"></span>
+                                        </button>
+                                    </span>
+                                    <select id="multi-append" class="form-control select2" multiple>
+                                        <optgroup label="Prioridad">
+                                            <option>Programadas</option>
+                                            <option>Reinspeccionar</option>
+                                            <option>Reprogramar</option>
+                                            <option>Automáticas</option>
+                                            <option>Nunca Inspeccionado</option>
+                                        </optgroup>
+                                        <optgroup label="Rubro" id="rubros">
+                                        </optgroup>
+                                        <optgroup label="Cedulas Vencidas" id="cedulasVencidas">
+                                        </optgroup>
+                                        <option>INTIMACION INMEDIATA</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <br>
+                            <br>
+
+                            <hr>
+
+                            <div class="col-md-1"></div>
+
+                            <div class="col-md-3">
+                                <div class="input-group select2-bootstrap-append">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" data-select2-open="single">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </span>
+                                    <select id="single" class="form-control select2">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <input class="form-control" placeholder="Ingrese altura..." type="text" id="a">
+                            </div>
+
+                            <div class="col-md-1">
+                                <input class="form-control" placeholder="Piso" type="text" id="p">
+                            </div>
+
+                            <div class="col-md-1">
+                                <input class="form-control" placeholder="Dto." type="text" id="d">
+                            </div>
+
+                            <div class="col-md-1">
+                                <input class="form-control" placeholder="Local" type="text" id="l">
+                            </div>
+
+                            <div class="col-md-2">
+                                <button type="button" data-loading-text="Loading..." class="btn yellow mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" id="buscarDireccion">
+                                    <span class="ladda-label">
+                                        Buscar dirección
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet-body">
+
+                    <div style="text-align: center;">
+                        <!--<label style="color:#000">Comunas</label>
+                        <input type="checkbox" id="kmlcomunas" name="kmlcomunas" checked>
+                        <label style="color:#000">Acumar</label>
+                        <input type="checkbox" id="kmlacumar" name="kmlacumar">-->
+                    </div>
+
+                    <div id="gmap" class="gmaps" style="height: 500px;"> </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light portlet-fit portlet-datatable bordered">
+                <div class="portlet-title">
+                    <div class="caption font-yellow">
+                        <span aria-hidden="true" class="icon-list font-yellow"></span>
+                        <span class="caption-subject bold uppercase">
+                            Programaciones
+                        </span>
+                    </div>
+                    {% if is_granted('ROLE_PROGRAMACION_EDIT') %}
+                        <div class="actions">
+                            <div class="btn-group btn-group-devided" data-toggle="buttons">
+                                <button type="Submit" data-loading-text="cargando..." class="btn yellow mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" id="pasar" name="pasar" onClick="javascript:enviar();">
+                                    <span class="ladda-label">
+                                        Enviar
+                                    </span>
+                                    <i class="fa fa-send"></i>
+                                </button>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="actions">
+                            <div class="btn-group btn-group-devided" data-toggle="buttons">
+                                <button type="Submit" data-loading-text="cargando..." class="btn grey-cascade mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right">
+                                    <span class="ladda-label">
+                                        sin permisos
+                                    </span>
+                                    <i class="fa fa-send"></i>
+                                </button>
+                            </div>
+                        </div>
+                    {% endif %}    
+
+                </div>
+                <div class="portlet-body">
+                    <div class="table-container">
+                        <table class="table table-striped table-bordered table-hover table-checkable" id="tablaProgramacionArea">
+                                <thead>
+                                    <tr role="row" class="heading" id="head">
+                                        <th width="15%"></th>
+                                        <th width="20%">Id Sap</th>
+                                        <th width="5%">Inspector</th>
+                                        <th width="15%">Circuito</th>
+                                        <th width="15%">Direccion</th>
+                                        <th width="15%">Fecha</th>
+                                    </tr>
+                                    <tr role="row" class="filter">
+                                        <th>
+                                            <div class="col-md-12">
+                                                <button class="btn btn-circle green-haze btn-outline btn-block sbold uppercase filter-submit">
+                                                <i class="fa fa-search"></i> Buscar </button>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <button class="btn btn-circle red-mint btn-outline btn-block sbold uppercase filter-cancel">
+                                                <i class="fa fa-times"></i> Reiniciar</button>
+                                            </div>   
+                                        </th>
+                                        <th>
+                                        </th>
+                                        <th>
+                                            <!--ESTADO-->
+                                            <select type="text" class="form-control form-filter input-sm select2" name="order_2" id="order_2">
+                                                <option></option>
+                                                {% for e in inspectores %}
+                                                    <option>{{ e.nombre }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </th>  
+                                        <th>
+                                            <!--ESTADO-->
+                                            <select type="text" class="form-control form-filter input-sm select2" name="order_3" id="order_3">
+                                                <option></option>
+                                                {% for e in circuito %}
+                                                    <option>{{ e.circuito }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </th>  
+                                        <th>
+                                            <input type="text" class="form-control form-filter" name="order_4" id="order_4"></input>
+                                        </th> 
+                                        <th>
+                                            <input type="text" class="form-control form-filter fecha-picker" name="order_5" id="order_5" placeholder="desde"></input>
+                                            <input type="text" class="form-control form-filter fecha-picker" name="order_5_2" id="order_5_2" placeholder="hasta"></input>
+                                        </th>                                                                                 
+                                    </tr>
+                                </thead>
+                                <tbody> 
+
+                                </tbody>                                            
+                        </table>
+                    </div>
+                </div>
+                <div class="form-actions" align="center">
+                {% if is_granted('ROLE_PROGRAMACION_EDIT') %}           
+                    <button type="Submit" data-loading-text="cargando..." class="btn yellow mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" id="pasar" name="pasar" onClick="javascript:enviar();">
+                        <span class="ladda-label">
+                            Enviar
+                        </span>
+                        <i class="fa fa-send"></i>
+                    </button>
+                 {% else %}
+                    <button data-loading-text="cargando..." class="btn grey-cascade mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" >
+                        <span class="ladda-label">
+                            Sin permisos
+                        </span>
+                        <i class="fa fa-send"></i>
+                    </button>
+                 {% endif %} 
+                </div>
+                <br>
+            </div>
+            <!-- End: life time stats -->
+        </div>
+    </div>
+
+
+    {# ----------------------------------- #}
+    
+
+    <div id="modalProgramar" class="modal container fade" tabindex="-1">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Full Width</h4>
+        </div>
+
+        <div class="modal-body"> </div>
+
+        <div class="modal-footer">
+        {% if is_granted('ROLE_PROGRAMACION_EDIT') %}
+            <button type="submit" data-loading-text="Loading..." class="btn blue mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" data-toggle="modal" onClick="javascript:$('#modalForm').submit();">
+                <span class="ladda-label">
+                    Guardar
+                </span>
+            </button>
+        {% endif %}
+            <button type="button" data-dismiss="modal" class="btn btn-outline btn-circle dark">Cerrar</button>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    {# SPINNER BUTTONS #}
+    <script src="{{asset('public/assets/global/scripts/datatable.js')}}" type="text/javascript"></script>
+    <script src="{{asset('public/assets/global/plugins/datatables/datatables.min.js')}}" type="text/javascript"></script>       
+    <script src="{{asset('public/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js')}}" type="text/javascript"/>
+    <script src="{{asset('public/assets/pages/scripts/table-datatables-ajax.min.js')}}" type="text/javascript"></script>
+
+    {# SPINNER BUTTONS #}
+    <script src="{{ asset('public/assets/global/plugins/ladda/spin.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/ladda/ladda.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-buttons.min.js') }}" type="text/javascript"></script>
+
+    {# SELECT2 #}
+    <script src="{{ asset('public/assets/global/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/components-select2.min.js') }}" type="text/javascript"></script>
+
+    {# EXTENDED MODALS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-extended-modals.min.js') }}" type="text/javascript"></script>
+
+    {# TOASTR NOTIFICATIONS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('Js/CoreBundle/ui-toastr.js') }}" type="text/javascript"></script>
+
+    {# GOOGLE MAPS #}
+    <script src="{{google_url}}" type="text/javascript"></script>
+    {# <script src="{{ asset('public/assets/global/plugins/gmaps/gmaps.min.js') }}" type="text/javascript"></script> #}
+    <script src="{{ asset('public/assets/global/plugins/gmaps/gmaps.js') }}" type="text/javascript"></script>
+    <script src="{{asset('Js/Inspecciones/InspeccionesBundle/TablaProgramacionArea.js')}}" type="text/javascript"></script>
+
+
+    {# ↓ LO USO PARA OPERAR CON LAS FECHAS EN EL JS #}
+    {#<script src="http://momentjs.com/downloads/moment.min.js"></script>#}    
+    <script src="{{ asset('public/assets/global/plugins/moment.min.js') }}" type="text/javascript"></script>
+
+    {# SCRIPTS DE LA PÁGINA #}
+    <script src="{{asset('Js/Inspecciones/InspeccionesBundle/MapaProgramacion.js')}}" type="text/javascript"></script>
+    <script src="{{asset('Js/Inspecciones/InspeccionesBundle/ReporteDiario.js')}}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        var routes = {
+            table:{
+                tablaProgramacionArea: "{{ path('inspecciones_inspecciones_tabla_reprogramacion') }}",
+                modal: "{{ path('inspecciones_inspecciones_edit_programacion', { 'idOrderInspeccion': 0 }) }}"
+            },
+            javascript:{
+                enviar: "{{ path('inspecciones_inspecciones_asignar_idsap') }}",
+                eliminarOrden:"{{ path('inspecciones_inspecciones_eliminar', {'idOrderInspeccion' : 0}) }}",
+                eliminarArchivo:"{{ path('inspecciones_inspecciones_borrar_archivo_subido_programacion', {'archivo' : 0}) }}",
+            },
+            select: {
+                rubrosPrincipales: "{{ path('core__rubros_principales') }}",
+                tiposCedulas: "{{ path('core__tipos_cedulas') }}",
+                calles: "{{ path('core__calles') }}"
+            },
+            map: {
+                gif: "{{ asset('public/assets/global/img/loading-spinner-grey.gif') }}",
+                programadas: "{{ path('inspecciones_inspecciones_buscar_por_programada') }}",
+                reprogramadas: "{{ path('inspecciones_inspecciones_buscar_por_reprogramados', { 'tipo': 0}) }}",
+                automaticas: "{{ path('inspecciones_inspecciones_buscar_por_inspeccionar_cada') }}",
+                nuncaInspeccionada: "{{ path('inspecciones_inspecciones_buscar_por_nunca_inspeccionada') }}",
+                intimacionInmediata: "{{ path('inspecciones_inspecciones_buscar_por_intimacion_inmediata') }}",                
+                buscarPorRubro: "{{ path('inspecciones_inspecciones_buscar_por_rubro_principal') }}",
+                buscarPorCedula: "{{ path('inspecciones_inspecciones_buscar_por_cedula') }}",
+                programar: "{{ path('inspecciones_inspecciones_programar', { 'idEstablecimiento': 0, idOrden : 0, 'edit' : 1 }) }}",
+                normalizarDireccion: "{{ path('inspecciones_inspecciones_normalizar_programar', { 'idCalle': 0, 'altura': '-1' }) }}",
+                buscarDireccion: "{{ path('inspecciones_inspecciones_buscar_direccion_programar', { 'idCalle': 0, 'altura': '-1', 'smp': '-2', 'piso': '-3', 'dpto': '-4', 'local': '-5' }) }}",
+                decidirProgramacion: "{{ path('inspecciones_inspecciones_decision') }}",
+                programarSinEstablecimiento: "{{ path('inspecciones_inspecciones_programar_sin_establecimiento', { 'idCalle': 0, 'altura': '-1', 'piso': '-2', 'dpto': '-3', 'local': '-4' }) }}",
+                reinspeccionar: "{{ path('inspecciones_inspecciones_reprogramar', { 'idOrderInspeccion': 0 }) }}",
+                reprogramar: "{{ path('inspecciones_inspecciones_reprogramar', { 'idOrderInspeccion': -1, 'crearNueva' : 0 }) }}"
+            },
+            icons: {
+                otros: "{{ asset('img/Programacion/gris.png') }}",
+                direBuscada: "{{ asset('img/Programacion/rojo.png') }}",
+                programadas: "{{ asset('img/Programacion/amarillo.png') }}",
+                reinspeccionar: "{{ asset('img/Programacion/marron.png') }}",
+                reprogramadas: "{{ asset('img/Programacion/azul.png') }}",
+                automaticas: "{{ asset('img/Programacion/violeta.png') }}",
+                cedula: "{{ asset('img/Programacion/celeste.png') }}",
+                sinRubro: "{{ asset('img/Programacion/Rubro/SinRubro.png') }}",
+                estServicioGNC: "{{ asset('img/Programacion/Rubro/EstacionServiciosGNC.png') }}",
+                estServicioDual: "{{ asset('img/Programacion/Rubro/EstacionServiciosDUAL.png') }}",
+                establecimientosGubernamentales: "{{ asset('img/Programacion/Rubro/EstablecimientosGubernamentales.png') }}",
+                hoteles: "{{ asset('img/Programacion/Rubro/HotelesHostels.png') }}",
+                supermercados: "{{ asset('img/Programacion/Rubro/Supermercado.png') }}",
+                fabricas: "{{ asset('img/Programacion/Rubro/Fabrica.png') }}",
+                acopios: "{{ asset('img/Programacion/Rubro/AcopioCombustiblesSustanciasPeligrosas.png') }}",
+                transportes: "{{ asset('img/Programacion/Rubro/Transporte.png') }}",
+                comercios: "{{ asset('img/Programacion/Rubro/ComercioMAYMIN.png') }}",
+                salud: "{{ asset('img/Programacion/Rubro/SanidadSalud.png') }}",
+                clubes: "{{ asset('img/Programacion/Rubro/Club.png') }}",
+                frigorificos: "{{ asset('img/Programacion/Rubro/Frigorificos.png') }}",
+                depositos: "{{ asset('img/Programacion/Rubro/Depositos.png') }}",
+                galvanoplastias: "{{ asset('img/Programacion/Rubro/Galvanoplastia.png') }}",
+                casasExpendioComida: "{{ asset('img/Programacion/Rubro/CasasExpendioDeComida.png') }}",
+                talleres: "{{ asset('img/Programacion/Rubro/MantenimientoAutomotor.png') }}",
+                laboratorios: "{{ asset('img/Programacion/Rubro/LaboratorioDrogeriasNoFarmacias.png') }}",
+                industrias: "{{ asset('img/Programacion/Rubro/IndustriaQuimica.png') }}",
+                curtiembres: "{{ asset('img/Programacion/Rubro/Curtiembre.png') }}",
+                lavaderos: "{{ asset('img/Programacion/Rubro/LavaderoVehiculos.png') }}",
+                lavaderosIndustriales: "{{ asset('img/Programacion/Rubro/LavaderoIndustrial.png') }}",
+                tintorerias: "{{ asset('img/Programacion/Rubro/Tintoreria.png') }}",
+                centrosComerciales: "{{ asset('img/Programacion/Rubro/CentroComercial.png') }}",
+                centrosEducativos: "{{ asset('img/Programacion/Rubro/CentrosEducativos.png') }}",
+                rubroFuentesMoviles: "{{ asset('img/Programacion/Rubro/FuentesMoviles.png') }}",
+                imprentas: "{{ asset('img/Programacion/Rubro/Imprenta.png') }}",
+                geriatricos: "{{ asset('img/Programacion/Rubro/Geriatrico.png') }}",
+                empresasServiciosPublicos: "{{ asset('img/Programacion/Rubro/EmpresasServiciosPublicos.png') }}",
+                elaboracionAlimentosBebidas: "{{ asset('img/Programacion/Rubro/ElaboracionAlimentosBebidas.png') }}",
+                antenas: "{{ asset('img/Programacion/Rubro/Antenas.png') }}",
+                industriasTextiles: "{{ asset('img/Programacion/Rubro/IndustriaTextil.png') }}",
+                petroquimicas: "{{ asset('img/Programacion/Rubro/Petroquimica.png') }}",
+                viviendas: "{{ asset('img/Programacion/Rubro/Vivienda.png') }}",
+                sinActividad: "{{ asset('img/Programacion/Rubro/SinActividad.png') }}",
+                espacioPublico: "{{ asset('img/Programacion/Rubro/EspacioPublico.png') }}",
+                obras: "{{ asset('img/Programacion/Rubro/ObraEdiliciaInfraestructuraUrbana.png') }}",
+                productorasCanales: "{{ asset('img/Programacion/Rubro/ProductorasCanalesTV.png') }}",
+                talleresOficiosVarios: "{{ asset('img/Programacion/Rubro/TalleresOficiosVarios.png') }}",
+                estServicioLiquido: "{{ asset('img/Programacion/Rubro/EstacionServiciosLiquido.png') }}",
+                oficinas: "{{ asset('img/Programacion/Rubro/Oficina.png') }}",
+                eventos: "{{ asset('img/Programacion/Rubro/Eventos.png') }}",
+                garages: "{{ asset('img/Programacion/Rubro/Garage.png') }}",
+                metalurgicas: "{{ asset('img/Programacion/verde.png') }}",
+                lavanderiasMecanicas: "{{ asset('img/Programacion/Rubro/LavanderiaMecanica.png') }}",
+                consorcios: "{{ asset('img/Programacion/Rubro/Consorcio.png') }}",
+            },
+        };
+
+        jQuery(document).ready(function() {            
+
+            tablaProgramacionArea.init(routes.table.tablaProgramacionArea);
+            UIButtons.init();
+
+            $("#single-prepend-text").select2({
+                placeholder: "Seleccione fecha..."
+            });
+
+            $("#multi-append").select2({
+                placeholder: "Seleccione filtro..."
+            });
+
+            $("#single").select2({
+                placeholder: "Seleccione calle..."
+            });
+
+            $('.fecha-picker').datepicker({ dateFormat: "dd-mm-yy" });
+        });
+        
+    var enviar = function () {
+        var confirmar = confirm("una vez confirmado, no podra volver atras,¿esta seguro de aplicar los cambios?");
+
+        if(confirmar){
+            var table = $('#tablaProgramacionArea').DataTable();
+          
+            var json = table.ajax.json();
+            var parsed = Object.values(json);
+            var valor;
+            var aux;
+            var arrayvalores=[];
+            var arrayid=[];
+            for (i = 0; i <= json.data.length-1; i++) {
+                id=parsed[0][i][1].split('"');
+                aux=id[7].split("id_sap");
+                valor = document.getElementById(id[7]).value;               
+                arrayvalores.push(valor);
+                arrayid.push(aux[1]);
+            }
+
+            var jsonvalores=JSON.stringify(arrayvalores);
+            var jsonids=JSON.stringify(arrayid);
+            var values = {
+            valores: jsonvalores,
+            ids: jsonids
+              };
+              var url= routes.javascript.enviar;
+              $.ajax({
+                type: "POST",
+                url: url,
+                data: values,
+                beforeSend : function (){
+                 $.blockUI({
+                        message: '<div class="page-loading"><img src="assets/img/loading-spinner-grey.gif"/>&nbsp;&nbsp;<span>Cargando...</span></div>',
+                        css: { border: 'none'}
+                    });
+                },
+                success: function(response){
+                  alert(response);
+                },
+                complete: function(response){
+                    $.unblockUI();            
+                }
+              });
+            }
+    }
+
+    var modaltablaprogramacionarea = function (id) {
+        var url = routes.table.modal.replace("0", id);
+        var values = { };
+          $.ajax({
+            type: "POST",
+            url: url,
+            data: values,
+            beforeSend : function (){
+                $.blockUI({
+                    message: '<div class="page-loading"><img src="assets/img/loading-spinner-grey.gif"/>&nbsp;&nbsp;<span>Cargando...</span></div>',
+                    css: { border: 'none'}
+                });                
+            },
+            success: function(response){
+                $('.modal-body').html(response);                
+                $('.modal-title').html("Seleccionar establecimiento");
+                $('#modalProgramar').modal('show')                
+            },
+            complete: function(response){
+                $.unblockUI();
+            }
+          });   
+    }
+    </script>
+
+{% endblock %}

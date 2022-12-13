@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<style>
+			html *
+			{
+			   	color: #000 !important;
+			  	font-family: Arial !important;
+			}
+
+			table, th, td {
+			    border: 1px solid black;
+			    border-collapse: collapse;
+
+			}
+			/*
+			 header del pdf
+			*/
+			#header {
+			    margin: 2px;
+			}
+
+			#header2 {
+			    font-weight:normal;
+			    margin: 2px;
+			}
+			/*
+			 titulo de los 5 campos
+			*/
+			#Titulo {
+			    margin-top: 0px;
+			    margin-bottom: 0px;
+			    font-weight:normal;
+			}		
+
+			.first-half {
+			    float: left;
+			    width: 50%;
+			}
+			.second-half {
+			    float: right;
+			    width: 50%;
+			}			
+			.page {
+		        overflow: hidden;
+		        page-break-after: always;
+		    }
+
+		    .bordeGrueso {
+		    	border: 2px solid black;
+		    }
+		</style>
+	</head>
+	<body>
+
+		<table width="100%" style="font-size: .7em;">
+			{#
+			<tr>
+				<th width="20%" class="bordeGrueso">
+					Gerencia Operativa de <br> Determinaciones Ambientales y Laboratorio
+				</th>
+				<th width="65%" class="bordeGrueso">
+					PROTOCOLO DE ANÁLISIS
+				</th>
+				<th width="15%" class="bordeGrueso">
+					R-117
+				</th>
+			</tr>
+			#}
+			<tr>
+				<th width="25%" class="bordeGrueso">
+					<img src="{{ asset('img/jacaranda.jpg') }}" width="75%" height="50%" alt="Imagen APrA">
+				</th>
+				<th width="25%" class="bordeGrueso">
+					Gerencia Operativa de <br> Determinaciones Ambientales y Laboratorio
+				</th>
+				<th width="25%" class="bordeGrueso">
+					PROTOCOLO DE ANÁLISIS
+				</th>
+				<th width="25%" class="bordeGrueso">
+					R-117
+				</th>
+			</tr>
+			<tr>
+				<th colspan="4" class="bordeGrueso">
+					ANÁLISIS DE {{ (resultados.programa.programa)|upper }}
+				</th>
+			</tr>
+		</table>
+
+		{#<br>
+		<br>
+		<br>#}
+
+		{% if resultados.registros is empty or not resultados.registros %}
+				<div class="row" align="center">
+					<br>
+					<br>
+					<strong style="font-size: 1.5em; color: #848484;">
+						Sin datos
+					</strong>
+				</div>
+			{% else %}
+				{# Agarrar la primera muestra y sacar el programa de ahí #}
+				{% set programaCodificado = '' %}
+				{% if resultados.programa.programa == 'Aguas ambientales varias (pozos, escurrimientos, etc.)' %}
+						{% set programaCodificado = 'AV' %}
+					{% elseif resultados.programa.programa == 'Calidad de Agua de Arroyos' %}
+						{% set programaCodificado = 'A' %}
+					{% elseif resultados.programa.programa == 'Calidad de Agua de la Cuenca Matanza Riachuelo CUMAR (II)' %}
+						{% set programaCodificado = 'RCH' %}
+					{% elseif resultados.programa.programa == 'Calidad de Agua de Lagos y Lagunas de la Ciudad' %}
+						{% set programaCodificado = 'L' %}
+					{% elseif resultados.programa.programa == 'Calidad de Agua del Río de la Plata' %}
+						{% set programaCodificado = 'RP' %}
+					{% elseif resultados.programa.programa == 'Control de la Calidad de Agua de bebida en instituciones oficiales' %}
+						{% set programaCodificado = 'B' %}
+					{% elseif resultados.programa.programa == 'Control de la Calidad de Agua de Natatorios' %}
+						{% set programaCodificado = 'N' %}
+					{% elseif resultados.programa.programa == 'Control de la calidad de efluentes líquidos' %}
+						{% set programaCodificado = 'E' %}
+				{% endif %}
+				{# Recopilación de legislaciones #}
+				{% set legislaciones = [] %}
+				{% for area, datos in resultados.registros %}
+					{% for idMuestra, resultadoAreaMuestra in datos if resultadoAreaMuestra.legislaciones is not empty %}
+						{% for idLegislacion, nombreLegislacion in resultadoAreaMuestra.legislaciones %}
+							{% set legislaciones = legislaciones|merge([nombreLegislacion]) %}
+						{% endfor %}
+					{% endfor %}
+				{% endfor %}
+				{# Eliminar duplicados #}
+				{% set legislacionesSinDup = [] %}
+				{% for legislacion in legislaciones %}
+					{% if legislacionesSinDup|length == 0 %}
+							{% set legislacionesSinDup = legislacionesSinDup|merge([legislacion]) %}
+						{% else %}
+							{% set encontro = false %}
+							{% for l in legislacionesSinDup if l == legislacion %}
+								{% set encontro = true %}
+							{% endfor %}
+
+							{% if not encontro %}
+								{% set legislacionesSinDup = legislacionesSinDup|merge([legislacion]) %}
+							{% endif %}
+					{% endif %}
+				{% endfor %}
+				{# - #}
+				{% set legislaciones = legislacionesSinDup %}
+
+				{# Sacar, también, las columnas de legislaciones #}
+
+				{# ------------------- DATOS -------------------- #}
+
+				<br>
+
+				<table width="100%" style="font-size: .7em;">
+			        {# <tr>
+			            <th colspan="3" class="bordeGrueso">
+			            	{% if resultados.muestras|length == 1 %}
+			            		DATOS DE LA MUESTRA
+			            	{% elseif resultados.muestras|length > 1 %}
+			            		DATOS DE LAS MUESTRAS
+			            	{% endif %}
+			            </th>
+			        </tr> #}
+
+			        {% if resultados.muestras|length == 1 or not resultados.diferenciaDeFechas %}
+				        <tr>
+				        	<td style="border-color: white; padding-right: 20px; padding-left: 20px;" colspan="3">
+				        		<strong>
+				        			{% if resultados.muestras|length == 1 %}
+				        					<u>Fecha de toma de muestra</u>:
+				        				{% else %}
+	                            			<u>Fecha de toma de muestras</u>:
+				        			{% endif %}
+	                            </strong>
+	                            <i>
+	                            	{{ (resultados.muestras|first).fechaTomaMuestra|date('d-m-Y') }}
+	                            </i>
+				        	</td>
+				        </tr>
+
+				        <tr>
+				        	<td style="border-color: white; padding-right: 20px; padding-left: 20px;" colspan="3">
+				        		&nbsp;
+				        		{#
+				        		<strong>
+				        			<u>
+				        				Fecha de fin del análisis:
+				        			</u>
+				        		</strong>
+				        		<i>
+				        			[fechaFinalización]
+				        		</i>
+				        		#}
+				        	</td>
+				        </tr>
+			        {% endif %}
+
+			        {% for id, muestra in resultados.muestras %}
+					    <tr>
+				        	<td style="border-color: white; padding-right: 20px; padding-left: 20px;" width="27%">
+				        		{% set codigo = '' %}
+		                        {% set idPrograma = muestra.pedido.programa.id %}
+
+		                        {% if idPrograma == 1 %}
+		                            {# Natatorios #}
+		                            {% set codigo = 'N' %}
+		                        {% elseif idPrograma == 2 %}
+		                            {# Agua de bebida #}
+		                            {% set codigo = 'B' %}
+		                        {% elseif idPrograma == 3 %}
+		                            {# Lagos y lagunas #}
+		                            {% set codigo = 'L' %}
+		                        {% elseif idPrograma == 4 %}
+		                            {# CUMAR #}
+		                            {% set codigo = 'RCH' %}
+		                        {% elseif idPrograma == 5 %}
+		                            {# Río de la Plata #}
+		                            {% set codigo = 'RP' %}
+		                        {% elseif idPrograma == 6 %}
+		                            {# Arroyos #}
+		                            {% set codigo = 'A' %}
+		                        {% elseif idPrograma == 7 %}
+		                            {# Aguas varias #}
+		                            {% set codigo = 'AV' %}
+		                        {% elseif idPrograma == 8 %}
+		                            {# Efluentes #}
+		                            {% set codigo = 'E' %}
+		                        {% elseif idPrograma == 9 %}
+		                            {# Monitoreo Atmosférico Manual #}
+		                            {% set codigo = 'MA' %}
+		                        {% elseif idPrograma == 10 %}
+		                            {# Calidad de Aire CUMAR - Subprograma I #}
+		                            {% set codigo = 'CAC' %}
+		                        {% elseif idPrograma == 11 %}
+		                            {# Contaminación atmosférica (fuentes fijas) #}
+		                            {% set codigo = 'FF' %}
+		                        {% elseif idPrograma == 12 %}
+		                            {# Contaminación atmosférica (Fuentes móviles) #}
+		                            {% set codigo = 'FM' %}
+		                        {% elseif idPrograma == 13 %}
+		                            {# Monitoreo Atmosférico Automático #}
+		                            {% set codigo = 'Definir' %}
+		                        {% elseif idPrograma == 14 %}
+		                            {# Calidad de Suelos Varios #}
+		                            {% set codigo = 'SV' %}
+		                        {% elseif idPrograma == 15 %}
+		                            {# Calidad de Suelos en Plazas y Parques #}
+		                            {% set codigo = 'SPP' %}
+		                        {% elseif idPrograma == 16 %}
+		                            {# Calidad de Compost #}
+		                            {% set codigo = 'COM' %}
+		                        {% elseif idPrograma == 17 %}
+		                            {# Calidad de Agua Juegos Acuáticos #}
+		                            {% set codigo = 'JA' %}
+		                        {% elseif idPrograma == 18 %}
+		                            {# Calidad de Agua de Humedales #}
+		                            {% set codigo = 'HU' %}
+		                        {% elseif idPrograma == 19 %}
+		                            {# Interlaboratorios #}
+		                            {% set codigo = 'IL' %}
+		                        {% elseif idPrograma == 20 %}
+		                            {# Intralaboratorios #}
+		                            {% set codigo = 'IAL' %}
+		                        {% else %}
+		                            {# Ningún caso de los anteriores #}
+		                            {% set codigo = 'Inexistente' %}
+		                        {% endif %}
+
+		                        {% if not muestra.fechaTomaMuestra %}
+		                                <strong>
+		                                	<u>Número de muestra</u>:
+		                                </strong>
+		                                <i>
+		                                	{{ muestra.numeroMuestra }}
+		                                </i>
+		                            {% else %}
+		                                {% set anio = muestra.fechaTomaMuestra|date('y') %}
+		                                {% set areas = '' %}
+
+		                                {% set c = '' %}
+		                                {% set b = '' %}
+		                                {% set i = '' %}
+		                                {% set f = '' %}
+		                                {% for a in muestra.pedido.areas %}
+		                                    {% if a.id == 19 %}
+		                                        {% set c = 'AC' %}
+		                                    {% elseif a.id == 20 %}
+		                                        {% set b = 'M' %}
+		                                    {% elseif a.id == 21 %}
+		                                        {% set i = 'I' %}
+		                                    {% elseif a.id == 22 %}
+		                                        {% set f = 'Q' %}
+		                                    {% endif %}
+		                                {% endfor %}
+
+		                                {# {% set areas = c ~ b ~ i ~ f %} - lo sacamos por ahora #}
+		                                {% set areas = b ~ i ~ f %}
+
+		                                {% if codigo == 'Inexistente' %}
+		                                        <strong>
+		                                        	<u>Número de muestra</u>:
+		                                        </strong>
+		                                        <i>
+		                                        	{{ muestra.numeroMuestra }}
+		                                        </i>
+		                                    {% else %}
+		                                        {% if areas == '' %}
+		                                                <strong>
+		                                                	<u>Número de muestra</u>:
+		                                                </strong>
+		                                                <i>
+		                                                	{{ muestra.numeroMuestra ~ '/' ~ anio ~ '-' ~ codigo }}
+		                                                </i>
+		                                            {% else %}
+		                                                <strong>
+		                                                	<u>Número de muestra</u>:
+		                                                </strong>
+		                                                <i>
+		                                                	{{ muestra.numeroMuestra ~ '/' ~ anio ~ '-' ~ codigo ~ '-' ~ areas }}
+		                                                </i>
+		                                        {% endif %}
+		                                {% endif %}
+		                        {% endif %}
+							</td>
+							{% if resultados.muestras|length > 1 and resultados.diferenciaDeFechas %}
+								<td style="border-color: white; padding-right: 20px; padding-left: 20px;" width="29%">
+									{% if muestra.fechaTomaMuestra %}
+											<strong>
+			                                	<u>Fecha de toma de muestra</u>:
+			                                </strong>
+			                                <i>
+			                                	{{ muestra.fechaTomaMuestra|date('d-m-Y') }}
+			                                </i>
+										{% else %}
+											<strong>
+			                                	<u>Fecha de toma de muestra</u>:
+			                                </strong>
+			                                <i>
+			                                	sin fecha
+			                                </i>
+									{% endif %}
+						    	</td>
+							{% endif %}
+							{# {% if resultados.programa.id == 1 or resultados.programa.id == 2 %}  Natatorios o Agua de bebida 
+								{% if resultados.muestras|length > 1 and resultados.diferenciaDeFechas %}  Si se muestra FTM por muestra 
+									{% else %}
+								{% endif %}
+							{% endif %} #}
+							<td style="border-color: white; padding-right: 20px; padding-left: 20px;">
+								{% if muestra.lugarExtraccion %}
+									<strong>
+	                                	<u>Lugar de extracción</u>:
+	                                </strong>
+	                                <i>
+	                                	{# {{ muestra.lugarExtraccion|capitalize }} #}
+	                                	{{ muestra.lugarExtraccion }}
+	                                </i>
+								{% endif %}
+							</td>
+							{% if resultados.programa.id == 1 or resultados.programa.id == 2 %}
+								{% set razonSocial = (muestra.pedido.establecimiento.razonesSociales|first) %}
+                                {% if razonSocial %}
+									<td style="border-color: white; padding-right: 20px; padding-left: 20px;">
+	                                    {% set razonSocial = razonSocial.razonSocial %}
+	                                    {% set nombreUno = razonSocial.nombre1 %}
+	                                    {% set nombreDos = razonSocial.nombre2 %}
+	                                    
+	                                    {% if (nombreUno is defined) or (nombreDos is defined) %}
+	                                            {% set tipo = razonSocial.tipo %}
+	                                            {% if tipo == 'F' %}
+	                                                    {% set nombreRS = nombreUno ~ ' ' ~ nombreDos %}
+	                                                {% else %}
+	                                                    {# NOMBRE FANTASÍA #}
+	                                                    {% if nombreDos %}
+	                                                            {% set nombreRS = nombreDos %}
+	                                                        {% else %}
+	                                                            {% set nombreRS = nombreUno %}
+	                                                    {% endif %}
+	                                            {% endif %}
+	                                        {% else %}
+	                                            {% set nombreRS = '' %}
+	                                    {% endif %}
+
+	                                    {# <strong>{{ razonSocial.cuit }}</strong>
+	                                    <br> #}
+	                                    <strong>
+		                                	<u>Dependencia</u>:
+		                                </strong>
+	                                    {{ nombreRS }}
+									</td>
+	                            {% endif %}
+								<td style="border-color: white; padding-right: 20px; padding-left: 20px;">
+	                                {% if muestra.pedido.establecimiento.direcciones|length == 1 %}
+	                                	{% set dir = muestra.pedido.establecimiento.direcciones|first %}
+	                                	{% set cal = dir.calle.calle %}
+	                                	{% set alt = dir.altura %}
+                                		<strong>
+		                                	<u>Domicilio</u>:
+		                                </strong>
+	                                	{{ cal ~ alt }}
+	                                {% elseif muestra.pedido.establecimiento.direcciones|length > 1 %}
+	                                	<strong>
+		                                	<u>Domicilios</u>:
+		                                </strong>
+		                                {% for d in muestra.pedido.establecimiento.direcciones %}
+		                                    {# {{ d.calle.calle ~ ' ' ~ d.altura }} <br> #}
+		                                    {% if loop.last %}
+		                                    	{{ d.calle.calle ~ ' ' ~ d.altura }}
+		                                    {% else %}
+		                                    	{{ d.calle.calle ~ ' ' ~ d.atlura ~ ' - ' }}
+		                                    {% endif %}
+		                                {% endfor %}
+	                                {% endif %}
+								</td>
+							{% endif %}
+				        </tr>
+			        {% endfor %}
+			    </table>
+
+				{# <br> #}
+				<br>
+
+				{% for area, datos in resultados.registros %}
+
+					<table width="100%" style="font-size: .7em;">
+						<tr>
+							<th class="bordeGrueso">
+								{% set titulo = '' %}
+								{% if area == 'CAMPO' %}
+										{{ 'ANÁLISIS FÍSICO-QUÍMICO IN SITU' }}
+									{% elseif area == 'BIOLOGICO' %}
+										{{ 'ANÁLISIS BACTERIOLÓGICO' }}
+									{% elseif area == 'INSTRUMENTAL' %}
+										{{ 'ANÁLISIS QUÍMICOS POR ABSORCIÓN ATÓMICA' }} {# ?????? #}
+									{% elseif area == 'FISICO-QUIMICA' %}
+										{{ 'ANÁLISIS FÍSICO-QUÍMICO' }}
+									{% else %}
+										{{ area }}
+								{% endif %}
+							</th>
+						</tr>
+						{% if area != 'CAMPO' %}
+							<tr>
+								<td style="border-color: white;">
+								</td>
+							</tr>
+							<tr>
+								{# FECHA DE INICIO DE ANÁLISIS #}
+								<td style="border-color: white;">
+									{% if resultados.fechaInicializacionAnalisis[area] %}
+											<strong><u>Fecha de inicio de análisis</u>:</strong>
+											&nbsp;{{ (resultados.fechaInicializacionAnalisis[area])|date('d-m-Y') }}
+										{% else %}
+											<em>
+												Sin fecha de inicio de análisis
+											</em>
+									{% endif %}
+								</td>
+							</tr>
+							<tr>
+								{# FECHA DE FINALIZACIÓN DE ANÁLISIS #}
+								<td style="border-color: white;">
+									{% if resultados.fechaFinalizacionAnalisis[area] %}
+											<strong><u>Fecha de finalización de análisis</u>:</strong>
+											&nbsp;{{ (resultados.fechaFinalizacionAnalisis[area])|date('d-m-Y') }}
+										{% else %}
+											<em>
+												Sin fecha de finalización de análisis
+											</em>
+									{% endif %}
+								</td>
+							</tr>
+						{% endif %}
+					</table>
+					<br>
+					{% set columnasLegislaciones = [] %}
+					<table style="width:100%">
+						<tr>
+							<th rowspan="2">DETERMINACIONES EFECTUADAS</th>
+							<th rowspan="2">METODOLOGÍA ANALÍTICA</th>
+							<th colspan="{{ datos|length }}">RESULTADOS</th>
+							{#
+								Cada 'resultadoAreaMuestra' tiene una cantidad de columnas dada por la cantidad de
+								tipos de legislaciones ("contacto", "sin contacto", etc.). Puede pasar (no debería)
+								que cada 'resultadoAreaMuestra' tenga un número de columnas distinto o que tenga
+								tipos de legislaciones distintas. El algoritmo no prevee eso: presupone que va a
+								venir lo mismo en todos los 'resultadoAreaMuestra'. Para hallar la cantidad de
+								columnas que va a usar, agarra cualquier (o el primero) 'resultadoAreaMuestra' que
+								no tenga el array 'columnas' vacío (cosa que TAMPOCO debería pasar) y, la longitud
+								de ese array, va a ser la cantidad de columnas para "VALOR REFERENCIAL"
+							#}
+							{% if (datos|first).columnas is empty %}
+									{% set col = 0 %}
+									{% for resultadoAreaMuestra in datos if resultadoAreaMuestra.columnas is not empty %}
+										{% set col = resultadoAreaMuestra.columnas|length %}
+									{% endfor %}
+									{% if col == 0 %}
+											<th rowspan="2">
+												VALOR REFERENCIAL
+												{% if resultados.programa.id != 1 and resultados.programa.id != 2 %}
+													PARA USO RECREATIVO
+												{% endif %}
+											</th>
+										{% else %}
+											<th colspan="{{ col }}">
+												VALOR REFERENCIAL
+												{% if resultados.programa.id != 1 and resultados.programa.id != 2 %}
+													PARA USO RECREATIVO
+												{% endif %}
+											</th>
+									{% endif %}
+								{% else %}
+									<th colspan="{{ (datos|first).columnas|length }}">
+										VALOR REFERENCIAL
+										{% if resultados.programa.id != 1 and resultados.programa.id != 2 %}
+											PARA USO RECREATIVO
+										{% endif %}
+									</th>
+							{% endif %}
+							{% if area == 'FISICO-QUIMICA' %}
+								<th rowspan="2">FECHA DE ANÁLISIS</th>
+							{% endif %}
+						</tr>
+						<tr>
+							{% for idMuestra in datos|keys %}
+								{% for muestra in resultados.muestras if idMuestra == muestra.id %}
+									{% set codigo = '' %}
+			                        {% set idPrograma = muestra.pedido.programa.id %}
+
+			                        {% if idPrograma == 1 %}
+			                            {# Natatorios #}
+			                            {% set codigo = 'N' %}
+			                        {% elseif idPrograma == 2 %}
+			                            {# Agua de bebida #}
+			                            {% set codigo = 'B' %}
+			                        {% elseif idPrograma == 3 %}
+			                            {# Lagos y lagunas #}
+			                            {% set codigo = 'L' %}
+			                        {% elseif idPrograma == 4 %}
+			                            {# CUMAR #}
+			                            {% set codigo = 'RCH' %}
+			                        {% elseif idPrograma == 5 %}
+			                            {# Río de la Plata #}
+			                            {% set codigo = 'RP' %}
+			                        {% elseif idPrograma == 6 %}
+			                            {# Arroyos #}
+			                            {% set codigo = 'A' %}
+			                        {% elseif idPrograma == 7 %}
+			                            {# Aguas varias #}
+			                            {% set codigo = 'AV' %}
+			                        {% elseif idPrograma == 8 %}
+			                            {# Efluentes #}
+			                            {% set codigo = 'E' %}
+			                        {% elseif idPrograma == 9 %}
+			                            {# Monitoreo Atmosférico Manual #}
+			                            {% set codigo = 'MA' %}
+			                        {% elseif idPrograma == 10 %}
+			                            {# Calidad de Aire CUMAR - Subprograma I #}
+			                            {% set codigo = 'CAC' %}
+			                        {% elseif idPrograma == 11 %}
+			                            {# Contaminación atmosférica (fuentes fijas) #}
+			                            {% set codigo = 'FF' %}
+			                        {% elseif idPrograma == 12 %}
+			                            {# Contaminación atmosférica (Fuentes móviles) #}
+			                            {% set codigo = 'FM' %}
+			                        {% elseif idPrograma == 13 %}
+			                            {# Monitoreo Atmosférico Automático #}
+			                            {% set codigo = 'Definir' %}
+			                        {% elseif idPrograma == 14 %}
+			                            {# Calidad de Suelos Varios #}
+			                            {% set codigo = 'SV' %}
+			                        {% elseif idPrograma == 15 %}
+			                            {# Calidad de Suelos en Plazas y Parques #}
+			                            {% set codigo = 'SPP' %}
+			                        {% elseif idPrograma == 16 %}
+			                            {# Calidad de Compost #}
+			                            {% set codigo = 'COM' %}
+			                        {% elseif idPrograma == 17 %}
+			                            {# Calidad de Agua Juegos Acuáticos #}
+			                            {% set codigo = 'JA' %}
+			                        {% elseif idPrograma == 18 %}
+			                            {# Calidad de Agua de Humedales #}
+			                            {% set codigo = 'HU' %}
+			                        {% elseif idPrograma == 19 %}
+			                            {# Interlaboratorios #}
+			                            {% set codigo = 'IL' %}
+			                        {% elseif idPrograma == 20 %}
+			                            {# Intralaboratorios #}
+			                            {% set codigo = 'IAL' %}
+			                        {% else %}
+			                            {# Ningún caso de los anteriores #}
+			                            {% set codigo = 'Inexistente' %}
+			                        {% endif %}
+
+			                        {% if not muestra.fechaTomaMuestra %}
+			                        		<td align="center" style="font-size: 13px;">
+			                        			{{ muestra.numeroMuestra }}
+			                        		</td>
+			                            {% else %}
+			                                {% set anio = muestra.fechaTomaMuestra|date('y') %}
+			                                {% set areas = '' %}
+
+			                                {% set c = '' %}
+			                                {% set b = '' %}
+			                                {% set i = '' %}
+			                                {% set f = '' %}
+			                                {% for a in muestra.pedido.areas %}
+			                                    {% if a.id == 19 %}
+			                                        {% set c = 'AC' %}
+			                                    {% elseif a.id == 20 %}
+			                                        {% set b = 'M' %}
+			                                    {% elseif a.id == 21 %}
+			                                        {% set i = 'I' %}
+			                                    {% elseif a.id == 22 %}
+			                                        {% set f = 'Q' %}
+			                                    {% endif %}
+			                                {% endfor %}
+
+			                                {# {% set areas = c ~ b ~ i ~ f %} - lo sacamos por ahora #}
+			                                {% set areas = b ~ i ~ f %}
+
+			                                {% if codigo == 'Inexistente' %}
+			                                        <td align="center" style="font-size: 13px;">
+					                        			{{ muestra.numeroMuestra }}
+					                        		</td>
+			                                    {% else %}
+			                                        {% if areas == '' %}
+			                                        		<td align="center" style="font-size: 13px;">
+							                        			{{ muestra.numeroMuestra ~ '/' ~ anio ~ '-' ~ codigo }}
+							                        		</td>
+			                                            {% else %}
+			                                            	<td align="center" style="font-size: 13px;">
+							                        			{{ muestra.numeroMuestra ~ '/' ~ anio ~ '-' ~ codigo ~ '-' ~ areas }}
+							                        		</td>
+			                                        {% endif %}
+			                                {% endif %}
+			                        {% endif %}
+								{% endfor %}
+								{# <td align="center" style="font-size: 13px;">{{ idMuestra }}</td> #}
+								{# <td align="center" style="font-size: 13px;">{{ idMuestra ~ '/' ~ }}</td> #}
+							{% endfor %}
+							{% if (datos|first).columnas is empty %}
+									{% set col = [] %}
+									{% for resultadoAreaMuestra in datos if resultadoAreaMuestra.columnas is not empty %}
+										{% set col = resultadoAreaMuestra.columnas %}
+									{% endfor %}
+									{% if col is not empty %}
+										{% for c in col %}
+											{% if c == 'legislacionContacto' %}
+												<td align="center" style="font-size: 13px;">
+													USO II con contacto directo
+												</td>
+											{% elseif c == 'legislacionSinContacto' %}
+												<td align="center" style="font-size: 13px;">
+													USO III sin contacto directo
+												</td>
+											{% elseif c == 'legislacionUsoPasivo' %}
+												<td align="center" style="font-size: 13px;">
+													USO IV Actividades pasivas
+												</td>
+											{% elseif c == 'legislacionSinClasificar' %}
+												<td align="center" style="font-size: 13px;">
+													{% if resultados.programa.id == 2 %}
+															{{ 'Agua de Bebida' }}
+														{% else %}
+															Sin clasificar
+													{% endif %}
+												</td>
+											{% endif %}
+											{% set columnasLegislaciones = columnasLegislaciones|merge([c]) %}
+										{% endfor %}
+									{% endif %}
+								{% else %}
+									{% for c in (datos|first).columnas %}
+										{% if c == 'legislacionContacto' %}
+											<td align="center" style="font-size: 13px;">
+												USO II con contacto directo
+											</td>
+										{% elseif c == 'legislacionSinContacto' %}
+											<td align="center" style="font-size: 13px;">
+												USO III sin contacto directo
+											</td>
+										{% elseif c == 'legislacionUsoPasivo' %}
+											<td align="center" style="font-size: 13px;">
+												USO IV Actividades pasivas
+											</td>
+										{% elseif c == 'legislacionSinClasificar' %}
+											<td align="center" style="font-size: 13px;">
+												{% if resultados.programa.id == 2 %}
+														{{ 'Agua de Bebida' }}
+													{% else %}
+														Sin clasificar
+												{% endif %}
+											</td>
+										{% endif %}
+										{% set columnasLegislaciones = columnasLegislaciones|merge([c]) %}
+									{% endfor %}
+							{% endif %}
+						</tr>
+
+						{% for idMuestra, resultadoAreaMuestra in datos if resultadoAreaMuestra.resultados is not empty %}
+							{% for resultado in resultadoAreaMuestra.resultados if resultado.mostrar %}
+								<tr style="font-size: 13px; text-align: center;">
+									<td align="left">
+										{# Nombre determinación + unidad medida #}
+										{% if resultado.unidadMedida and resultado.unidadMedida != ' ' %}
+												{{ resultado.nombreDeterminacion ~ ' (' ~ resultado.unidadMedida ~ ')' }}
+											{% else %}
+												{{ resultado.nombreDeterminacion }}
+										{% endif %}
+									</td>
+									{# Metodología #}
+									{% if resultado.metodologia %}
+											<td>{{ resultado.metodologia }}</td>
+										{% else %}
+											<td style="background-color: #C0C0C0;"></td>
+									{% endif %}
+									{# Resultado #}
+									{# {% for key in datos|keys %} #}
+									{% for key, val in datos %} {# cambió #}
+										{% if key == idMuestra %}
+												<td>
+
+{% if resultado.tipoDato == 'String' %}
+		{{ resultado.resultado }}
+	{% else %}
+		{% if resultado.resultado == 0 %}
+				{% if resultado.limiteCuantificable != '' %}
+						{{ resultado.limiteCuantificable }}
+					{% else %}
+						{{ resultado.resultado }}
+				{% endif %}
+			{% elseif resultado.resultado == -2 %}
+				{% if area == 'BIOLOGICO' %}
+						{% if resultado.idDeterminacion == 11 or resultado.idDeterminacion == 12 %}
+								{{ 'PRESENCIA' }}
+							{% elseif resultado.idDeterminacion == 13 %}
+								{{ '> 3' }}x10<sup>3</sup>
+							{% else %}
+								{{ resultado.resultado }}
+						{% endif %}
+					{% else %}
+						{{ resultado.resultado }}
+				{% endif %}
+			{% else %}
+				{% set numero = resultado.resultado|split('.') %}
+				{% if numero|length == 1 %}
+						{# NÚMERO ENTERO #}
+						{% if resultado.resultado >= 10000 %}
+								{% set numero = resultado.resultado|split('') %}
+								{% set ultimoNumero = 0 %}
+		                		{% for n in numero if n != 0 %}
+		                			{% set ultimoNumero = loop.index0 %}
+		                		{% endfor %}
+
+		                		{% if numero[ultimoNumero] != 0 %}
+		                        		{% set ceros = numero|slice((ultimoNumero + 1), ((numero|length) - 1)) %}
+
+		                        		{% if ceros is not empty %}
+		                        				{% if ceros|length >= 3 %}
+		                        						{% set numero = numero|slice(0, (ultimoNumero + 1)) %}
+		                        						{% set ceros = ceros|length %}
+		                        						{% if resultado.resultado > 0 %}
+		                        								{% if numero|length > 1 %}
+		                        									{#Extraer el primer elemento y, lo demás, ponerlo después de la coma#}
+		                        									{#{% set numdec = numero[:((numero|length)-1)] %}#}
+		                        									{% set numdec = numero|slice(1, (numero|length)-1) %}
+		                        									{% set numero = numero|first ~ '.' ~ numdec|join %}
+		                        								{% else %}
+		                        									{% set numero = '0' ~ '.' ~ numero|first %}
+		                        								{% endif %}
+
+		                        								{# {{ numero|join ~ 'E' ~ ceros }} #}
+		                        								{# {{ numero|join }}x10<sup>{{ ceros }}</sup> #}
+		                        								{{ numero }}x10<sup>{{ ceros + 1 }}</sup>
+		                        							{% else %}
+		                        								{% if numero|length > 1 %}
+		                        									{#Extraer el primer elemento y, lo demás, ponerlo después de la coma#}
+		                        									{#{% set numdec = numero[:((numero|length)-1)] %}#}
+		                        									{% set numdec = numero|slice(1, (numero|length)-1) %}
+		                        									{% set numero = numero|first ~ '.' ~ numdec|join %}
+		                        								{% else %}
+		                        									{% set numero = '0' ~ '.' ~ numero|first %}
+		                        								{% endif %}
+
+		                        								{# {{ '-' ~ numero|join ~ 'E' ~ ceros }} #}
+		                        								{# {{ '-' ~ numero|join }}x10<sup>{{ ceros }}</sup> #}
+		                        								{{ '-' ~ numero }}x10<sup>{{ ceros + 1 }}</sup>
+		                        						{% endif %}
+		                        					{% else %}
+		                        						{{ resultado.resultado }}
+		                        				{% endif %}
+		                        			{% else %}
+		                        				{{ resultado.resultado }}
+		                        		{% endif %}
+		                        	{% else %}
+		                        		{{ resultado.resultado }}
+		                		{% endif %}
+							{% else %}
+								{{ resultado.resultado }}
+						{% endif %}
+					{% else %}
+						{# NÚMERO CON DECIMALES #}
+						{% set decimales = (numero|last)|split('') %}
+						{% set ex = false %}
+				        {% for d in decimales if d == 'E' %}
+				            {% set ex = true %}
+				        {% endfor %}
+				        {# (me imagino que no serán tan hdp como para ponerme un exponente con decimales, porque no lo estaría considerando) #}
+
+				        {% if ex %}
+								{{ resultado.resultado }}
+				        	{% else %}
+								{% if decimales|length >= 3 %}
+										{% if resultado.resultado > -1 and resultado.resultado < 1 %}
+												{# -1 < x < 1  (x != 0) #}
+												{% set primerNumero = 0 %}
+												{% for d in decimales if d != 0 and primerNumero == 0 %}
+													{% set primerNumero = loop.index0 %}
+												{% endfor %}
+
+												{% if numero[primerNumero] != 0 %}
+														{% set ceros = numero|slice(0, (primerNumero + 1)) %}
+
+														{% if ceros is not empty %}
+																{% if ceros|length >= 3 %}
+																		{% set numero = numero|slice((primerNumero + 1), ((numero|length) - 1)) %}
+																		{% set ceros = ceros|length %}
+																		{% if resultado.resultado > 0 %}
+																				{# {{ numero|join ~ 'E-' ~ ceros }} #}
+																				{{ numero|join }}x10<sup>-{{ ceros }}</sup>
+																			{% else %}
+																				{# {{ '-' ~ numero|join ~ 'E-' ~ ceros }} #}
+																				{{ '-' ~ numero|join }}x10<sup>-{{ ceros }}</sup>
+																		{% endif %}
+																	{% else %}
+																		{{ resultado.resultado }}
+																{% endif %}
+															{% else %}
+																{{ resultado.resultado }}
+														{% endif %}
+													{% else %}
+														{{ resultado.resultado }}
+												{% endif %}
+											{% else %}
+												{# -1 > x > 1 #} {# POR DEFINIR #}
+												{# NÚMEROS CON PARTE ENTERA != 0 #}
+												{# NUMEROS GRANDES CON DECIMALES #}
+												{# {% set entero = numero|first %} #}
+												{{ resultado.resultado }}
+										{% endif %}
+									{% else %}
+										{{ resultado.resultado }}
+								{% endif %}
+				        {% endif %}
+				{% endif %}
+		{% endif %}
+{% endif %}
+
+												</td>
+											{% else %}
+												{% set b = false %}
+												{% for item in val.resultados if val.resultados is not empty %}
+													{% if item.nombreDeterminacion == resultado.nombreDeterminacion %}
+														<td>
+
+{% if item.resultado == 'String' %}
+		{{ item.resultado }}
+	{% else %}
+		{% if item.resultado == 0 %}
+				{% if item.limiteCuantificable != '' %}
+						{{ item.limiteCuantificable }}
+					{% else %}
+						{{ item.resultado }}
+				{% endif %}
+			{% elseif item.resultado == -2 %}
+				{% if area == 'BIOLOGICO' %}
+						{% if item.idDeterminacion == 11 or item.idDeterminacion == 12 %}
+								{{ 'PRESENCIA' }}
+							{% elseif item.idDeterminacion == 13 %}
+								{{ '> 3E3' }}
+							{% else %}
+								{{ item.resultado }}
+						{% endif %}
+					{% else %}
+						{{ item.resultado }}
+				{% endif %}
+			{% else %}
+				{% set numero = item.resultado|split('.') %}
+				{% if numero|length == 1 %}
+						{# NÚMERO ENTERO #}
+						{% if item.resultado >= 10000 %}
+								{% set numero = item.resultado|split('') %}
+								{% set ultimoNumero = 0 %}
+		                		{% for n in numero if n != 0 %}
+		                			{% set ultimoNumero = loop.index0 %}
+		                		{% endfor %}
+
+		                		{% if numero[ultimoNumero] != 0 %}
+		                        		{% set ceros = numero|slice((ultimoNumero + 1), ((numero|length) - 1)) %}
+
+		                        		{% if ceros is not empty %}
+		                        				{% if ceros|length >= 3 %}
+		                        						{% set numero = numero|slice(0, (ultimoNumero + 1)) %}
+		                        						{% set ceros = ceros|length %}
+		                        						{% if item.resultado > 0 %}
+		                        								{% if numero|length > 1 %}
+		                        									{#Extraer el primer elemento y, lo demás, ponerlo después de la coma#}
+		                        									{#{% set numdec = numero[:((numero|length)-1)] %}#}
+		                        									{% set numdec = numero|slice(1, (numero|length)-1) %}
+		                        									{% set numero = numero|first ~ '.' ~ numdec|join %}
+		                        								{% else %}
+		                        									{% set numero = '0' ~ '.' ~ numero|first %}
+		                        								{% endif %}
+
+		                        								{# {{ numero|join ~ 'E' ~ ceros }} #}
+		                        								{# {{ numero|join }}x10<sup>{{ ceros }}</sup> #}
+		                        								{{ numero }}x10<sup>{{ ceros + 1 }}</sup>
+		                        							{% else %}
+		                        								{% if numero|length > 1 %}
+		                        									{#Extraer el primer elemento y, lo demás, ponerlo después de la coma#}
+		                        									{#{% set numdec = numero[:((numero|length)-1)] %}#}
+		                        									{% set numdec = numero|slice(1, (numero|length)-1) %}
+		                        									{% set numero = numero|first ~ '.' ~ numdec|join %}
+		                        								{% else %}
+		                        									{% set numero = '0' ~ '.' ~ numero|first %}
+		                        								{% endif %}
+
+		                        								{# {{ numero|join ~ 'E' ~ ceros }} #}
+		                        								{# {{ numero|join }}x10<sup>{{ ceros }}</sup> #}
+		                        								{{ '-' ~ numero }}x10<sup>{{ ceros + 1 }}</sup>
+		                        						{% endif %}
+		                        					{% else %}
+		                        						{{ item.resultado }}
+		                        				{% endif %}
+		                        			{% else %}
+		                        				{{ item.resultado }}
+		                        		{% endif %}
+		                        	{% else %}
+		                        		{{ item.resultado }}
+		                		{% endif %}
+							{% else %}
+								{{ item.resultado }}
+						{% endif %}
+					{% else %}
+						{# NÚMERO CON DECIMALES #}
+						{% set decimales = (numero|last)|split('') %}
+						{% set ex = false %}
+				        {% for d in decimales if d == 'E' %}
+				            {% set ex = true %}
+				        {% endfor %}
+				        {# (me imagino que no serán tan hdp como para ponerme un exponente con decimales, porque no lo estaría considerando) #}
+
+				        {% if ex %}
+								{{ item.resultado }}
+				        	{% else %}
+								{% if decimales|length >= 3 %}
+										{% if item.resultado > -1 and item.resultado < 1 %}
+												{# -1 < x < 1  (x != 0) #}
+												{% set primerNumero = 0 %}
+												{% for d in decimales if d != 0 and primerNumero == 0 %}
+													{% set primerNumero = loop.index0 %}
+												{% endfor %}
+
+												{% if numero[primerNumero] != 0 %}
+														{% set ceros = numero|slice(0, (primerNumero + 1)) %}
+
+														{% if ceros is not empty %}
+																{% if ceros|length >= 3 %}
+																		{% set numero = numero|slice((primerNumero + 1), ((numero|length) - 1)) %}
+																		{% set ceros = ceros|length %}
+																		{% if item.resultado > 0 %}
+																				{# {{ numero|join ~ 'E-' ~ ceros }} #}
+																				{{ numero|join }}x10<sup>{{ ceros }}</sup>
+																			{% else %}
+																				{# {{ '-' ~ numero|join ~ 'E-' ~ ceros }} #}
+																				{{ '-' ~ numero|join }}x10<sup>{{ ceros }}</sup>
+																		{% endif %}
+																	{% else %}
+																		{{ item.resultado }}
+																{% endif %}
+															{% else %}
+																{{ item.resultado }}
+														{% endif %}
+													{% else %}
+														{{ item.resultado }}
+												{% endif %}
+											{% else %}
+												{# -1 > x > 1 #} {# POR DEFINIR #}
+												{# NÚMEROS CON PARTE ENTERA != 0 #}
+												{# NUMEROS GRANDES CON DECIMALES #}
+												{# {% set entero = numero|first %} #}
+												{{ item.resultado }}
+										{% endif %}
+									{% else %}
+										{{ item.resultado }}
+								{% endif %}
+				        {% endif %}
+				{% endif %}
+		{% endif %}
+{% endif %}
+
+														</td>
+														{% set b = true %}
+													{% endif %}
+												{% endfor %}
+
+												{% if not b %}
+													<td style="background-color: #C0C0C0;"></td>
+												{% endif %}
+										{% endif %}
+									{% endfor %}
+									{# Legislaciones #}
+									{% if resultadoAreaMuestra.columnas is empty %}
+											{% if columnasLegislaciones|length == 0 %}
+													<td style="background-color: #C0C0C0;"></td>
+												{% else %}
+													{% for l in columnasLegislaciones %}
+														<td style="background-color: #C0C0C0;"></td>
+													{% endfor %}
+											{% endif %}
+										{% else %}
+											{% for tipoLegislacion in resultadoAreaMuestra.columnas %}
+												{% if resultado[tipoLegislacion] %}
+														{% if tipoLegislacion == 'legislacionContacto' %}
+															{% if resultado.valorLimiteContacto %}
+																	<td>
+																		{{ resultado.valorLimiteContacto }}
+																		{% for key, legislacion in legislaciones if legislacion == resultado.legislacionContacto.legislacion %}
+																			<sup>{{ '(' ~ ((key)+1) ~ ')' }}</sup>
+																		{% endfor %}
+																	</td>
+																{% else %}
+																	<td style="background-color: #C0C0C0;"></td>
+															{% endif %}
+														{% elseif tipoLegislacion == 'legislacionSinContacto' %}
+															{% if resultado.valorLimiteSinContacto %}
+																	<td>
+																		{{ resultado.valorLimiteSinContacto }}
+																		{% for key, legislacion in legislaciones if legislacion == resultado.legislacionSinContacto.legislacion %}
+																			<sup>{{ '(' ~ ((key)+1) ~ ')' }}</sup>
+																		{% endfor %}
+																	</td>
+																{% else %}
+																	<td style="background-color: #C0C0C0;"></td>
+															{% endif %}
+														{% elseif tipoLegislacion == 'legislacionUsoPasivo' %}
+															{% if resultado.valorLimiteUsoPasivo %}
+																	<td>
+																		{{ resultado.valorLimiteUsoPasivo }}
+																		{% for key, legislacion in legislaciones if legislacion == resultado.legislacionUsoPasivo.legislacion %}
+																			<sup>{{ '(' ~ ((key)+1) ~ ')' }}</sup>
+																		{% endfor %}
+																	</td>
+																{% else %}
+																	<td style="background-color: #C0C0C0;"></td>
+															{% endif %}
+														{% elseif tipoLegislacion == 'legislacionSinClasificar' %}
+															{% if resultado.valorLimiteSinClasificar %}
+																	<td>
+																		{{ resultado.valorLimiteSinClasificar }}
+																		{% for key, legislacion in legislaciones if legislacion == resultado.legislacionSinClasificar.legislacion %}
+																			<sup>{{ '(' ~ ((key)+1) ~ ')' }}</sup>
+																		{% endfor %}
+																	</td>
+																{% else %}
+																	<td style="background-color: #C0C0C0;"></td>
+															{% endif %}
+														{% endif %}
+													{% else %}
+														<td style="background-color: #C0C0C0;"></td>
+												{% endif %}
+											{% endfor %}
+									{% endif %}
+									{# Fecha (fin) análisis #}
+									{% if area == 'FISICO-QUIMICA' %}
+										{% if resultado.fechaInicioAnalisis %}
+												<td> {{ resultado.fechaInicioAnalisis|date('d-m-Y') }} </td>
+											{% else %}
+												<td style="background-color: #C0C0C0;"></td>
+										{% endif %}
+									{% endif %}
+								</tr>
+							{% endfor %}
+						{% endfor %}
+
+					</table>
+					<br>
+					<table width="100%" style="margin-bottom: 5px;">
+						{% set conclusionesArea = [] %}
+						{% for resultadoAreaMuestra in datos if resultadoAreaMuestra.conclusiones is not empty %}
+							{% for conclusion in resultadoAreaMuestra.conclusiones %}
+								{% set conclusionesArea = conclusionesArea|merge([conclusion]) %}
+							{% endfor %}
+						{% endfor %}
+						{# Eliminar duplicados #}
+						{# {% set conclusionesSinDup = [] %}
+						{% for conclusion in conclusionesArea %}
+							{% if conclusionesSinDup|length == 0 %}
+									{% set conclusionesSinDup = conclusionesSinDup|merge([conclusion]) %}
+								{% else %}
+									{% set encontro = false %}
+									{% for c in conclusionesSinDup if c == conclusion %}
+										{% set encontro = true %}
+									{% endfor %}
+
+									{% if not encontro %}
+										{% set conclusionesSinDup = conclusionesSinDup|merge([conclusion]) %}
+									{% endif %}
+							{% endif %}
+						{% endfor %} #}
+						{# - #}
+						{# {% set conclusionesArea = conclusionesSinDup %} #}
+						{# CONCATENAR AMBAS CONCLUSIONES #}
+						{% set conclusionesManualesArea = [] %}
+						{% for resultadoAreaMuestra in datos if resultadoAreaMuestra.conclusionArea %}
+							{% set conclusionesManualesArea = conclusionesManualesArea|merge([resultadoAreaMuestra.conclusionArea]) %}
+						{% endfor %}
+						{# - #}
+						{% set conclusionesArea = conclusionesArea|merge(conclusionesManualesArea) %}
+						{# - #}
+						<tr style="font-size: 13px;">
+							{% if conclusionesArea|length == 0 %}
+									<td width="10%" style="border-color: white; vertical-align: top;">
+										<strong>
+											<u>Conclusión</u>: 
+										</strong>
+									</td>
+								{% elseif conclusionesArea|length == 1 %}
+									<td width="10%" style="border-color: white; vertical-align: top;">
+										<strong>
+											<u>Conclusión</u>:
+										</strong>
+									</td>
+								{% else %}
+									<td width="11%" style="border-color: white; vertical-align: top;">
+										<strong>
+											<u>Conclusiones</u>:
+										</strong>
+									</td>
+							{% endif %}
+							<td style="border-color: white;">
+								{# Para los que, en la conclusión, pusieron un punto al final #}
+								{#{% for conclusion in conclusionesArea %}
+									{% if conclusion|last == '.' %}
+											{{ conclusion ~ ' ' }}
+										{% else %}
+											{{ conclusion ~ '. ' }}
+									{% endif %}
+								{% endfor %}#}
+
+								{# ------ #}
+
+								{% if resultados.conclusionesAbreviadas[area] is defined %}
+									{% set conclusiones = resultados.conclusionesAbreviadas[area] %}
+
+									{% if conclusiones.conclusionGeneral != '' %}
+										{{ conclusiones.conclusionGeneral }}
+									{% else %}
+										{% for num, m in conclusiones.muestras %}
+											<u>{{ num }}</u> : &nbsp;
+											{% if m.conclusionMuestra != '' %}
+												{{ m.conclusionMuestra ~ '.' }}
+											{% else %}
+												&nbsp;
+												{% for d in m.determinaciones %}
+													{% if d.conclusionParametro != '' %}
+														{{ d.conclusionParametro ~ '.' }}
+													{% else %}
+														{% for tc in d.tiposConclusiones %}
+															{{ tc|first ~ '.' }}
+														{% endfor %}
+													{% endif %}
+												{% endfor %}
+											{% endif %}
+											{# Conclusiones manuales? #}
+											<br>
+										{% endfor %}
+									{% endif %}
+								{% endif %}
+
+							</td>
+						</tr>
+					</table>
+					<table width="100%" style="margin-bottom: 5px;">
+						{% set observacionesArea = [] %}
+						{% for resultadoAreaMuestra in datos if resultadoAreaMuestra.observacionArea %}
+							{% set observacionesArea = observacionesArea|merge([resultadoAreaMuestra.observacionArea]) %}
+						{% endfor %}
+						<tr style="font-size: 13px;">
+							{% if observacionesArea|length == 0 %}
+									<!-- <td width="25%" style="border-color: white;">
+										<em>Sin observaciones del área</em>
+									</td> -->
+								{% elseif observacionesArea|length == 1 %}
+									<td width="10%" style="border-color: white; vertical-align: top;">
+										<strong>
+											<u>Observación</u>:
+										</strong>
+									</td>
+								{% else %}
+									<td width="11%" style="border-color: white; vertical-align: top;">
+										<strong>
+											<u>Observaciones</u>:
+										</strong>
+									</td>
+							{% endif %}
+							<td style="border-color: white;">
+								{% for observacion in observacionesArea %}
+									{# Para los que, en la/s observación/es, pusieron un punto al final #}
+									{% if observacion|last == '.' %}
+											{{ observacion ~ ' ' }}
+										{% else %}
+											{{ observacion ~ '. ' }}
+									{% endif %}
+								{% endfor %}
+							</td>
+						</tr>
+					</table>
+					<table width="100%">
+						{% set operadoresArea = [] %}
+						
+						{% if resultados.analistas[area] %}
+							{% set analistas = resultados.analistas[area] %}
+							{% for analista in analistas %}
+								{% set operadoresArea = operadoresArea|merge([analista]) %}
+							{% endfor %}
+						{% endif %}
+
+						<tr style="font-size: 13px;">
+							{% if operadoresArea|length == 0 %}
+									<td width="20%" style="border-color: white;">
+										<em>Sin operadores anaĺíticos</em>
+									</td>
+								{% elseif operadoresArea|length == 1 %}
+									<td width="15%" style="border-color: white; vertical-align: top;">
+										<strong>
+											<u>Operador analítico</u>:
+										</strong>
+									</td>
+								{% else %}
+									<td width="16%" style="border-color: white; vertical-align: top;">
+										<strong>
+											<u>Operadores analíticos</u>:
+										</strong>
+									</td>
+							{% endif %}
+							<td style="border-color: white;">
+								{% if operadoresArea|length == 1 %}
+										{{ operadoresArea|first }}
+									{% else %}
+										{% for operador in operadoresArea %}
+											{% if loop.first %}
+													{{ operador }}
+												{% else %}
+													{{ ' - ' ~ operador }}
+											{% endif %}
+										{% endfor %}
+								{% endif %}
+							</td>
+						</tr>
+					</table>
+					<br>
+					<br>
+					<br>
+					<br>
+					<table style="width: 100%; border: 0; page-break-after: always;">
+						{% if area == 'CAMPO' %}
+								<th style="width: 35%; border: 0;">
+									<h5 align="left" style="margin: 0; text-align: center;">
+										Prof. Fabio Guzzo
+									</h5>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Subgcia. Op. Analítica de Campo y Muestreo
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										G.O. de Determinaciones Ambientales y Laboratorio
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										DGCONTA - APRA
+									</h6>
+								</th>
+								<th style="width: 35%; border: 0;"> </th>
+								<th style="width: 35%; border: 0;"> </th>
+							{% elseif area == 'BIOLOGICO' %}
+								<th style="width: 35%; border: 0;">
+									<h5 align="left" style="margin: 0; text-align: center;">
+										Lic. María Noelia Gómez
+									</h5>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										(A/C) Sector Biológico
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Subgcia. Op. Análisis Físico Químico y Biológico
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										G.O. Determinaciones Ambientales y Laboratorio
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										DGCONTA - APRA
+									</h6>
+								</th>
+								<th style="width: 35%; border: 0; vertical-align: top;">
+									<h5 align="left" style="margin: 0; text-align: center;">
+										Lic. Federico P. Schickendantz
+									</h5>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Subgcia. Op. Análisis Físico Químico y Biológico
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										G.O. Determinaciones Ambientales y Laboratorio
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										DGCONTA - APRA
+									</h6>
+								</th>
+								<th style="width: 35%; border: 0; vertical-align: top;">
+									<h5 align="left" style="margin: 0; text-align: center;">
+										Lic. Roxana Bigi
+									</h5>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										G.O. Determinaciones Ambientales y Laboratorio
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Dirección General de Control Ambiental
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Agencia de Protección Ambiental
+									</h6>
+								</th>
+							{% elseif area == 'INSTRUMENTAL' %}
+								<th style="width: 35%; border: 0;">
+									<h5 align="left" style="margin: 0; text-align: center;">
+										Bioq. Sandra Milieni
+									</h5>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										(A/C) Sector Análisis Instrumental
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Subgcia. Op. Análisis Físico Químico y Biológico
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										G.O. Determinaciones Ambientales y Laboratorio
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										DGCONTA - APRA
+									</h6>
+								</th>
+								<th style="width: 35%; border: 0;">
+									<h5 align="left" style="margin: 0; text-align: center;">
+										Lic. Federico P. Schickendantz
+									</h5>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Subgcia. Op. Análisis Físico Químico y Biológico
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										G.O. Determinaciones Ambientales y Laboratorio
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										DGCONTA - APRA
+									</h6>
+								</th>
+								<th style="width: 35%; border: 0;">				
+									<h5 align="left" style="margin: 0; text-align: center;">
+										Lic. Roxana Bigi
+									</h5>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										G.O. Determinaciones Ambientales y Laboratorio
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Dirección General de Control Ambiental
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Agencia de Protección Ambiental
+									</h6>
+								</th>
+							{% elseif area == 'FISICO-QUIMICA' %}
+								<th style="width: 35%; border: 0;">
+									<h5 align="left" style="margin: 0; text-align:center;">
+										Bioq. M. De Biasi
+									</h5>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										(A/C) Sector Análisis Físico Químico
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Subgcia. Op. Análisis Físico Químico y Biológico
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										G.O. Determinaciones Ambientales y Laboratorio
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										DGCONTA - APRA
+									</h6>
+								</th>
+								<th style="width: 35%; border: 0;">
+									<h5 align="left" style="margin: 0; text-align: center; vertical-align: top;">
+										Lic. Federico P. Schickendantz
+									</h5>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Subgcia. Op. Análisis Físico Químico y Biológico
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										G.O. Determinaciones Ambientales y Laboratorio
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										DGCONTA - APRA
+									</h6>
+								</th>
+								<th style="width: 35%; border: 0;">				
+									<h5 align="left" style="margin: 0; text-align: center; vertical-align: top;">
+										Lic. Roxana Bigi
+									</h5>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										G.O. Determinaciones Ambientales y Laboratorio
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Dirección General de Control Ambiental
+									</h6>
+									<h6 align="left" style="margin: 0; font-weight: normal; text-align: center;">
+										Agencia de Protección Ambiental
+									</h6>
+								</th>
+						{% endif %}
+					</table>
+					<br>
+					<br>
+					<br>
+					<br>
+
+				{% endfor %}
+
+				<br>
+
+				{# Legislaciones #}
+				<table style="width: 100%; border: 0; font-size: 13px;">
+					{% if legislaciones is not empty %}
+						<tr>
+							<th style="border-color: white; text-align: left;">
+								<u>Legislaciones (referencias):</u>
+							</th>
+						</tr>
+						{% for key, legislacion in legislaciones %}
+							<tr>
+								<td style="border-color: white;">
+									{{ '(' ~ ((key)+1) ~ ')  ' ~ legislacion }}
+								</td>
+							</tr>
+						{% endfor %}
+					{% endif %}
+				</table>
+
+		{% endif %}
+
+	</body>
+</html>

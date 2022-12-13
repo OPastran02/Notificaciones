@@ -1,0 +1,13 @@
+        .ui-datepicker{
+            background: #FFFFFF;
+            color: #000000;
+            border-radius: 0;
+            z-index:9999999 !important
+        }
+
+        .ui-datepicker-header.ui-widget-header.ui-helper-clearfix.ui-corner-all{
+            background: #3546b3;
+            color: #FFFFFF;
+            border-radius: 0;
+            z-index:9999999 !important
+        }

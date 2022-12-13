@@ -1,0 +1,215 @@
+# TIPOS DE ARGUMENTOS QUE SE PUEDEN PASAR
+
+################
+# OBLIGATORIOS #
+################
+# campo: nombre de la columna, tiene que ser exacto
+# tipo:  tipo de columna puede ser Integer,String,Date,DateTime,Boolean
+
+###############
+# IMPORTANTES #
+###############
+# componente: Tipo de componente que se podra ver en la columna, puede ser Button,Ahref,Select2
+# date_format: Formato de la fecha en el caso que tipo de campo Fecha
+# tipoBoton: tipo de boton, submit o boton
+# attr: atributo del campo, puede ser hidden,disable,readonly
+# ruta: ruta a donde puede ir el Ahref, Button, o Select2
+# javascript: funcion de javascript que puede tener el boton o select2
+# argumentos: argumentos que puede tener la funcion javascript 
+
+################
+# SECUNDARIOS  #
+################
+# color: color de la letra o del boton
+# background-color:  color del fondo de la letra
+# font-family: tipo de letra
+# font-size: tamaño de letra
+# text-align: alineacion de la letra
+# padding: tamaño de los bordes
+# icono: icono del boton, consultar symfony
+# titulo: titulo del boton
+
+########################################
+InspeccionesInspeccionesBundle:OrdenInspeccion o:
+    1:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                Button
+            color:
+                green
+            titulo:
+                "reprogramar"
+            javascript:
+                ReporteDiario.reprogramar
+            icono:
+                fa fa-retweet
+            argumentos:
+                o.id
+            extra:
+                '<a href="../pdfinspeccion/checklist/--arg--" target="_blank" class="btn btn-circle btn-outline sbold uppercase btn-block blue-soft"><i class="fa fa-search"></i>PDF</a>'
+            extraArg:
+                o.checklist
+            decodificar:
+                si
+    2:
+        1:
+            campo:
+                checklist
+            tipo:
+                Integer
+
+    3:
+        1:
+            campo:
+                motivo
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                m.motivo
+
+    4:
+        1:
+            campo:
+                reinspeccionar
+            tipo:
+                Integer
+    5:
+        1:
+            campo:
+                Direccion
+            tipo:
+                String
+            componente:
+                Concat
+            concatenar:
+                Direccion
+            tieneAlias:
+                no
+            nombreAlias:
+                Direccion
+    6:
+        1:
+            campo:
+                Inspectores
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                Inspectores
+
+InspeccionesInspeccionesBundle:Inspeccion i:
+    7:
+        1: 
+            campo:
+                fecha_programado
+            tipo:
+                Date
+    8:
+        1:
+            campo:
+                fecha_inspeccion
+            tipo:
+                DateTime
+    9:
+        1:
+            campo:
+                estado
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                estado
+
+    10:
+        1:
+            campo:
+                ifGra
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                o.ifGra
+
+    11:
+        1:
+            campo:
+                Intimo
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                Intimo
+
+    12:
+        1:
+            campo:
+                Acta
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                Acta
+
+    13:
+        1:
+            campo:
+                inspeccionPorTablet
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                inspeccionPorTablet
+
+    14:
+        1:
+            campo:
+                vinculado
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                o.vinculado
+            extra:
+                '<input class="form-control" --arg2-- onclick="javascript:ReporteDiario.vincularifgra(--arg--);" type="checkbox" id="vinculado--arg--" name="vinculado--arg--" value="--arg1--"></input>'
+            extraArg:
+                o.id|o.vinculado|o.checked
+            attr:
+                hidden
+
+    15:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                aHref
+            color:
+                blue-soft
+            titulo:
+                Ver
+            ruta:
+                establecimiento
+            argumentos:
+                o.establecimiento_id
+            extra:
+                '<a href="javascript:ReporteDiario.rechazar(`--arg--`)" class="btn btn-circle btn-outline sbold uppercase btn-block red"><i class="fa fa-times"></i>Rechazar</a>'
+            extraArg:
+                o.id
+            encriptArg:
+                si
+            decodificar:
+                si

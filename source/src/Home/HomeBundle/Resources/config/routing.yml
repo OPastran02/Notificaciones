@@ -1,0 +1,40 @@
+home_home_homepage:
+    path:     /home
+    defaults: { _controller: HomeHomeBundle:Default:home }
+
+home_home_tablaEstablecimiento:
+    path:     /home/tablaEstablecimiento
+    defaults: { _controller: HomeHomeBundle:Default:tablaEstablecimiento}
+
+home_home_tablaCedula:
+    path:     /home/tablaCedula
+    defaults: { _controller: HomeHomeBundle:Default:tablaCedula}
+
+home_home_tablaDisposicion:
+    path:     /home/tablaDisposicion
+    defaults: { _controller: HomeHomeBundle:Default:tablaDisposicion}
+
+home_home_tablaInspeccion:
+    path:     /home/tablaInspeccion
+    defaults: { _controller: HomeHomeBundle:Default:tablaInspeccion }
+
+
+home_home_excelEstablecimiento:
+    path:     /home/excelEstablecimiento
+    defaults: { _controller: HomeHomeBundle:Default:excelEstablecimiento }
+
+home_home_excelCedula:
+    path:     /home/excelCedula
+    defaults: { _controller: HomeHomeBundle:Default:excelCedula }
+
+home_home_excelDisposicion:
+    path:     /home/excelDisposicion
+    defaults: { _controller: HomeHomeBundle:Default:excelDisposicion }
+
+home_home_excelInspeccion:
+    path:     /home/excelInspeccion
+    defaults: { _controller: HomeHomeBundle:Default:excelInspeccion }
+
+prueba:
+    path:     /prueba
+    defaults: { _controller: HomeHomeBundle:Default:prueba }

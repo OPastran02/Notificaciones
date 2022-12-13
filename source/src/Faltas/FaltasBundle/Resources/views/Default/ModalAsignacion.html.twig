@@ -1,0 +1,94 @@
+{{ form_start(form, { 'attr': {'class': 'form-horizontal', 'id': 'modalForm', 'name':'modalForm'} }) }}
+
+    {% if arrayasignaciones|length != 0 %}
+        <div class="note note-warning">
+            <h4 class="block">Asignaciones</h4>
+            <p>
+                <ul>
+                    {% for a in arrayasignaciones %}
+                        <li>{{ (a|last)|date("d-m-Y") }} - {{ a|first }}</li>
+                    {% endfor %}
+                </ul>
+            </p>
+        </div>
+    {% endif %}
+
+    <div class="form-group form-md-line-input has-info">
+        {{ form_label(form.fechaAsignacion, 'Fecha de asignación', {
+            'label_attr': {
+                'class': 'col-md-4 control-label',
+                'style': 'color: grey;'
+            }
+        }) }}
+        <div class="col-md-4">
+            <div class="input-icon">
+                {{ form_widget(form.fechaAsignacion, {
+                    'attr': {
+                        'class': 'form-control fecha-picker new-fecha-picker',
+                        'placeholder': 'Fecha asignación'
+                    }
+                }) }}
+                <div class="form-control-focus"> </div>
+                <span class="help-block">
+                    ingrese fecha asignación
+                </span>
+                <i class="fa fa-calendar-check-o"></i>
+                <span class="help-block help-block-error" style="color: red;">
+                    {{ form_errors(form.fechaAsignacion) }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group form-md-line-input has-info">
+        {{ form_label(form.idUsuarioInspector, 'Inspector', {
+            'label_attr': {
+                'class': 'col-md-4 control-label',
+                'style': 'color: grey;'
+            }
+        }) }}
+        <div class="col-md-4">
+            {{ form_widget(form.idUsuarioInspector, {
+                'attr': {
+                    'class': 'form-control'
+                }
+            }) }}
+            <div class="form-control-focus"> </div>
+            <span class="help-block">
+                elija un inspector
+            </span>
+            <span class="help-block help-block-error" style="color: red;">
+                {{ form_errors(form.idUsuarioInspector) }}
+            </span>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <div class="col-md-offset-5">
+            <button type="submit" data-loading-text="Loading..." class="btn green mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" id="faja_re_asignar" name="faja_re_asignar[save]" >
+                <span class="ladda-label">
+                    Guardar
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <input hidden id="referenciaFaja" />
+
+{{ form_end(form) }}
+
+<script>
+    $(document).ready(function(){
+        $( "#modalForm" ).on( "submit", function( event ) {
+            event.preventDefault();
+            AsignacionFaja.enviarNuevaReasignacion();
+        });
+        $('.fecha-picker').datepicker({ dateFormat: "dd-mm-yy" });
+
+    });
+</script>
+
+{# TOASTR NOTIFICATIONS #}
+<script src="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('Js/CoreBundle/ui-toastr.js') }}" type="text/javascript"></script>
+<script src="{{asset('Js/CoreBundle/DateValidatorModal.js')}}" type="text/javascript"></script>

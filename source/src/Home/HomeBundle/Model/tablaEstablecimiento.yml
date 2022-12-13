@@ -1,0 +1,134 @@
+# TIPOS DE ARGUMENTOS QUE SE PUEDEN PASAR
+
+################
+# OBLIGATORIOS #
+################
+# campo: nombre de la columna, tiene que ser exacto
+# tipo:  tipo de columna puede ser Integer,String,Date,DateTime,Boolean
+
+###############
+# IMPORTANTES #
+###############
+# componente: Tipo de componente que se podra ver en la columna, puede ser Button,Ahref,Select2
+# date_format: Formato de la fecha en el caso que tipo de campo Fecha
+# tipoBoton: tipo de boton, submit o boton
+# attr: atributo del campo, puede ser hidden,disable,readonly
+# ruta: ruta a donde puede ir el Ahref, Button, o Select2
+# javascript: funcion de javascript que puede tener el boton o select2
+# argumentos: argumentos que puede tener la funcion javascript 
+
+################
+# SECUNDARIOS  #
+################
+# color: color de la letra o del boton
+# background-color:  color del fondo de la letra
+# font-family: tipo de letra
+# font-size: tamaño de letra
+# text-align: alineacion de la letra
+# padding: tamaño de los bordes
+# icono: icono del boton, consultar symfony
+# titulo: titulo del boton
+
+########################################
+EstablecimientoEstablecimientoBundle:Establecimiento e:
+    1:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                aHref
+            color:
+                blue-soft
+            titulo:
+                Ver
+            ruta:
+                establecimiento
+            argumentos:
+                e.id
+            extra:
+                '<div class="btn-group col-md-12"><a class="btn yellow btn-circle btn-outline sbold uppercase btn-block dropdown-toggle" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="true"><i class="fa fa-ticket"></i> Pedido </a><ul class="dropdown-menu pull-left"><li><a href="pedido/cedula/new/--arg--"><i class="i"></i> Cedula</a></li><li><a href="disposicion/new/1/--arg--"><i class="i"></i> Hacer Saber</a></li><li><a href="disposicion/new/2/--arg--"><i class="i"></i>Informe Clausura</a></li><li><a href="laboratorio/pedido/0/--arg--"><i class="i"></i>Laboratorio</a></li></ul></div>'
+            extraArg:
+                e.id
+            encriptArg:
+                si
+            decodificar:
+                si
+
+    2:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+    3:
+        1:
+            campo:
+                Estado
+            tipo:
+                String
+    4:
+        1:
+            campo:
+                RubroPrincipal
+            tipo:
+                String
+    5:
+        1:
+            campo:
+                Rubros
+            tipo:
+                String
+    6:
+        1:
+            campo:
+                Direcciones
+            tipo:
+                String
+    7:
+        1:
+            campo:
+                Comunas
+            tipo:
+                Integer
+
+    8:
+        1:
+            campo:
+                Actuaciones
+            tipo:
+                String
+    9:
+        1:
+            campo:
+                RazonSocial
+            tipo:
+                String
+
+    10:
+        1:
+            campo:
+                cuit
+            tipo:
+                String
+    11:
+        1:
+            campo:
+                SMP
+            tipo:
+                String
+
+    12:
+        1:
+            campo:
+                favorito
+            tipo:
+                String
+
+    13:
+        1:
+            campo:
+                cmr
+            tipo:
+                String

@@ -1,0 +1,787 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+	
+	{{ parent() }}   
+
+    {# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# SELECT2 #}
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+    <link href="{{ asset('public/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+
+
+   <!--DATEPICKER-->
+    <link href="{{ asset('public/assets/layouts/layout/css/datepicker.css')}}" rel="stylesheet" type="text/css">   
+
+{% endblock %}
+
+{% block pagecontent %}
+<div name="pagina" id="pagina">
+        {% if is_granted('ROLE_ESTABLECIMIENTO_EDIT') %}
+            <div class="row">
+                <a href="{{ path('establecimiento_establecimiento_homepage') }}">
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-bottom-10">
+                        <div class="dashboard-stat purple-sharp">
+                            <div class="visual">
+                                <i class="fa fa-plus"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number"> Nuevo establecimiento </div>
+                            </div>
+                            <a class="more" href="{{ path('establecimiento_establecimiento_homepage') }}">
+                                Nuevo establecimiento
+                                <i class="m-icon-swapright m-icon-white"></i>
+                            </a>
+                        </div>
+                    </div>
+                </a>
+                <a href="{{ path('establecimiento_establecimiento_razonsocial') }}">
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="dashboard-stat blue-soft">
+                            <div class="visual">
+                                <i class="fa fa-plus"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number"> Nueva razón social </div>
+                            </div>
+                            <a class="more" href="{{ path('establecimiento_establecimiento_razonsocial') }}">
+                                Nueva razón social
+                                <i class="m-icon-swapright m-icon-white"></i>
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-bottom-10">
+                    <div class="dashboard-stat grey-cascade">
+                        <div class="visual">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number"> Nuevo establecimiento </div>
+                        </div>
+                        <a class="more" href="#">
+                            No tiene los permisos necesarios
+                            <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat grey-cascade">
+                        <div class="visual">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number"> Nueva razón social </div>
+                        </div>
+                        <a class="more" href="#">
+                            No tiene los permisos necesarios
+                            <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}    
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet box blue-chambray">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-folder-open font-grey-cararra"></i>
+                        <span class="caption-subject font-grey-cararra bold uppercase">Establecimientos</span>
+                    </div>
+                    <div class="actions">
+                        <div class="btn-group btn-group-devided" data-toggle="buttons">
+                            <button type="Button" data-loading-text="cargando..." class="btn blue-hoki mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" id="pasaraexcel" name="pasaraexcel" onClick="javascript:excel1();">
+                                <span class="ladda-label">
+                                    Pasar a Excel
+                                </span>
+                            </button>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="portlet-body">
+
+                    <div class="panel-group accordion" id="accordion2">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle accordion-toggle-styled font-blue-steel bold" data-toggle="collapse" data-parent="#accordion2" href="#collapse_2_1">
+                                        Click aquí para ocultar/ver los establecimientos
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse_2_1" class="panel-collapse collapse in">
+                                <div class="panel-body">
+
+                                    <div class="table-container">                                    
+                                        <table class="table table-striped table-bordered table-hover table-checkable" id="TablaEstablecimiento">
+                                                <thead>
+                                                    <tr role="row" class="heading" id="head1">
+                                                        <th width="15%">Accion</th>                                        
+                                                        <th >Id</th>
+                                                        <th >Estado</th>
+                                                        <th >Rubro Principal</th>
+                                                        <th >Rubros</th>
+                                                        <th >Direcciones</th>
+                                                        <th >Comunas</th>
+                                                        <th >Actuaciones</th>
+                                                        <th >Razon Social</th>
+                                                        <th >CUIT</th>
+                                                        <th >SMP</th>
+                                                        <th >Favorito</th>
+                                                        <th >Cmr</th>
+
+                                                    </tr>
+                                                    <tr role="row" class="filter">
+                                                            <td >
+                                                                <button class="btn btn-sm green btn-outline filter-submit margin-bottom col-md-11">Buscar</button>
+                                                                <button class="btn btn-sm red btn-outline filter-cancel col-md-11" id="reiniciar1">Reiniciar</button>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control form-filter" name="order_1" style="width:100%" id="1order_1"></input>
+                                                            </td>
+                                                            <td>
+                                                                <!--ESTADO-->
+                                                                <select type="text" class="form-control form-filter input-sm select2" style="width:100%" name="order_2" id="1order_2">
+                                                                    <option></option>
+                                                                    {% for e in estado %}
+                                                                        <option>{{ e.estado }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </td>  
+                                                            <td>
+                                                                <!--RUBRO PRINCIPAL-->
+                                                                <select  type="text" class="form-control form-filter input-sm select2" style="width:100%" name="order_3" id="1order_3">
+                                                                    <option></option>
+                                                                    {% for r in RubroPrincipal %}
+                                                                        <option>{{ r.rubroPrincipal }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </td>  
+                                                            <td>
+                                                                <!--RUBRO-->
+                                                                <select  type="text"class="form-control form-filter input-sm select2" style="width:100%" name="order_4" id="1order_4">
+                                                                    <option></option>
+                                                                    {% for r in Rubro %}
+                                                                        <option>{{ r.rubro }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </td> 
+                                                            <td>
+                                                                <input type="text" class="form-control form-filter" style="width:100%" name="order_5" id="1order_5"></input>
+                                                            </td>  
+                                                            <td>
+                                                                <input type="text" class="form-control form-filter" style="width:100%" name="order_6" id="1order_6"></input>
+                                                            </td> 
+                                                            <td>
+                                                                <input type="text" class="form-control form-filter" style="width:100%" name="order_7" id="1order_7"></input>
+                                                            </td> 
+                                                            <td>
+                                                                <!--RUBRO-->
+                                                                <select type="text" class="form-control form-filter input-sm select2" style="width:100%" name="order_8" id="1order_8">
+                                                                    <option></option>
+                                                                </select>
+                                                            </td>  
+                                                            <td>
+                                                                <input type="text" class="form-control form-filter" style="width:100%" name="order_9" id="1order_9"></input>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control form-filter" style="width:100%" name="order_10" id="1order_10"></input>
+                                                            </td> 
+                                                            <td>
+                                                                <select type="text" class="form-control form-filter input-sm select2" placeholder="..." style="width:100%" name="order_11" id="1order_11">
+                                                                    <option></option>
+                                                                    <option value="1">SI</option>
+                                                                    <option value="0">NO</option>
+                                                                    
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <select type="text" class="form-control form-filter input-sm select2" placeholder="..." style="width:100%" name="order_12" id="1order_12">
+                                                                    <option></option>
+                                                                    <option value="1">SI</option>
+                                                                    <option value="0">NO</option>
+                                                                    
+                                                                </select>
+                                                            </td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody> 
+
+                                                </tbody>                                            
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End: life time stats -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet box blue-chambray">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-folder-open font-grey-cararra"></i>
+                        <span class="caption-subject font-grey-cararra bold uppercase">Inspecciones</span>
+                    </div>                    
+                    <div class="actions">
+                        <div class="btn-group btn-group-devided" data-toggle="buttons">
+                            <button type="Button" data-loading-text="cargando..." class="btn blue-hoki mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" id="pasaraexcel" name="pasaraexcel" onClick="javascript:excel2();">
+                                <span class="ladda-label">
+                                    Pasar a Excel
+                                </span>
+                            </button>
+                        </div>
+                    </div>                    
+                </div>
+
+                <div class="portlet-body">
+
+                    <div class="panel-group accordion" id="accordion3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle accordion-toggle-styled font-blue-steel bold" data-toggle="collapse" data-parent="#accordion3" href="#collapse_3_1">
+                                        Click aquí para ver/ocultar las inspecciones
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse_3_1" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+                                    <div class="table-container">
+                                        <table class="table table-striped table-bordered table-hover table-checkable" id="TablaInspecciones">
+                                                <thead>
+                                                    <tr role="row" class="heading" id="head2">
+                                                        <th width="15%"></th>
+                                                        <th width="10%">Id Sap</th>
+                                                        <th width="5%">CheckList</th>
+                                                        <th width="15%">Fecha Inspeccion</th>
+                                                        <th width="7%">Area</th>
+                                                        <th width="15%">Inspectores</th>
+                                                        <th width="30%">Dirreciones</th>
+                                                        <th width="10%">Circuito</th>
+                                                        <th width="10%">SMP</th>
+                                                        <th width="10%">Comuna</th>
+                                                    </tr>
+                                                    <tr role="row" class="filter">
+                                                        <th>
+                                                            <button class="btn btn-sm green btn-outline filter-submit margin-bottom col-md-11">Buscar</button>
+                                                            <button class="btn btn-sm red btn-outline filter-cancel col-md-11" id="reiniciar2">Reiniciar</button>
+                                                        </th>
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter input-sm" name="order_1" id="2order_1"/>
+                                                        </th>
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter" name="order_2" id="2order_2"></input>
+                                                        </th> 
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter fecha-picker" name="order_3" id="2order_3" placeholder="desde"></input>
+                                                            <input type="text" class="form-control form-filter fecha-picker" name="order_3_2" id="2order_3_2" placeholder="hasta"></input>
+                                                        </th>  
+                                                        <th>
+                                                            <!--RUBRO-->
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_4" id="2order_4">
+                                                                <option></option>
+                                                                {% for e in area %}
+                                                                    <option>{{ e.area }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </th>
+                                                        <th>
+                                                            <!--RUBRO-->
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_5" id="2order_5">
+                                                                <option></option>
+                                                                {% for e in inspectores %}
+                                                                    <option>{{ e.nombre }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </th>
+                                                        <th>
+                                                                <input type="text" class="form-control form-filter" name="order_6" id="2order_6"></input>
+                                                        </th>
+                                                        <th>
+                                                            <!--RUBRO-->
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_7" id="2order_7">
+                                                                <option></option>
+                                                                {% for e in circuito %}
+                                                                    <option>{{ e.circuito }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </th>
+                                                        <th>
+                                                                <input type="text" class="form-control form-filter" name="order_8" id="2order_8"></input>
+                                                        </th>
+                                                        <th>
+                                                                <input type="text" class="form-control form-filter" name="order_9" id="2order_9"></input>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody> 
+
+                                                </tbody>                                            
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End: life time stats -->
+        </div>
+    </div>
+
+     <div class="row">
+        <div class="col-md-12">
+            <div class="portlet box blue-chambray">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-folder-open font-grey-cararra"></i>
+                        <span class="caption-subject font-grey-cararra bold uppercase">Cédulas</span>
+                    </div> 
+                     <div class="actions">
+                        <div class="btn-group btn-group-devided" data-toggle="buttons">
+                            <button type="Button" data-loading-text="cargando..." class="btn blue-hoki mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" id="pasaraexcel" name="pasaraexcel" onClick="javascript:excel3();">
+                                <span class="ladda-label">
+                                    Pasar a Excel
+                                </span>
+                            </button>
+                        </div>
+                    </div>                                   
+                </div>
+                <div class="portlet-body">
+
+                    <div class="panel-group accordion" id="accordion4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle accordion-toggle-styled font-blue-steel bold" data-toggle="collapse" data-parent="#accordion4" href="#collapse_4_1">
+                                        Click aquí para ver/ocultar las cédulas
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse_4_1" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+                                    <div class="table-container">
+                                        <table class="table table-striped table-bordered table-hover table-checkable" id="TablaCedulas">
+                                                <thead>
+                                                    <tr role="row" class="heading" id="head3">
+                                                        <th width="15%"></th>
+                                                        <th width="15%">Numero</th>
+                                                        <th width="15%">Tipo</th>
+                                                        <th width="15%">Fecha Notificacion</th>
+                                                        <th width="15%">Direccion</th>
+                                                        <th width="15%">Comuna(Cedula)</th>
+                                                        <th width="15%">Nocturnidad</th>
+                                                        <th width="15%">Estado</th>
+                                                        <th width="15%">Notificador</th>
+                                                        <th width="15%">Comuna(Est.)</th>
+                                                    </tr>
+                                                    <tr role="row" class="filter">
+                                                        <th>
+                                                            <button class="btn btn-sm green btn-outline filter-submit margin-bottom col-md-11">Buscar</button>
+                                                            <button class="btn btn-sm red btn-outline filter-cancel col-md-11" id="reiniciar3">Reiniciar</button>
+                                                        </th>
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter input-sm" name="order_1" id="3order_1"/>
+                                                        </th>
+                                                        <th>
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_2" id="3order_2">
+                                                                <option></option>
+                                                                {% for e in tipoCedula %}
+                                                                    <option>{{ e.tipoCedula }}</option>
+                                                                {% endfor %}
+                                                            </select>                                                        
+                                                        </th> 
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter fecha-picker" name="order_3" id="3order_3" placeholder="desde"></input>
+                                                            <input type="text" class="form-control form-filter fecha-picker" name="order_3_2" id="3order_3_2" placeholder="hasta"></input>
+                                                        </th>  
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter" name="order_4" id="3order_4"></input>
+                                                        </th>
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter" name="order_5" id="3order_5"></input>
+                                                        </th>
+                                                        <th>
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_6" id="3order_6">
+                                                                <option></option>
+                                                                <option value="1">SI</option>
+                                                                <option value="0">NO</option>
+                                                                
+                                                            </select>                                                        
+                                                        </th> 
+                                                        <th>
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_7" id="3order_7">
+                                                                <option></option>
+                                                                {% for e in estadoCedula %}
+                                                                    <option>{{ e.estado }}</option>
+                                                                {% endfor %}
+                                                            </select> 
+                                                        </th>
+                                                        <th>
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_8" id="3order_8">
+                                                                <option></option>
+                                                                {% for e in inspectores %}
+                                                                    <option>{{ e.nombre }}</option>
+                                                                {% endfor %}
+                                                            </select> 
+                                                        </th>
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter" name="order_9" id="3order_9"></input>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody> 
+
+                                                </tbody>                                            
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End: life time stats -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet box blue-chambray">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-folder-open font-grey-cararra"></i>
+                        <span class="caption-subject font-grey-cararra bold uppercase">Disposiciones</span>
+                    </div>
+                     <div class="actions">
+                        <div class="btn-group btn-group-devided" data-toggle="buttons">
+                            <button type="Button" data-loading-text="cargando..." class="btn blue-hoki mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" id="pasaraexcel" name="pasaraexcel" onClick="javascript:excel4();">
+                                <span class="ladda-label">
+                                    Pasar a Excel
+                                </span>
+                            </button>
+                        </div>
+                    </div>                                    
+                </div>
+                <div class="portlet-body">
+
+                    <div class="panel-group accordion" id="accordion5">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle accordion-toggle-styled font-blue-steel bold" data-toggle="collapse" data-parent="#accordion5" href="#collapse_5_1">
+                                        Click aquí para ver/ocultar las disposiciones
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse_5_1" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+                                    <div class="table-container">
+                                        <table class="table table-striped table-bordered table-hover table-checkable" id="TablaDisposiciones">
+                                                <thead>
+                                                    <tr role="row" class="heading" id="head4">
+                                                        <th width="20%"></th>
+                                                        <th width="20%">Numero</th>
+                                                        <th width="20%">Tipo</th>
+                                                        <th width="20%">Fecha Notificacion</th>
+                                                        <th width="20%">Direccion</th>
+                                                        <th width="20%">Estado</th>                                                        
+                                                        <th width="20%">Notificador</th>
+                                                        <th width="20%">Levantada</th>
+                                                    </tr>
+                                                    <tr role="row" class="filter">
+                                                        <th>
+                                                            <button class="btn btn-sm green btn-outline filter-submit margin-bottom col-md-11">Buscar</button>
+                                                            <button class="btn btn-sm red btn-outline filter-cancel col-md-11">Reiniciar</button>
+                                                        </th>
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter input-sm" name="order_1" id="4order_1"/>
+                                                        </th>
+                                                        <th>
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_2" id="4order_2">
+                                                                <option></option>
+                                                                {% for e in tipoDispo %}
+                                                                    <option>{{ e.tipoDispo }}</option>
+                                                                {% endfor %}
+                                                            </select> 
+                                                        </th> 
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter fecha-picker" name="order_3" id="4order_3" placeholder="desde"></input>
+                                                            <input type="text" class="form-control form-filter fecha-picker" name="order_3_2" id="4order_3_2" placeholder="hasta"></input>
+                                                        </th>  
+                                                        <th>
+                                                            <input type="text" class="form-control form-filter input-sm" name="order_4" id="4order_4"/>
+                                                        </th>
+                                                        <th>
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_5" id="4order_5">
+                                                                <option></option>
+                                                                {% for e in estadoCedula %}
+                                                                    <option>{{ e.estado }}</option>
+                                                                {% endfor %}
+                                                            </select> 
+                                                        </th>
+                                                        <th>
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_6" id="4order_6">
+                                                                <option></option>
+                                                                {% for e in inspectores %}
+                                                                    <option>{{ e.nombre }}</option>
+                                                                {% endfor %}
+                                                            </select> 
+                                                        </th>
+                                                        <th>
+                                                            <select type="text" class="form-control form-filter input-sm select2" name="order_7" id="4order_7">
+                                                                <option></option>
+                                                                <option value="1">SI</option>
+                                                                <option value="0">NO</option>                                                                
+                                                            </select>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody> 
+
+                                                </tbody>                                            
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End: life time stats -->
+        </div>
+    </div>
+</div>
+    
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+	<!-- BEGIN PAGE LEVEL PLUGINS -->
+		<script src="{{asset('public/assets/global/scripts/datatable.js')}}" type="text/javascript"></script>
+		<script src="{{asset('public/assets/global/plugins/datatables/datatables.min.js')}}" type="text/javascript"></script>		
+
+		<script src="{{asset('public/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js')}}" type="text/javascript"/>
+		<script src="{{asset('public/assets/pages/scripts/table-datatables-ajax.min.js')}}" type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+
+    
+    
+    {# SELECT2 #}
+    <script src="{{ asset('public/assets/global/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/components-select2.min.js') }}" type="text/javascript"></script>
+
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->            
+        <script src="{{asset('Js/Home/HomeBundle/TablaEstablecimiento.js')}}" type="text/javascript"></script>
+        <script src="{{asset('Js/Home/HomeBundle/TablaCedulas.js')}}" type="text/javascript"></script>
+        <script src="{{asset('Js/Home/HomeBundle/TablaDisposicion.js')}}" type="text/javascript"></script>
+        <script src="{{asset('Js/Home/HomeBundle/TablaInspeccion.js')}}" type="text/javascript"></script>
+        <script src="{{asset('Js/Home/HomeBundle/Home.js')}}" type="text/javascript"></script>
+		<script type="text/javascript">
+	        var routesUsuario = {
+	            myroutes:{
+                    gif: "{{ asset('public/assets/global/img/loading-spinner-grey.gif') }}",
+	                tablaEstablecimiento:"{{ path('home_home_tablaEstablecimiento') }}",
+	                tablaCedula:"{{ path('home_home_tablaCedula') }}",   
+	                tablaDisposicion:"{{ path('home_home_tablaDisposicion') }}",
+	                tablaInspeccion:"{{ path('home_home_tablaInspeccion') }}",
+                    excelEstablecimiento:"{{ path('home_home_excelEstablecimiento') }}",
+                    excelCedula:"{{ path('home_home_excelCedula') }}",
+                    excelDisposicion:"{{ path('home_home_excelDisposicion') }}",
+                    excelInspeccion:"{{ path('home_home_excelInspeccion') }}"   
+	            },
+	        };
+            
+            function excel1() {
+                jsHome.excel1(routesUsuario.myroutes.excelEstablecimiento);
+            }
+            function excel2() {                
+                jsHome.excel2(routesUsuario.myroutes.excelInspeccion);
+            }
+            function excel3() {
+                jsHome.excel3(routesUsuario.myroutes.excelCedula);
+            }
+            function excel4() {
+                jsHome.excel4(routesUsuario.myroutes.excelDisposicion);
+            }
+
+		   jQuery(document).ready(function() {
+           $('.fecha-picker').datepicker({ dateFormat: "dd-mm-yy" });
+
+            $('#1order_8').select2({
+                language: "SpanishLocale",
+                placeholder: "Razon Social",
+                minimumInputLength: 3,
+                allowClear: true
+            });
+
+            $('#1order_4').select2({
+                language: "SpanishLocale",
+                placeholder: "Rubro",
+                minimumInputLength: 3,
+                allowClear: true
+            });
+
+            $('#1order_3').select2({
+                language: "SpanishLocale",
+                placeholder: "Rubro Principal",                
+                allowClear: true
+            });
+            $('#1order_2').select2({
+                language: "SpanishLocale",
+                placeholder: "Estado",
+                allowClear: true
+            });
+
+            $('#1order_11').select2({
+                language: "SpanishLocale",
+                placeholder: "Favorito",
+                allowClear: true
+            });
+
+            $('#2order_4').select2({
+                language: "SpanishLocale",
+                placeholder: "Area",
+                allowClear: true
+            });
+
+            $('#2order_5').select2({
+                language: "SpanishLocale",
+                placeholder: "Inspector",
+                allowClear: true
+            });
+
+            $('#3order_2').select2({
+                language: "SpanishLocale",
+                placeholder: "Tipo",
+                allowClear: true
+            });
+
+            $('#3order_6').select2({
+                language: "SpanishLocale",
+                placeholder: "Nocturnidad",
+                allowClear: true
+            });
+
+            $('#3order_7').select2({
+                language: "SpanishLocale",
+                placeholder: "Estado",
+                allowClear: true
+            });
+
+            $('#3order_8').select2({
+                language: "SpanishLocale",
+                placeholder: "Notificador",
+                allowClear: true
+            });
+
+            $('#4order_2').select2({
+                language: "SpanishLocale",
+                placeholder: "Tipo",
+                allowClear: true
+            });
+
+            $('#4order_5').select2({
+                language: "SpanishLocale",
+                placeholder: "Estado",
+                allowClear: true
+            });
+
+            $('#4order_6').select2({
+                language: "SpanishLocale",
+                placeholder: "Notificador",
+                allowClear: true
+            });
+
+            $('#4order_7').select2({
+                language: "SpanishLocale",
+                placeholder: "Levantamiento",
+                allowClear: true
+            });
+ 
+            $("#reiniciar1").on("click", function() {
+                $("#1order_2").val(null).trigger("change"); 
+                $("#1order_3").val(null).trigger("change"); 
+                $("#1order_4").val(null).trigger("change"); 
+                $("#1order_8").val(null).trigger("change"); 
+            });
+
+            $("#reiniciar2").on("click", function() {
+                $("#2order_4").val(null).trigger("change"); 
+                $("#2order_5").val(null).trigger("change"); 
+                $("#2order_7").val(null).trigger("change"); 
+            });
+
+
+            $("#reiniciar3").on("click", function() {
+                $("#3order_2").val(null).trigger("change"); 
+                $("#3order_5").val(null).trigger("change"); 
+                $("#3order_6").val(null).trigger("change"); 
+            });
+
+            $("#1order_8").select2({
+                minimumInputLength: 2,                        
+                cache: false,
+                ajax: {
+                    url: function (term) { 
+                                var url = "{{ path('establecimiento_establecimiento_razonsocial_table_for_front', {'search' : 0} ) }}";
+                                return (url+'/'+term.term).replace("/0","");
+                            },
+                    dataType: 'json',
+                    type: "GET",
+                    quietMillis: 50,
+                    data: (params) => {                            
+                        return {
+                            
+                        }
+                    },
+                    processResults: (data) => {     
+                    console.log(data);
+                          return {
+                              results: $.map(data, function(obj) {
+                                  return {id: obj.id, text: obj.name};
+                              }),
+                          };
+                    },
+                }
+            });
+
+            TablaEstablecimiento.init(routesUsuario.myroutes.tablaEstablecimiento);
+            TablaCedulas.init(routesUsuario.myroutes.tablaCedula);
+            TablaDisposiciones.init(routesUsuario.myroutes.tablaDisposicion);
+            TablaInspeccion.init(routesUsuario.myroutes.tablaInspeccion);
+           
+           //UIButtons.init();
+		  
+		});
+	    </script>
+    <!-- END PAGE LEVEL SCRIPTS -->	
+{% endblock %}

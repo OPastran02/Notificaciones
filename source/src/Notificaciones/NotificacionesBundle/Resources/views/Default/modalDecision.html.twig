@@ -1,0 +1,70 @@
+{# {{ dump(establecimientos) }} #}
+
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-advance table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <i class="fa fa-list-ul"></i>
+                    Dirección/es
+                </th>
+                <th>
+                    <i class="fa fa-bookmark"></i>
+                    Razón social
+                </th>
+                <th style="text-align: center;">
+                    <i class="fa fa-hand-o-down"></i>
+                    Acción
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {#
+                ESTRUCTURA establecimientos:
+                    + 0 => id
+                    + 1 => razonSocial
+                    + 2 => Direccion
+            #}
+
+            {% for e in establecimientos %}
+                <tr>
+                    <td>
+                        <ul>
+                            {% for domicilio in e[2] %}
+                                . {{ domicilio }} <br>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        {% if e[1] == 'undefined' %}
+                                <i> No tiene razón social </i>
+                            {% else %}
+                                {{ e[1] }}
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="javascript:CargaMasiva.elegir( {{ '"' ~ e[0] ~ '"' }} );" class="btn dark btn-sm btn-outline sbold uppercase">
+                            <i class="fa fa-check"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+</div>
+
+{# SCRIPTS DE LA PÁGINA #}
+<script src="{{asset('Js/Notificaciones/NotificacionesBundle/CargaMasiva.js')}}" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    var routes = {
+        results:{
+            decidirEstablecimiento: "{{ path('notificaciones_notificaciones_carga_masiva_decidir_que_establecimiento', { 'establecimientos': 0 }) }}",
+            elegir: "{{ path('notificaciones_notificaciones_carga_masiva_elegir', { 'idEstablecimiento': 0, 'idPedido': '-1', 'plazo1': '-2', 'plazo2': '-3', 'citacion': '-4', 'nocturnidad': '-5', 'idTipo': '-6', 'fojas': '-7', 'vencer': '-8', 'idModelo': '-9', 'calleR': '-10', 'alturaR': '-11', 'pisoR': '-12', 'dptoR': '-13', 'localR': '-14', 'enviarR': '-15', 'destinatario': '-16', 'calleL': '-17', 'alturaL': '-18', 'pisoL': '-19', 'dptoL': '-20', 'localL': '-21', 'enviarL': '-22' }) }}",
+        },
+    };
+
+</script>

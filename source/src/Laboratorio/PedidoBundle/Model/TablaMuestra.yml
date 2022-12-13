@@ -1,0 +1,163 @@
+# TIPOS DE ARGUMENTOS QUE SE PUEDEN PASAR
+
+################
+# OBLIGATORIOS #
+################
+# campo: nombre de la columna, tiene que ser exacto
+# tipo:  tipo de columna puede ser Integer,String,Date,DateTime,Boolean
+
+###############
+# IMPORTANTES #
+###############
+# componente: Tipo de componente que se podra ver en la columna, puede ser Button,Ahref,Select2
+# date_format: Formato de la fecha en el caso que tipo de campo Fecha
+# tipoBoton: tipo de boton, submit o boton
+# attr: atributo del campo, puede ser hidden,disable,readonly
+# ruta: ruta a donde puede ir el Ahref, Button, o Select2
+# javascript: funcion de javascript que puede tener el boton o select2
+# argumentos: argumentos que puede tener la funcion javascript 
+
+################
+# SECUNDARIOS  #
+################
+# color: color de la letra o del boton
+# background-color:  color del fondo de la letra
+# font-family: tipo de letra
+# font-size: tamaño de letra
+# text-align: alineacion de la letra
+# padding: tamaño de los bordes
+# icono: icono del boton, consultar symfony
+# titulo: titulo del boton
+
+########################################
+LaboratorioPedidoBundle:Muestra m:
+    1:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                aHref
+            color:
+                green
+            titulo:
+                "Ver"
+            ruta:
+                laboratorio/muestraderivador
+            argumentos:
+                m.id
+            decodificar:
+                si
+    2:
+        1:
+            campo:
+                numeroMuestra
+            tipo:
+                Integer
+            text-align:
+                center
+    3:
+        1:
+            campo:
+                tipo
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                tipo
+            text-align:
+                center
+    4:
+        1:
+            campo:
+                Programa
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                Programa
+            text-align:
+                center
+    5:
+        1:
+            campo:
+                fecha_toma_muestra
+            tipo:
+                Date
+            text-align:
+                center
+    6:
+        1:
+            campo:
+                autorizado
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                m.autorizado
+            text-align:
+                center
+    7:
+        1:
+            campo:
+                supervisado
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                m.supervisado
+            text-align:
+                center
+    8:
+        1:
+            campo:
+                CAMPO
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                (SELECT e.estado FROM laboratoio_estado_muestra as e  INNER JOIN laboratorio_muestra_estados as me  on e.id = me.estado_id WHERE me.area_id = 19 and me.muestra_id = m.id)
+            text-align:
+                center
+    9:
+        1:
+            campo:
+                FISICOQUIMICA
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                (SELECT e.estado FROM laboratoio_estado_muestra as e INNER JOIN laboratorio_muestra_estados as me  on e.id = me.estado_id WHERE me.area_id = 22 and me.muestra_id = m.id)
+            text-align:
+                center
+    10:
+        1:
+            campo:
+                BIOLOGICO
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                (SELECT e.estado FROM laboratoio_estado_muestra as e INNER JOIN laboratorio_muestra_estados as me  on e.id = me.estado_id WHERE me.area_id = 20 and me.muestra_id = m.id)
+            text-align:
+                center
+    11:
+        1:
+            campo:
+                INSTRUMENTAL
+            tipo:
+                String
+            tieneAlias:
+                no
+            nombreAlias:
+                (SELECT e.estado FROM laboratoio_estado_muestra as e INNER JOIN laboratorio_muestra_estados as me  on e.id = me.estado_id WHERE me.area_id = 21 and me.muestra_id = m.id)
+            text-align:
+                center

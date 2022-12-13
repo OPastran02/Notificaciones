@@ -1,0 +1,11 @@
+publico_publico_homepage:
+    path:     /publico/inspecciones
+    defaults: { _controller: PublicoPublicoBundle:Inspecciones:inspecciones }
+
+publico_publico_tablaInspeccion:
+    path:     /publico/tablaInspeccion
+    defaults: { _controller: PublicoPublicoBundle:Inspecciones:tablaInspeccion }
+
+publico_publico_excelInspeccion:
+    path:     /publico/excelInspeccion
+    defaults: { _controller: PublicoPublicoBundle:Inspecciones:excelInspeccion }

@@ -1,0 +1,39 @@
+services:
+  faltas.listener.acta:
+    class: Faltas\FaltasBundle\EventListener\ActaListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+      - { name: doctrine.event_listener, event: postPersist }
+
+  faltas.listener.actautilizada:
+    class: Faltas\FaltasBundle\EventListener\ActaUtilizadaListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+
+  faltas.listener.actaasignacion:
+    class: Faltas\FaltasBundle\EventListener\AsignacionActaListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+      - { name: doctrine.event_listener, event: postPersist }
+
+  faltas.listener.faja:
+    class: Faltas\FaltasBundle\EventListener\FajaListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+      - { name: doctrine.event_listener, event: postPersist }
+
+  faltas.listener.fajaasignacion:
+    class: Faltas\FaltasBundle\EventListener\AsignacionFajaListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+      - { name: doctrine.event_listener, event: postPersist }

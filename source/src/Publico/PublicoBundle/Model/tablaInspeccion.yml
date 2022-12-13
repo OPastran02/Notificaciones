@@ -1,0 +1,109 @@
+# TIPOS DE ARGUMENTOS QUE SE PUEDEN PASAR
+
+################
+# OBLIGATORIOS #
+################
+# campo: nombre de la columna, tiene que ser exacto
+# tipo:  tipo de columna puede ser Integer,String,Date,DateTime,Boolean
+
+###############
+# IMPORTANTES #
+###############
+# componente: Tipo de componente que se podra ver en la columna, puede ser Button,Ahref,Select2
+# date_format: Formato de la fecha en el caso que tipo de campo Fecha
+# tipoBoton: tipo de boton, submit o boton
+# attr: atributo del campo, puede ser hidden,disable,readonly
+# ruta: ruta a donde puede ir el Ahref, Button, o Select2
+# javascript: funcion de javascript que puede tener el boton o select2
+# argumentos: argumentos que puede tener la funcion javascript 
+
+################
+# SECUNDARIOS  #
+################
+# color: color de la letra o del boton
+# background-color:  color del fondo de la letra
+# font-family: tipo de letra
+# font-size: tamaño de letra
+# text-align: alineacion de la letra
+# padding: tamaño de los bordes
+# icono: icono del boton, consultar symfony
+# titulo: titulo del boton
+
+########################################
+InspeccionesInspeccionesBundle:OrdenInspeccion i:
+    1:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                aHref
+            color:
+                blue-soft
+            titulo:
+                "ver"
+            ruta:
+                inspeccion/visualizarinspecciones
+            argumentos:
+                i.id
+            extra:
+                '<div class="btn-group col-md-12"><a class="btn btn-circle btn-outline btn-block sbold uppercase yellow" target="_blank" href="../pdfinspeccion/checklist/--arg--"><i class="fa fa-file-text-o"></i>CheckList</a></div>'
+            extraArg:
+                i.checklist
+            decodificar:
+                si
+    2:
+        1: 
+            campo:
+                id_sap
+            tipo:
+                String
+    3:
+        1: 
+            campo:
+                checklist
+            tipo:
+                Integer
+    4:
+        1: 
+            campo:
+                fecha_inspeccion
+            tipo:
+                DateTime
+    5:
+        1: 
+            campo:
+                area
+            tipo:
+                String
+    6:
+        1: 
+            campo:
+                Inspectores
+            tipo:
+                String
+    7:
+        1:
+            campo:
+                Direcciones
+            tipo:
+                String
+    8:
+        1:
+            campo:
+                circuito
+            tipo:
+                String
+    9:
+        1:
+            campo:
+                SMP
+            tipo:
+                String
+    10:
+        1:
+            campo:
+                comuna
+            tipo:
+                Integer

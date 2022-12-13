@@ -1,0 +1,139 @@
+notificaciones_notificaciones_new_cedula:
+    path:     /pedido/cedula/new/{idEstablecimiento}
+    defaults: { _controller: NotificacionesNotificacionesBundle:PedidoCedula:newPedidoCedula}
+
+notificaciones_notificaciones_autorizar:
+    path:     /pedido/autorizar/{id}
+    defaults: { _controller: NotificacionesNotificacionesBundle:PedidoCedula:autorizarPedido}
+
+notificaciones_notificaciones_edit_cedula:
+    path:     /pedido/cedula/edit/{id}
+    defaults: { _controller: NotificacionesNotificacionesBundle:PedidoCedula:editPedido}
+
+notificaciones_notificaciones_firm_cedula:
+    path:     /cedula/firm/{id}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:firmCedula}
+
+notificaciones_notificaciones_distancia_notificacion_programacion:
+    path:     /notificacion/distancia/{idNotificacion}/{cuadras}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:listAsignarDistanciaNotificador}
+
+notificaciones_notificaciones_lista_notificacion_programacion:
+    path:     /notificacion/programacion/home
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:listAsignarNotificador}
+
+notificaciones_notificaciones_tabla_lista_notificacion_programacion:
+    path:     /notificacion/programacion/tabla
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:tablaListAsignarNotificador}
+
+notificaciones_notificaciones_tabla_lista_notificacion_programacion_disposicion:
+    path:     /notificacion/programaciondisposicion/tabla
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:tablaListAsignarNotificadorDisposicion}
+
+notificaciones_notificaciones_excel_notificacion_programacion:
+    path:     /notificacion/programacion/excel
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:excelListAsignarNotificador }
+
+notificaciones_notificaciones_excel_notificacion_programacion_disposicion:
+    path:     /notificacion/programacion/exceldisposicion
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:excelListAsignarNotificadorDisposicion }
+
+notificaciones_notificaciones_guardar_notificacion_programacion:
+    path:     /notificacion/programacion/save
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:AsignarNotificador}
+
+notificaciones_notificaciones_cedula:
+    path:     /cedula/{idCedula}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:saveCedula}
+
+notificaciones_notificaciones_eliminar_cedula:
+    path:     /notificacion/eliminar/{id}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:eliminarNotificacion}
+
+notificaciones_notificaciones_imprimir_cedula:
+    path:     /print/cedula/{idCedula}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Imprimir:printCedula}
+
+notificaciones_notificaciones_new_disposicion:
+    path:     /disposicion/new/{idTipo}/{idEstablecimiento}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Disposicion:newDisposicion}
+
+notificaciones_notificaciones_edit_disposicion:
+    path:     /disposicion/edit/{idDisposicion}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Disposicion:editDisposicion}
+
+notificaciones_notificaciones_esta_clausurado:
+    path:     /disposicionClausura/establecimiento/{idEstablecimiento}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Disposicion:estaClausurado}
+
+notificaciones_notificaciones_inbox:
+    path:     /inbox
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:inbox}
+
+notificaciones_notificaciones_tabla_inbox:
+    path:     /tablainbox
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:tablaInbox}
+
+notificaciones_notificaciones_lista_autorizar:
+    path:     /listaAutorizar
+    defaults: { _controller: NotificacionesNotificacionesBundle:PedidoCedula:listAutorizar}
+
+notificaciones_notificaciones_tabla_autorizar:
+    path:     /tablaAutorizar
+    defaults: { _controller: NotificacionesNotificacionesBundle:PedidoCedula:tablaAutorizar}
+
+notificaciones_notificaciones_excel_autorizar:
+    path:     /excelAutorizar
+    defaults: { _controller: NotificacionesNotificacionesBundle:PedidoCedula:excelAutorizar}
+
+notificaciones_notificaciones_pedido_eliminar:
+    path:     /eliminarpedido/{id}
+    defaults: { _controller: NotificacionesNotificacionesBundle:PedidoCedula:eliminarPedido}
+
+notificaciones_notificaciones_mis_pedidos:
+    path:     /mispedidos
+    defaults: { _controller: NotificacionesNotificacionesBundle:PedidoCedula:listMisPedidos}
+
+notificaciones_notificaciones_tabla_mis_pedidos:
+    path:     /tablamispedidos
+    defaults: { _controller: NotificacionesNotificacionesBundle:PedidoCedula:tablaMisPedidos}
+
+notificaciones_notificaciones_tabla_remitos:
+    path:     /tablamisremitos
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:tablaRemitoCedulas}
+
+notificaciones_notificaciones_excel_inbox:
+    path:     /excelusuario
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:excelInbox }
+
+notificaciones_notificaciones_convertir_pdf_pedido:
+    path:     /pedidopdf
+    defaults: { _controller: NotificacionesNotificacionesBundle:PedidoCedula:convertirAPdfPedido}
+
+notificaciones_notificaciones_imprimir_inbox:
+    path:     /imprimir/{id}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:imprimirInbox}
+
+notificaciones_notificaciones_imprimir_inbox_autorizar:
+    path:     /imprimirAutorizar/{id}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:imprimirInboxAutorizar}
+
+notificaciones_notificaciones_carga_masiva:
+    path:     /cargamasiva
+    defaults: { _controller: NotificacionesNotificacionesBundle:CargaMasiva:cargarExcel}
+
+notificaciones_notificaciones_carga_masiva_decidir_que_establecimiento:
+    path:     /cargamasiva/decision/{establecimientos}
+    defaults: { _controller: NotificacionesNotificacionesBundle:CargaMasiva:decidirQueEstablecimiento}
+
+notificaciones_notificaciones_carga_masiva_elegir:
+    path:     /cargamasiva/eleccion/{idEstablecimiento}/{idPedido}/{plazo1}/{plazo2}/{citacion}/{nocturnidad}/{idTipo}/{fojas}/{vencer}/{idModelo}/{calleR}/{alturaR}/{pisoR}/{dptoR}/{localR}/{enviarR}/{destinatario}/{calleL}/{alturaL}/{pisoL}/{dptoL}/{localL}/{enviarL}
+    defaults: { _controller: NotificacionesNotificacionesBundle:CargaMasiva:cargarCorregidas}
+
+notificaciones_notificaciones_pdfcedula:
+    path:     /pdfcedula/verpdf/{cedula}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Cedula:pdfCedula}
+
+notificaciones_notificaciones_pdfdispo:
+    path:     /pdfdispo/verpdf/{dispo}
+    defaults: { _controller: NotificacionesNotificacionesBundle:Disposicion:pdfDispo}

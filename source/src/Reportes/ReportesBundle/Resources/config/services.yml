@@ -1,0 +1,4 @@
+services:
+  reportes_options:
+    class:  Reportes\ReportesBundle\Form\Listener\AddOptionFieldSubscriber
+    arguments: ["@doctrine.orm.entity_manager"]

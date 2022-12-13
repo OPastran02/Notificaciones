@@ -1,0 +1,581 @@
+{% extends '::base.html.twig' %}
+
+
+{% block stylesheets %}
+    
+    {{ parent() }}
+
+    {# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# SWITCH #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# SELECT2 #}
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# TOASTR NOTIFICATIONS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+
+{% block pagecontent %}
+
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <input class="successFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashBag.get('alert') %}
+        <input class="alertFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashBag.get('error') %}
+        <input class="errorFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+
+    {{ form_start(form, { 'attr': {'class':'form-horizontal'} }) }}
+
+        <div class="form-body">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption font-red">
+                            <span aria-hidden="true" class="icon-note"></span>
+                            <span class="caption-subject font-red bold uppercase">
+                                Nueva disposición de clausura
+                            </span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        
+                        <div class="scroller" style="height:500px" data-rail-visible="1" data-rail-color="yellow" data-handle-color="green">
+
+                            <div class="form-group form-md-line-input has-info">
+
+                                {{ form_label(form.disposicion.numero, 'Número de disposición', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-1">
+                                    {{ form_widget(form.disposicion.numero, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'placeholder': 'Número'
+                                        }
+                                    }) }}
+                                    <div class="form-control-focus"> </div>
+                                    <span class="help-block">
+                                        nro. dispo
+                                    </span>
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.disposicion.numero) }}
+                                    </span>
+                                </div>
+
+                                {{ form_label(form.disposicion.reparticion, 'Repartición', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    {{ form_widget(form.disposicion.reparticion, {
+                                        'attr': {
+                                            'class': 'form-control select2'
+                                        }
+                                    }) }}
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.disposicion.reparticion) }}
+                                    </span>
+                                </div>
+
+                                <div class="col-md-1"></div>
+
+                                {{ form_label(form.disposicion.anio, 'Año', {
+                                    'label_attr': {
+                                        'class': 'col-md-1 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    {{ form_widget(form.disposicion.anio, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'placeholder': 'Año'
+                                        }
+                                    }) }}
+                                    <div class="form-control-focus"> </div>
+                                    <span class="help-block">
+                                        ingrese año disposición
+                                    </span>
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.disposicion.anio) }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group form-md-line-input has-info">
+
+                                {{ form_label(form.disposicion.tipo, 'Tipo de disposición', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    {{ form_widget(form.disposicion.tipo, {
+                                        'attr': {
+                                            'class': 'form-control select2'
+                                        }
+                                    }) }}
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.disposicion.tipo) }}
+                                    </span>
+                                </div>
+
+                                {{ form_label(form.disposicion.clausura.alcance, 'Alcance', {
+                                    'label_attr': {
+                                        'class': 'col-md-1 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    {{ form_widget(form.disposicion.clausura.alcance, {
+                                        'attr': {
+                                            'class': 'form-control select2'
+                                        }
+                                    }) }}
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.disposicion.clausura.alcance) }}
+                                    </span>
+                                </div>
+
+                                <div class="col-md-1"></div>
+
+                                {{ form_label(form.disposicion.clausura.leyes, 'Leyes', {
+                                    'label_attr': {
+                                        'class': 'col-md-1 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-3">
+                                    {{ form_widget(form.disposicion.clausura.leyes, {
+                                        'attr': {
+                                            'class': 'form-control select2'
+                                        }
+                                    }) }}
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.disposicion.clausura.leyes) }}
+                                    </span>
+                                </div>
+
+                            </div>                            
+
+                            <div class="form-group form-md-line-input has-info">
+
+                                {{ form_label(form.disposicion.clausura.fechaClausura, 'Fecha de clausura', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    <div class="input-icon">
+                                        {{ form_widget(form.disposicion.clausura.fechaClausura, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Fecha de clausura'
+                                            }
+                                        }) }}
+                                        <div class="form-control-focus"> </div>
+                                        <span class="help-block">
+                                            ingrese fecha de clausura
+                                        </span>
+                                        <i class="fa fa-calendar-times-o"></i>
+                                        <span class="help-block help-block-error" style="color: red;">
+                                            {{ form_errors(form.disposicion.clausura.fechaClausura) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1"></div>
+
+                                {{ form_label(form.disposicion.requiereInspector, 'Requiere Inspector', {
+                                    'label_attr': {
+                                        'class': 'col-md-1 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-1">
+                                    {{ form_widget(form.disposicion.requiereInspector, {
+                                        'attr': {
+                                            'class': 'make-switch switch-large',
+                                            'type':'checkbox',
+                                            'data-label-icon':'fa fa-youtube',
+                                            'data-on-text':'<i class="fa fa-check"></i>',
+                                            'data-off-text':'<i class="fa fa-times"></i>'
+                                        }
+                                    }) }}
+                                    <span style="color: red;">
+                                        {{ form_errors(form.disposicion.requiereInspector) }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <hr>
+
+                            <div class="form-group form-md-line-input has-info">
+
+                                <div class="col-md-1"></div>
+
+                                {{ form_label(form.disposicion.clausura.levantada, 'Levantada', {
+                                    'label_attr': {
+                                        'class': 'col-md-1 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-1">
+                                    {{ form_widget(form.disposicion.clausura.levantada, {
+                                        'attr': {
+                                            'class': 'make-switch switch-large',
+                                            'type':'checkbox',
+                                            'data-label-icon':'fa fa-youtube',
+                                            'data-on-text':'<i class="fa fa-check"></i>',
+                                            'data-off-text':'<i class="fa fa-times"></i>'
+                                        }
+                                    }) }}
+                                    <span style="color: red;">
+                                        {{ form_errors(form.disposicion.clausura.levantada) }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group form-md-line-input has-info">
+
+                                {{ form_label(form.disposicion.clausura.fechaLevantamiento, 'Fecha de levantamiento', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    <div class="input-icon">
+                                        {{ form_widget(form.disposicion.clausura.fechaLevantamiento, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'F. levantamiento'
+                                            }
+                                        }) }}
+                                        <div class="form-control-focus"> </div>
+                                        <span class="help-block">
+                                            ingrese f. levantamiento
+                                        </span>
+                                        <i class="fa fa-calendar"></i>
+                                        <span class="help-block help-block-error" style="color: red;">
+                                            {{ form_errors(form.disposicion.clausura.fechaLevantamiento) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group form-md-line-input has-info">
+
+                                {{ form_label(form.disposicion.clausura.numeroNotaDgai, 'Número de nota DGAI', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    <div class="input-icon">
+                                        {{ form_widget(form.disposicion.clausura.numeroNotaDgai, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Número nota DGAI'
+                                            }
+                                        }) }}
+                                        <div class="form-control-focus"> </div>
+                                        <span class="help-block">
+                                            ingrese nro. nota DGAI
+                                        </span>
+                                        <i class="fa fa-file-text-o"></i>
+                                        <span class="help-block help-block-error" style="color: red;">
+                                            {{ form_errors(form.disposicion.clausura.numeroNotaDgai) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {{ form_label(form.disposicion.clausura.anioNotaDgai, 'Año nota DGAI', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    <div class="input-icon">
+                                        {{ form_widget(form.disposicion.clausura.anioNotaDgai, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Año nota DGAI'
+                                            }
+                                        }) }}
+                                        <div class="form-control-focus"> </div>
+                                        <span class="help-block">
+                                            ingrese año nota DGAI
+                                        </span>
+                                        <i class="fa fa-calendar"></i>
+                                        <span class="help-block help-block-error" style="color: red;">
+                                            {{ form_errors(form.disposicion.clausura.anioNotaDgai) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group form-md-line-input has-info">
+
+                                {{ form_label(form.disposicion.clausura.numeroGiroDocumental, 'Nro. de giro documental', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    <div class="input-icon">
+                                        {{ form_widget(form.disposicion.clausura.numeroGiroDocumental, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Nro. g. documental'
+                                            }
+                                        }) }}
+                                        <div class="form-control-focus"> </div>
+                                        <span class="help-block">
+                                            ingrese nro. g. documental
+                                        </span>
+                                        <i class="fa fa-file-text-o"></i>
+                                        <span class="help-block help-block-error" style="color: red;">
+                                            {{ form_errors(form.disposicion.clausura.numeroGiroDocumental) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {{ form_label(form.disposicion.clausura.anioGiroDocumental, 'Año giro documental', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    <div class="input-icon">
+                                        {{ form_widget(form.disposicion.clausura.anioGiroDocumental, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Año g. documental'
+                                            }
+                                        }) }}
+                                        <div class="form-control-focus"> </div>
+                                        <span class="help-block">
+                                            ingrese año g. documental
+                                        </span>
+                                        <i class="fa fa-calendar"></i>
+                                        <span class="help-block help-block-error" style="color: red;">
+                                            {{ form_errors(form.disposicion.clausura.anioGiroDocumental) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group form-md-line-input has-info">
+
+                                {{ form_label(form.disposicion.clausura.numeroActuacionRemicion, 'Nro. actuación remisión', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    <div class="input-icon">
+                                        {{ form_widget(form.disposicion.clausura.numeroActuacionRemicion, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Nro. act. remisión'
+                                            }
+                                        }) }}
+                                        <div class="form-control-focus"> </div>
+                                        <span class="help-block">
+                                            ingrese nro. act. remisión
+                                        </span>
+                                        <i class="fa fa-file-text-o"></i>
+                                        <span class="help-block help-block-error" style="color: red;">
+                                            {{ form_errors(form.disposicion.clausura.numeroActuacionRemicion) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {{ form_label(form.disposicion.clausura.anioActuacionRemicion, 'Año actuación remisión', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    <div class="input-icon">
+                                        {{ form_widget(form.disposicion.clausura.anioActuacionRemicion, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Año act. remisión'
+                                            }
+                                        }) }}
+                                        <div class="form-control-focus"> </div>
+                                        <span class="help-block">
+                                            ingrese año act. remisión
+                                        </span>
+                                        <i class="fa fa-calendar"></i>
+                                        <span class="help-block help-block-error" style="color: red;">
+                                            {{ form_errors(form.disposicion.clausura.anioActuacionRemicion) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group form-md-line-input has-info">
+                                
+                                {{ form_label(form.disposicion.clausura.tipoActuacionRemicion, 'Tipo actuación remisión', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-2">
+                                    {{ form_widget(form.disposicion.clausura.tipoActuacionRemicion, {
+                                        'attr': {
+                                            'class': 'form-control select2'
+                                        }
+                                    }) }}
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.disposicion.clausura.tipoActuacionRemicion) }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <hr>
+
+                            <div class="form-group form-md-line-input has-info">
+
+                                <div class="col-md-1"></div>
+
+                                {{ form_label(form.nocturnidad, 'Nocturnidad', {
+                                    'label_attr': {
+                                        'class': 'col-md-1 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-1">
+                                    {{ form_widget(form.nocturnidad, {
+                                        'attr': {
+                                            'class': 'make-switch switch-large',
+                                            'type':'checkbox',
+                                            'data-label-icon':'fa fa-youtube',
+                                            'data-on-text':'<i class="fa fa-check"></i>',
+                                            'data-off-text':'<i class="fa fa-times"></i>'
+                                        }
+                                    }) }}
+                                    <span style="color: red;">
+                                        {{ form_errors(form.nocturnidad) }}
+                                    </span>
+                                </div>
+
+                                <div class="col-md-1"></div>
+
+                                {{ form_label(form.disposicion.clausura.controlador, 'Controlador', {
+                                    'label_attr': {
+                                        'class': 'col-md-1 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+                                <div class="col-md-3">
+                                    <div class="input-group select2-bootstrap-prepend">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" data-select2-open="single-prepend-text">
+                                                <span class="glyphicon glyphicon-user"></span>
+                                            </button>
+                                        </span>
+                                        {{ form_widget(form.disposicion.clausura.controlador, {
+                                        'attr': {
+                                            'class': 'form-control select2'
+                                        }
+                                    }) }}
+                                    </div>
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.disposicion.clausura.controlador) }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if is_granted('ROLE_NOTIFICACIONES_EDIT') %}
+        <div class="form-actions">
+            <div class="col-md-offset-5">
+                <button type="submit" data-loading-text="Loading..." class="btn red mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right">
+                    <span class="ladda-label">
+                        Guardar
+                    </span>
+                </button>
+            </div>
+        </div>        
+        {% else %}
+            <div class="form-actions">
+                <div class="col-md-offset-5">
+                    <button type="button" data-loading-text="Loading..." class="btn grey mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right">
+                        <span class="ladda-label">
+                            No Habilitado
+                        </span>
+                    </button>
+                </div>
+            </div>
+        {% endif %}    
+
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    {# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <script src="{{ asset('public/assets/global/plugins/ladda/spin.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/ladda/ladda.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-buttons.min.js') }}" type="text/javascript"></script>
+
+    {# SELECT2 #}
+    <script src="{{ asset('public/assets/global/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/components-select2.min.js') }}" type="text/javascript"></script>
+
+    {# TOASTR NOTIFICATIONS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('Js/CoreBundle/ui-toastr.js') }}" type="text/javascript"></script>
+
+{% endblock %}

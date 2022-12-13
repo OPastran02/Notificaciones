@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 192.168.162.8
+    database_port: 3306
+    database_name: notificaciones
+    database_user: checklist
+    database_password: porygon2
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: 3306
+    mailer_password: null
+    secret: 8abeed21856c92640aaaf8942a6510cd1ba8a78a

@@ -1,0 +1,3 @@
+api_annotation_route:
+    resource: "@AppBundle/Controller/ApiController.php"
+    type: annotation

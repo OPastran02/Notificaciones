@@ -1,0 +1,353 @@
+{% extends '::base.html.twig' %}
+
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+	{# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+
+
+{% block pagecontent %}
+
+    {{ dump(resultados) }}
+
+    {#{{ dump(programadasDia) }}
+
+    {{ dump(programadasSemana) }}
+
+    {{ dump(programadasMes) }}#}
+
+    <div class="form-body">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-blue-madison">
+                        <i class="icon-user-following font-blue-madison"></i>
+                        <span class="caption-subject bold uppercase">
+                            Reporte
+                        </span>
+                    </div>
+                    {#
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn btn-sm green dropdown-toggle" href="javascript:;" data-toggle="dropdown">
+                                    Acciones
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li>
+                                        <a href="javascript:;">
+                                            <i class="fa fa-pencil"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <i class="fa fa-ban"></i>
+                                            Ban
+                                        </a>
+                                    </li>
+                                    <li class="divider"> </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <i class="fa fa-trash-o"></i>
+                                            Eliminar
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    #}
+                </div>
+                <div class="portlet-body">
+
+                    {#
+                    <div class="form-group form-md-line-input has-info">
+                    	<div id="programadasDia" class="col-md-3"></div>
+
+                    	<div class="col-md-1"></div>
+
+					    <div id="programadasSemana" class="col-md-3"></div>
+
+					    <div class="col-md-1"></div>
+
+					    <div id="programadasMes" class="col-md-3"></div>
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                    	<div id="inspeccionesDia" class="col-md-3"></div>
+
+                    	<div class="col-md-1"></div>
+
+					    <div id="inspeccionesSemana" class="col-md-3"></div>
+
+					    <div class="col-md-1"></div>
+
+					    <div id="inspeccionesMes" class="col-md-3"></div>
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                    	<div id="actasDia" class="col-md-3"></div>
+
+                    	<div class="col-md-1"></div>
+
+					    <div id="actasSemana" class="col-md-3"></div>
+
+					    <div class="col-md-1"></div>
+
+					    <div id="actasMes" class="col-md-3"></div>
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                    	<div id="fajasDia" class="col-md-3"></div>
+
+                    	<div class="col-md-1"></div>
+
+					    <div id="fajasSemana" class="col-md-3"></div>
+
+					    <div class="col-md-1"></div>
+
+					    <div id="fajasMes" class="col-md-3"></div>
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    #}
+
+                    <div class="form-group form-md-line-input has-info">
+                        <br>
+
+                        <div id="programadasDia" class="col-md-5"></div>
+
+                        <div class="col-md-1"></div>
+
+                        <div id="inspeccionesDia" class="col-md-5" style="position: relative; right: 9px;" align="right"></div>
+
+                        <br>
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                        <br>
+
+                        <div id="programadasSemana" class="col-md-5"></div>
+
+                        <div class="col-md-1">
+                            <h1 align="center" style="position: relative; left: 50px; top: 100px;">V S</h1>
+                        </div>
+
+                        <div id="inspeccionesSemana" class="col-md-5" style="position: relative; right: 9px;" align="right"></div>
+
+                        <br>
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                        <br>
+
+                        <div id="programadasMes" class="col-md-5"></div>
+
+                        <div class="col-md-1"></div>
+
+                        <div id="inspeccionesMes" class="col-md-5" style="position: relative; right: 9px;" align="right"></div>
+
+                        <br>
+                    </div>
+
+                    {# '''''' #}
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    {# '''''' #}
+
+                    <div class="form-group form-md-line-input has-info">
+                        <br>
+
+                        <div id="actasDia" class="col-md-5"></div>
+
+                        <div class="col-md-1"></div>
+
+                        <div id="fajasDia" class="col-md-5" style="position: relative; right: 9px;" align="right"></div>
+
+                        <br>
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                        <br>
+
+                        <div id="actasSemana" class="col-md-5"></div>
+
+                        <div class="col-md-1">
+                            <h1 align="center" style="position: relative; left: 50px; top: 100px;">V S</h1>
+                        </div>
+
+                        <div id="fajasSemana" class="col-md-5" style="position: relative; right: 9px;" align="right"></div>
+
+                        <br>
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                        <br>
+
+                        <div id="actasMes" class="col-md-5"></div>
+
+                        <div class="col-md-1"></div>
+
+                        <div id="fajasMes" class="col-md-5" style="position: relative; right: 9px;" align="right"></div>
+
+                        <br>
+                    </div>
+
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+                    <div class="form-group form-md-line-input has-info">
+                        &nbsp;
+                    </div>
+
+                    {# ---------------------------------------------- #}
+
+                    <div class="form-group form-md-line-input has-info">
+                        <br>
+
+                        <div id="line"></div>
+
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    {# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <script src="{{ asset('public/assets/global/plugins/ladda/spin.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/ladda/ladda.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-buttons.min.js') }}" type="text/javascript"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    {# <script type="text/javascript">
+        {{ gc_draw(programadasDia, 'programadasDia') }}
+        {{ gc_draw(programadasSemana, 'programadasSemana') }}
+        {{ gc_draw(programadasMes, 'programadasMes') }}
+
+        {{ gc_draw(inspeccionesDia, 'inspeccionesDia') }}
+        {{ gc_draw(inspeccionesSemana, 'inspeccionesSemana') }}
+        {{ gc_draw(inspeccionesMes, 'inspeccionesMes') }}
+
+        {{ gc_draw(actasDia, 'actasDia') }}
+        {{ gc_draw(actasSemana, 'actasSemana') }}
+        {{ gc_draw(actasMes, 'actasMes') }}
+
+        {{ gc_draw(fajasDia, 'fajasDia') }}
+        {{ gc_draw(fajasSemana, 'fajasSemana') }}
+        {{ gc_draw(fajasMes, 'fajasMes') }}
+
+        {{ gc_draw(line, 'line') }}
+    </script> #}
+
+{% endblock %}

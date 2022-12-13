@@ -1,0 +1,196 @@
+# TIPOS DE ARGUMENTOS QUE SE PUEDEN PASAR
+
+################
+# OBLIGATORIOS #
+################
+# campo: nombre de la columna, tiene que ser exacto
+# tipo:  tipo de columna puede ser Integer,String,Date,DateTime,Boolean
+
+###############
+# IMPORTANTES #
+###############
+# componente: Tipo de componente que se podra ver en la columna, puede ser Button,Ahref,Select2
+# date_format: Formato de la fecha en el caso que tipo de campo Fecha
+# tipoBoton: tipo de boton, submit o boton
+# attr: atributo del campo, puede ser hidden,disable,readonly
+# ruta: ruta a donde puede ir el Ahref, Button, o Select2
+# javascript: funcion de javascript que puede tener el boton o select2
+# argumentos: argumentos que puede tener la funcion javascript 
+
+################
+# SECUNDARIOS  #
+################
+# color: color de la letra o del boton
+# background-color:  color del fondo de la letra
+# font-family: tipo de letra
+# font-size: tamaño de letra
+# text-align: alineacion de la letra
+# padding: tamaño de los bordes
+# icono: icono del boton, consultar symfony
+# titulo: titulo del boton
+
+########################################
+NotificacionesNotificacionesBundle:Notificacion n:
+    1:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                Button
+            color:
+                red
+            titulo:
+                "Eliminar"
+            javascript:
+                Inbox.eliminarCedula
+            argumentos:
+                n.id
+            icono:
+                fa fa-trash
+            permisos:
+                ROLE_INBOX_ADMIN
+    2:
+        1:    
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                Button
+            color:
+                blue-soft
+            titulo:
+                "Guardar"
+            javascript:
+                Inbox.guardarCedula
+            argumentos:
+                n.id
+            icono:
+                fa fa-save
+            permisos:
+                ROLE_INBOX_EDIT
+    3:
+        1:    
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                Button
+            color:
+                yellow
+            titulo:
+                "Imprimir"
+            javascript:
+                VistaPrevia
+            argumentos:
+                n.id
+            icono:
+                fa fa-print
+            decodificar:
+                si
+            permisos:
+                ROLE_INBOX_VIEW
+n.cedula c:
+    4:
+        1: 
+            campo:
+                numero
+            tipo:
+                String
+
+c.notificacion nn:
+
+    5:
+        1: 
+            campo:
+                fechaEnvioFirma
+            tipo:
+                Date
+            componente:
+                Empty
+            extra:
+                '<input type="Text" class="form-control fecha-picker new-fecha-picker" id="fechaEnvioFirma--arg--" name="fechaEnvioFirma--arg--" value="--arg1--"></input>'
+            extraArg:
+                n.id|n.fechaEnvioFirma
+            extraTipos:
+                Integer|Date
+    6:
+        1: 
+            campo:
+                fechaVueltaFirma
+            tipo:
+                Date
+            componente:
+                Empty
+            extra:
+                '<input type="Text" class="form-control fecha-picker new-fecha-picker" id="fechaDevolucion--arg--" name="fechaDevolucion--arg--" value="--arg1--"></input>'
+            extraArg:
+                n.id|n.fechaVueltaFirma
+            extraTipos:
+                Integer|Date
+    7:
+        1: 
+            campo:
+                observaciones
+            tipo:
+                String
+            componente:
+                Empty
+            extra:
+                '<input type="Text" class="form-control fecha-picker new-fecha-picker" id="observaciones--arg--" name="observaciones--arg--" value="--arg1--"></input>'
+            extraArg:
+                n.id|n.observaciones
+            extraTipos:
+                Integer|Date
+    8:
+        1: 
+            campo:
+                direccionNotificada
+            tipo:
+                String
+    9:
+        1: 
+            campo:
+                plazo1
+            tipo:
+                String
+    10:
+        1: 
+            campo:
+                plazo2
+            tipo:
+                String
+n.estado ee:
+    13:
+        1: 
+            campo:
+                id
+            tipo:
+                String
+            mapeado:
+                no
+n.pedidoNot pn:
+    11:
+        1:
+            campo:
+                fechaAutorizado
+            tipo:
+                Date
+pn.usuarioAutorizador u:
+    12:
+        1:
+            campo:
+                apellido
+            tipo:
+                String
+            componente:
+                Concat
+            concatenar:
+                u.apellido|, |u.nombre
+            tieneAlias:
+                no
+            nombreAlias:
+                CONCAT(u.apellido,', ',u.nombre)

@@ -1,0 +1,19 @@
+core__rubros_principales:
+    path:     /core/rubrosPrincipales
+    defaults: { _controller: CoreBundle:Default:rubrosPrincipales}
+
+core__calles:
+    path:     /core/calles
+    defaults: { _controller: CoreBundle:Default:calles}
+
+core__tipos_cedulas:
+    path:     /core/tiposCedulas
+    defaults: { _controller: CoreBundle:Default:tiposCedulas}
+
+core_Denied:
+    path:     /denied
+    defaults: { _controller: CoreBundle:Default:denied }
+
+core_Denied_Home:
+    path:     /deniedHome
+    defaults: { _controller: CoreBundle:Default:deniedHome }

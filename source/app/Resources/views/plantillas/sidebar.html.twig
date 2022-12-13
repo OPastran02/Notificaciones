@@ -1,0 +1,67 @@
+
+
+<div class="page-header navbar navbar-fixed-top">
+	<div class="page-header-inner ">
+		<div class="page-logo">
+            <!--aca va el logo-->
+            <div class="menu-toggler sidebar-toggler"> </div>
+        </div>
+
+        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"> </a>
+        
+
+        <div class="top-menu">            
+        	<ul class="nav navbar-nav pull-right">
+                <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+
+                </li>
+                <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar2">
+                    
+                </li>
+        		<li class="dropdown dropdown-user">                    
+
+        			<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <img src="{{ asset('img/avatar1_small.jpg') }}" />                        
+                        <span class="username username-hide-on-mobile"> {{ app.user.nombre }} </span>
+            
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-default">                                                
+                        <li class="divider"> </li>                        
+                        <li>
+                            <a id="logout" href="#" onclick="logout();return false;"><i class="icon-key"></i> Salir del sistema </a>
+
+                            <!--<a href="{{ path('usuario_usuario_log_out') }}">
+                                <i class="icon-key"></i> Salir del sistema </a>-->
+                        </li>
+                    </ul>
+        		</li>
+
+        	</ul>
+        </div>
+	</div>
+</div>
+
+
+            
+<script type="text/javascript">
+        var routesSideBar = {
+            myroutes:{                    
+                alerta:"{{ path('inspecciones_inspecciones_alertainspecciones') }}",
+                alertaReInspeccion:"{{ path('inspecciones_inspecciones_alertareinspecciones') }}"                
+            },
+        };
+
+        function logout(){
+            $.ajax({
+                type: "POST",
+                url: "{{ oauth2_url }}/oidc/logout",
+                xhrFields: {
+                    withCredentials: true
+                }
+            }).done(function(n) {
+                window.location.replace("{{ path('usuario_usuario_log_out') }}");
+            });
+        }
+</script>
+

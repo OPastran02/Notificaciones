@@ -1,0 +1,95 @@
+# TIPOS DE ARGUMENTOS QUE SE PUEDEN PASAR
+
+################
+# OBLIGATORIOS #
+################
+# campo: nombre de la columna, tiene que ser exacto
+# tipo:  tipo de columna puede ser Integer,String,Date,DateTime,Boolean
+
+###############
+# IMPORTANTES #
+###############
+# componente: Tipo de componente que se podra ver en la columna, puede ser Button,Ahref,Select2
+# date_format: Formato de la fecha en el caso que tipo de campo Fecha
+# tipoBoton: tipo de boton, submit o boton
+# attr: atributo del campo, puede ser hidden,disable,readonly
+# ruta: ruta a donde puede ir el Ahref, Button, o Select2
+# javascript: funcion de javascript que puede tener el boton o select2
+# argumentos: argumentos que puede tener la funcion javascript 
+
+################
+# SECUNDARIOS  #
+################
+# color: color de la letra o del boton
+# background-color:  color del fondo de la letra
+# font-family: tipo de letra
+# font-size: tamaño de letra
+# text-align: alineacion de la letra
+# padding: tamaño de los bordes
+# icono: icono del boton, consultar symfony
+# titulo: titulo del boton
+
+########################################
+NotificacionesNotificacionesBundle:Notificacion n:
+    1:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                Button
+            color:
+                yellow
+            titulo:
+                " ubicar"
+            javascript:
+                Notificaciones.ubicar
+            argumentos:
+                n.id
+            decodificar:
+                si
+            icono:
+                fa fa-map-pin
+    2:
+        1: 
+            campo:
+                direccionNotificada
+            tipo:
+                String
+    3:
+        1: 
+            campo:
+                fechaVueltaFirma
+            tipo:
+                Date
+    7:
+        1:
+            campo:
+                estado
+            tipo:
+                Integer
+            mapeado:
+                no
+
+n.disposicion d:
+    4:
+        1:
+            campo:
+                numero
+            tipo:
+                String
+    5:
+        1:
+            campo:
+                anio
+            tipo:
+                Integer
+d.reparticion t:
+    6:
+        1:
+            campo:
+                reparticion
+            tipo:
+                String
+

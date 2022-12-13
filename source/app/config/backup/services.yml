@@ -1,0 +1,23 @@
+services:
+    app.login_listener:
+        class: Usuario\UsuarioBundle\Listener\LoginListener
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login }
+
+    app.twig_extension:
+        class: CoreBundle\Logic\AppExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+
+    app.cors_listener:
+        class: CoreBundle\Logic\CorsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+
+# 	app.login_listener:
+# 		class: Usuario\UsuarioBundle\Listener\LoginListener
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

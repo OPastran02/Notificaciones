@@ -1,0 +1,32 @@
+services:
+  notificaciones.listener.notificacion:
+    class: Notificaciones\NotificacionesBundle\EventListener\NotificacionListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: preUpdate }
+      - { name: doctrine.event_listener, event: prePersist }
+
+  notificaciones.listener.cedula:
+    class: Notificaciones\NotificacionesBundle\EventListener\CedulaListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: preUpdate }
+
+  notificaciones.listener.disposicion:
+    class: Notificaciones\NotificacionesBundle\EventListener\DisposicionListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: preUpdate }
+
+  notificaciones.listener.disposicionclausura:
+    class: Notificaciones\NotificacionesBundle\EventListener\DisposicionClausuraListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: preUpdate }
+
+  notificaciones.listener.pedido:
+    class: Notificaciones\NotificacionesBundle\EventListener\PedidoListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: postPersist }

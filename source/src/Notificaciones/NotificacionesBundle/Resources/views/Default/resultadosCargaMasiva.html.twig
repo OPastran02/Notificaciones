@@ -1,0 +1,183 @@
+{% extends '::base.html.twig' %}
+
+
+{% block stylesheets %}
+    
+    {{ parent() }}
+
+    {# EXTENDED MODALS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+
+{% block pagecontent %}
+
+	{# ¡IMPORTANTE! ↓ #}
+	{# EN "data.data[2:]" TENGO TODOS LOS REGISTROS DEL EXCEL #}
+
+	{# {{dump(data)}} #}
+
+	<div class="row">
+		<div class="col-md-12">
+            <div class="portlet light bordered">
+	            <div class="portlet-title">
+	                <div class="caption font-yellow">
+	                    <span aria-hidden="true" class="icon-note"></span>
+	                    <span class="caption-subject font-yellow bold uppercase">
+	                        Resultados
+	                    </span>
+	                </div>
+	            </div>
+	            <div class="portlet-body">
+
+	            	<div class="table-scrollable">
+				        <table class="table table-bordered table-hover">
+				            <thead>
+				                <tr>
+				                    <th> Nro. fila </th>
+				                    <th> Domicilio </th>
+				                    <th> Razón social </th>
+				                    <th> Diagnóstico </th>
+				                </tr>
+				            </thead>
+				            <tbody>
+				                {% for e in data.data[2:] %}
+				                	{% set domicilio = e.0[0] ~ ' ' ~ e.0[1] %}
+				                	{% set razonSocial = e.0[6] %}
+				                	{% set diagnostico = e.detail.REAL %}
+
+									{% if e.result.REAL == 'MULTIPLE' %}
+										<tr class="warning" id="{{ 'warning' ~ loop.index0 }}">
+						                    <td> {{ loop.index }} </td>
+						                    <td> {{ domicilio }} </td>
+						                    <td> {{ razonSocial }} </td>
+						                    <td id="{{ 'labelWarning' ~ loop.index0 }}">
+						                    	{{ diagnostico }}
+
+						                    	{# DATOS DEL ESTABLECIMIENTO #}
+						                    	<input hidden type="text" id="{{ 'numero' ~ loop.index0 }}" value="{{ loop.index0 }}">
+						                    	<input hidden type="text" id="{{ 'calleR' ~ loop.index0 }}" value="{{ e.0[0] }}">
+						                    	<input hidden type="text" id="{{ 'alturaR' ~ loop.index0 }}" value="{{ e.0[1] }}">
+						                    	<input hidden type="text" id="{{ 'pisoR' ~ loop.index0 }}" value="{{ e.0[2] }}">
+						                    	<input hidden type="text" id="{{ 'dptoR' ~ loop.index0 }}" value="{{ e.0[3] }}">
+						                    	<input hidden type="text" id="{{ 'localR' ~ loop.index0 }}" value="{{ e.0[4] }}">
+						                    	<input hidden type="text" id="{{ 'enviarR' ~ loop.index0 }}" value="{{ e.0[5] }}">
+						                    	<input hidden type="text" id="{{ 'destinatario' ~ loop.index0 }}" value="{{ e.0[6] }}">
+						                    	<input hidden type="text" id="{{ 'calleL' ~ loop.index0 }}" value="{{ e.0[7] }}">
+						                    	<input hidden type="text" id="{{ 'alturaL' ~ loop.index0 }}" value="{{ e.0[8] }}">
+						                    	<input hidden type="text" id="{{ 'pisoL' ~ loop.index0 }}" value="{{ e.0[9] }}">
+						                    	<input hidden type="text" id="{{ 'dptoL' ~ loop.index0 }}" value="{{ e.0[10] }}">
+						                    	<input hidden type="text" id="{{ 'localL' ~ loop.index0 }}" value="{{ e.0[11] }}">
+						                    	<input hidden type="text" id="{{ 'enviarL' ~ loop.index0 }}" value="{{ e.0[12] }}">
+
+						                    	<a href="javascript:CargaMasiva.mostrarModalDecision({{ e.data.REAL.MULTIPLE|json_encode() }}, {{ loop.index0 }});" class="btn dark btn-sm btn-outline sbold uppercase">
+						                    		<i class="fa fa-share"></i>
+						                    		Seleccionar
+						                    	</a>
+						                    </td>
+						                </tr>
+									{% elseif e.result.GENERAL == "ERROR" %}
+										<tr class="danger">
+						                    <td> {{ loop.index }} </td>
+						                    <td> {{ domicilio }} </td>
+						                    <td> {{ razonSocial }} </td>
+						                    {% if diagnostico[((diagnostico|length)-25):((diagnostico|length)-1)] == ', Altura Inexistente <br>' %}
+						                    		<td> {{ diagnostico[:((diagnostico|length)-25)] ~ '. Altura inexistente' }} </td>
+						                    	{% else %}
+						                    		<td> {{ diagnostico }} </td>
+						                    {% endif %}
+						                </tr>
+									{% else %}
+										<tr class="success">
+						                    <td> {{ loop.index }} </td>
+						                    <td> {{ domicilio }} </td>
+						                    <td> {{ razonSocial }} </td>
+						                    <td> {{ diagnostico }} </td>
+						                </tr>
+									{% endif %}
+									<br>
+								{% endfor %}
+				            </tbody>
+				        </table>
+				    </div>
+
+	            </div>
+	        </div>
+        </div>
+    </div>
+
+    {# DATOS DEL PEDIDO #}
+    <input hidden type="text" id="pedido" value="{{ data.form.pedido }}">
+    <input hidden type="text" id="plazo1" value="{{ data.form.plazo1 }}">
+    <input hidden type="text" id="plazo2" value="{{ data.form.plazo2 }}">
+    <input hidden type="text" id="citacion" value="{{ data.form.citacion }}">
+    <input hidden type="text" id="nocturnidad" value="{{ data.form.nocturnidad }}">
+    <input hidden type="text" id="tipo" value="{{ data.form.tipo }}">
+    <input hidden type="text" id="fojas" value="{{ data.form.fojas }}">
+    <input hidden type="text" id="vencer" value="{{ data.form.vencer }}">
+    <input hidden type="text" id="modelo" value="{{ data.form.modelo }}">
+
+
+    {# ----------------------------------- #}
+    
+
+    <div id="modalCM" class="modal container fade" tabindex="-1">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Full Width</h4>
+        </div>
+
+        <div class="modal-body"></div>
+
+    	<input hidden type="text" id="numero" value="0">
+    	<input hidden type="text" id="modalcalleR" value="0">
+		<input hidden type="text" id="modalalturaR" value="0">
+		<input hidden type="text" id="modalpisoR" value="0">
+		<input hidden type="text" id="modaldptoR" value="0">
+		<input hidden type="text" id="modallocalR" value="0">
+		<input hidden type="text" id="modalenviarR" value="0">
+		<input hidden type="text" id="modaldestinatario" value="0">
+		<input hidden type="text" id="modalcalleL" value="0">
+		<input hidden type="text" id="modalalturaL" value="0">
+		<input hidden type="text" id="modalpisoL" value="0">
+		<input hidden type="text" id="modaldptoL" value="0">
+		<input hidden type="text" id="modallocalL" value="0">
+		<input hidden type="text" id="modalenviarL" value="0">
+
+        <div class="modal-footer">
+            <button type="submit" data-loading-text="Loading..." class="btn blue mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" data-toggle="modal" onClick="javascript:$('#modalForm').submit();">
+                <span class="ladda-label">
+                    Guardar
+                </span>
+            </button>
+            <button type="button" data-dismiss="modal" class="btn btn-outline btn-circle dark">Cerrar</button>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    {# EXTENDED MODALS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-extended-modals.min.js') }}" type="text/javascript"></script>
+
+    {# SCRIPTS DE LA PÁGINA #}
+    <script src="{{asset('Js/Notificaciones/NotificacionesBundle/CargaMasiva.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var routes = {
+            results:{
+            	decidirEstablecimiento: "{{ path('notificaciones_notificaciones_carga_masiva_decidir_que_establecimiento', { 'establecimientos': 0 }) }}",
+            },
+        };
+
+    </script>
+
+{% endblock %}

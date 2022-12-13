@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>	
+	<meta charset="UTF-8" />
+<style>
+html *
+{
+	color: #000 !important;
+	font-family: TimesNewRoman !important;
+}
+
+/*
+header del pdf
+*/
+#header {
+	margin: 2px;
+}
+
+#header2 {
+	font-weight:normal;
+	margin: 2px;
+}
+/*
+titulo de los 5 campos
+*/
+#Titulo {
+	margin-top: 0px;
+	margin-bottom: 10px;
+	font-weight:normal;
+}
+
+.first-half {
+	float: left;
+	width: 50%;
+}
+.second-half {
+	float: right;
+	width: 50%;
+}
+
+</style>
+</head>
+<body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+	
+	<div style="font-size: 25px;" align="right">
+		<h5 id="Titulo">Inspeccion N°: {{datos.Numero}} - SAP N°: {{datos.Sap}}</h5>		
+	</div>	
+	<table style="width:100%">
+		<tr>
+			<td>
+				<div align="center">
+					
+					<img height="80" width="70" src="{{ absolute_url(asset('img/escudo.png'))}}" >
+					<h4 id="header"><label>&nbsp;GOBIERNO DE LA CIUDAD DE BUENOS AIRES</label></h4>
+					<h4 id="header"><label>&nbsp;AGENCIA DE PROTECCI&Oacute;N AMBIENTAL</label></h4>
+				</div>				
+				<div align="center">
+					<strong><h4 id="header">&nbsp;DIRECCI&Oacute;N GENERAL DE CONTROL AMBIENTAL </h4></strong>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<br>
+	
+	<table style="width:100%">
+		<tr>
+			<td style="width:30%">
+				<!--img src="https://fotos.usig.buenosaires.gob.ar//getFoto?smp=42-057-048C&i=0&w=243&h=200&t=Thu%20Dec%2028%202017%2016:48:38%20GMT-0300"-->
+
+				<img style="width:250px; height:180px" src="data:image/png;base64, {{fotoInicio}}" />
+
+			</td>
+			<td style="width:70%">
+				Expediente: {{datos.Actuacion}}
+				<br>
+				Motivo Inspeccion: {{datos.Motivo}}
+				<br>
+				Direccion: {{datos.Establecimiento.direcciones}}
+				<br>
+				Comuna: {{datos.Establecimiento.comuna}}
+				<br>
+				Smp: {{datos.Establecimiento.smp}}
+				<br>
+				Inspector: {{datos.Inspector}}
+				<br>
+				Fecha y Hora: {{datos.Fecha}}
+				<br>
+				Autorizador: Ing. Frank Hernandez
+				<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gerente Operativo de Fiscalización Ambiental
+				<br>
+				{% if area == 1 %}
+					Autorizador: Lic. Flavia Sozzani
+					<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subgerente Operativo de Fiscalización Ambiental Zona Sur
+				{% elseif area == 2 %}
+					Autorizador: Dra. Gisela Marchese
+					<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subgerente Operativo de Fiscalización Ambiental Zona Norte
+				{% elseif area == 3 %}
+					Autorizador: Lic. Jorgelina Allemand
+					<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subgerente Operativo de Fiscalización Ambiental Zona Este
+				{% elseif area == 4 %}
+					Autorizador: Ing. Patricia Díaz
+					<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subgerente Operativo de Fiscalización Ambiental Zona Oeste
+				{% elseif area == 5 %}
+					Autorizador: Daniela Miguez
+					<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subgerente Operativo de Fiscalización Ambiental Horario Nocturno				
+				{% else %}					
+				{% endif %}
+			</td>
+		</tr>
+	</table>
+	{% set grupo = '' %}
+	{% for respuesta in respuestas %}
+		{% if grupo != respuesta.Grupo %}
+			<table>	
+				<tr style="border-bottom: 1px solid #000;">					
+					<td ></td>
+					<td style="width:100%">
+						<hr>	
+						<div align="center">
+								{{respuesta.Grupo}}
+						</div>
+						<hr>	
+					</td>					
+				</tr>
+			</table>
+			{% set grupo = respuesta.Grupo %}			
+		{% endif %}		
+		{% if respuesta.Respuesta|length > 1 %}
+			<div style="text-align: justify; font-size: 15px; "><b>- {{respuesta.Pregunta}} :</b></div>
+			<ol style=" margin-top: 0px; margin-bottom: 0px;">
+				{% for listaRespuesta in respuesta.Respuesta %}
+					<div style="text-align: justify; font-size: 15px;"><li >{{listaRespuesta}}</li></div>
+				{% endfor %}
+			</ol>
+		{% else %}
+			<div style="text-align: justify; font-size: 15px;"><b>- {{respuesta.Pregunta}} :</b> {{respuesta.RespuestaLibre}}{{respuesta.Respuesta|first}}</div>
+		{% endif %}		
+
+	{% endfor %}
+
+	<br>
+
+	{% if ruidos|length > 0 %}
+
+		{% include('@inspecciones/protocoloRuido.html.twig') %}
+		{% if ruidos.440 is defined %}
+			{% if ruidos.440.respuesta == "SI" %}
+				{% include('@inspecciones/protocoloRuido2.html.twig') %}
+			{% endif %}	
+		{% endif %}
+
+		{% if ruidos.564 is defined %}
+			{% if ruidos.564.respuesta == "SI" %}
+				{% include('@inspecciones/protocoloRuido3.html.twig') %}
+			{% endif %}	
+		{% endif %}
+
+		
+		
+
+	{% endif %}
+
+	{% for respuesta in respuestas %}
+		{% for foto in respuesta.fotos %}
+			<img style="max-width:1000px; max-height:1300px" src="data:image/png;base64, {{foto}}" />
+		{% endfor %}
+	{% endfor %}
+	
+	<br>
+
+	{% for pdf in pdfs%}
+		{{pdf}}
+	{% endfor %}
+
+
+	<br>
+	<hr>
+		A CONTINUACIÓN, EN CASO DE APLICAR, SE MOSTRARÁN LOS ANTECEDENTES REQUERIDOS PARA REALIZAR LA PRESENTE INSPECCION.
+	<hr>
+
+	
+</body>
+</html>

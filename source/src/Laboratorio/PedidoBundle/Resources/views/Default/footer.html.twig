@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script>
+            {#
+            function subst() {
+                var vars={};
+                var x=document.location.search.substring(1).split('&');
+
+                for (var i in x) {
+                    var z=x[i].split('=',2);
+                    vars[z[0]] = unescape(z[1]);
+                }
+
+                var x=['frompage','topage','page','webpage','section','subsection','subsubsection'];
+
+                for (var i in x) {
+                    var y = document.getElementsByClassName(x[i]);
+
+                    for (var j=0; j<y.length; ++j)
+                        y[j].textContent = vars[x[i]];
+                }
+            }
+            #}
+            function subst() {
+                var vars = {};
+                
+                // explode the URL query string
+                var x = document.location.search.substring(1).split('&');
+                
+                // loop through each query string segment and get keys/values
+                for (var i in x)
+                {
+                    var z = x[i].split('=',2);
+                    vars[z[0]] = unescape(z[1]);
+                }
+
+                // an array of all the parameters passed into the footer file
+                var x = ['frompage', 'topage', 'page', 'webpage', 'section', 'subsection', 'subsubsection'];
+
+                // each page will have an element with class 'section' from the body of the footer HTML
+                var y = document.getElementsByClassName('section');
+                for(var j = 0; j < y.length; j++)
+                {
+                    // if current page equals total pages
+                    if (vars[x[2]] == vars[x[1]])
+                    {
+                        //y[j].innerHTML = "I'm a footer only on the last page";
+                        y[j].innerHTML = '<table style="width: 100%; font-size: 12px; margin-bottom: 30px; padding-bottom: 30px;">'+
+                                            '<tr>'+
+                                                '<td align="center" style="border-left-color: white; border-right-color: white; border-top: 2px solid black; border-bottom: 2px solid black;">'+
+                                                    'No se debe reproducir el informe de ensayo sin la aprobación escrita del laboratorio.'+
+                                                '</td>'+
+                                            '</tr>'+
+                                            '<tr>'+
+                                                '<th style="border-bottom-color: white; border-left-color: white; border-right-color: white;">'+
+                                                    'Gerencia Operativa de Determinaciones Ambientales y Laboratorio'+
+                                                '</th>'+
+                                            '</tr>'+
+                                            '<tr>'+
+                                                '<td align="center" style="border-color: white;">'+
+                                                    'DGCONTA-APRA'+
+                                                '</td>'+
+                                            '</tr>'+
+                                            '<tr>'+
+                                                '<td align="center" style="border-color: white;">'+
+                                                    'CIFA (Centro de Información y Formación Ambiental)'+
+                                                '</td>'+
+                                            '</tr>'+
+                                            '<tr>'+
+                                                '<td align="center" style="border-top-color: white; border-left-color: white; border-right-color: white; border-bottom: 2px solid black;">'+
+                                                    'Av. Castañares y Av. Escalada (Villa Soldati)'+
+                                                '</td>'+
+                                            '</tr>'+
+                                        '</table>';
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body onload="subst()">
+        {#
+        <table style="border-bottom: 1px solid black; width: 100%; font-size: 14px">
+            <tr>
+                <td class="section"></td>
+                <td>
+                    <em>No se debe reproducir el informe de ensayo sin la aprobación escrita del laboratorio</em>
+                </td>
+                <td style="text-align:right">
+                    <em>Página <span class="page"></span> de <span class="topage"></span> - Fecha de impresión: {{ "now"|date("d-m-Y") }}</em>
+                </td>
+            </tr>
+        </table>
+        #}
+        <div class="section">
+            {#
+            <table style="width: 100%; font-size: 12px; margin-bottom: 30px; padding-bottom: 30px;">
+                <tr>
+                    <td align="center" style="border-left-color: white; border-right-color: white;">
+                        No se debe reproducir el informe de ensayo sin la aprobación escrita del laboratorio.
+                    </td>
+                </tr>
+                <tr>
+                    <th style="border-bottom-color: white; border-left-color: white; border-right-color: white;">
+                        Gerencia Operativa de Determinaciones Ambientales y Laboratorio
+                    </th>
+                </tr>
+                <tr>
+                    <td align="center" style="border-color: white;">
+                        DGCONTA-APRA
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="border-color: white;">
+                        CIFA (Centro de Información y Formación Ambiental)
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="border-top-color: white; border-left-color: white; border-right-color: white;">
+                        Av. Castañares y Av. Escalada (Villa Soldati)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        Página <span class="page"></span>
+                    </td>
+                </tr>
+            </table>
+            #}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,110 @@
+# TIPOS DE ARGUMENTOS QUE SE PUEDEN PASAR
+
+################
+# OBLIGATORIOS #
+################
+# campo: nombre de la columna, tiene que ser exacto
+# tipo:  tipo de columna puede ser Integer,String,Date,DateTime,Boolean
+
+###############
+# IMPORTANTES #
+###############
+# componente: Tipo de componente que se podra ver en la columna, puede ser Button,Ahref,Select2
+# date_format: Formato de la fecha en el caso que tipo de campo Fecha
+# tipoBoton: tipo de boton, submit o boton
+# attr: atributo del campo, puede ser hidden,disable,readonly
+# ruta: ruta a donde puede ir el Ahref, Button, o Select2
+# javascript: funcion de javascript que puede tener el boton o select2
+# argumentos: argumentos que puede tener la funcion javascript 
+
+################
+# SECUNDARIOS  #
+################
+# color: color de la letra o del boton
+# background-color:  color del fondo de la letra
+# font-family: tipo de letra
+# font-size: tamaño de letra
+# text-align: alineacion de la letra
+# padding: tamaño de los bordes
+# icono: icono del boton, consultar symfony
+# titulo: titulo del boton
+
+########################################
+InspeccionesInspeccionesBundle:OrdenInspeccion m:
+    1:
+        1:
+            campo:
+                id
+            tipo:
+                Integer
+            componente:
+                aHref
+            color:
+                blue-soft
+            titulo:
+                Ver
+            ruta:
+                inspeccion/reinpseccionarpage
+            argumentos:
+                o.id
+            decodificar:
+                si
+InspeccionesInspeccionesBundle:OrdenInspeccion o:    
+    2:
+        1: 
+            campo:
+                id_sap
+            tipo:
+                Integer
+    3:
+        1: 
+            campo:
+                checklist
+            tipo:
+                Integer
+    4:
+        1: 
+            campo:
+                circuito_id
+            tipo:
+                Integer
+    5:
+        1: 
+            campo:
+                area_id
+            tipo:
+                Integer
+    6:
+        1: 
+            campo:
+                Inspectores
+            tipo:
+                String
+            concatenar:
+                Inspectores
+            tieneAlias:
+                no
+            nombreAlias:
+                fnUltimosInspectoresPorOrden(o.id)
+    7:
+        1: 
+            campo:
+                FechaInspeccion
+            tipo:
+                DateTime
+            tieneAlias:
+                no
+            nombreAlias:
+                fnUltimaFechaInspeccionPorOrden(o.id)
+    8:
+        1: 
+            campo:
+                Direccion
+            tipo:
+                String
+            concatenar:
+                Direccion
+            tieneAlias:
+                no
+            nombreAlias:
+                CONCAT(COALESCE(fnEstablecimientoDomicilios(o.establecimiento_id),""), COALESCE(fnOrdenInspeccionDomiciliosProvisorios(o.id),""))

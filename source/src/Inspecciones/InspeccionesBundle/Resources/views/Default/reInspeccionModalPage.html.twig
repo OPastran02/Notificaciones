@@ -1,0 +1,78 @@
+{% extends '::base.html.twig' %}
+
+{% block pagecontent %}
+
+<h2>Motivo Re-Inspeccion</h2>
+<h2 style="color:red">Solo responder en caso de que no se considere reinspeccionar</h2>
+
+{% for motivo in motivosAnteriores %}
+    <hr>
+    <div class="row">
+        <div class="col-md-9">
+            {{motivo.idUsuarioCreador.apellido}}, {{motivo.idUsuarioCreador.nombre}}
+        </div>    
+        <div class="col-md-3">
+            Fecha: {{motivo.fechaCreado|date("d/m/Y")}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-1">
+            <h4>Motivo:</h4>
+        </div>
+        <div class="col-md-11">
+            <h4>{{motivo.motivo}}</h4>
+        </div>
+    </div>
+
+    <hr>
+{% endfor %}
+
+<hr>
+
+
+{{ form_start(form, { 'attr': {'class':'form-horizontal'} }) }}
+<div class="form-body">
+
+    <div class="form-group form-md-line-input has-info">
+        <div class="col-md-1">Motivo</div>
+        <div class="col-md-10">                                        
+            {{ form_widget(form.motivo) }}
+            <div class="form-control-focus"> </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+
+<div class="col-md-offset-5">
+    <button type="submit" data-loading-text="Loading..." class="btn yellow mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right">
+        <span class="ladda-label">
+            Enviar
+        </span>
+    </button>
+    {% if botonDesestimar == 1 %}
+    <button type="button" data-loading-text="Loading..." class="btn red mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" onclick="javascript:ReporteDiario.desestimarReInspeccion('{{idMotivoReInspeccion|encriptar }}')">
+        <span class="ladda-label">
+            Desestimar
+        </span>
+    </button>
+    {% endif %}
+</div>
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{asset('Js/Inspecciones/InspeccionesBundle/ReporteDiario.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+        var routestCheckList = {
+            myroutes:{
+                desestimar:"{{ path('inspecciones_inspecciones_desestimarreinspeccion', { 'idMotivoReInspeccion': 0 }) }}",
+                back:"{{ path('inspecciones_inspecciones_reinspeccionpage_checklist') }}"
+            },
+        };        
+</script>
+
+
+{% endblock %}

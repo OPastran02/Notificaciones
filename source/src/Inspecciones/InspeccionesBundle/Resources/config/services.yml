@@ -1,0 +1,24 @@
+services:
+  inspecciones.listener.direccionprovisoria:
+    class: Inspecciones\InspeccionesBundle\EventListener\DireccionProvisoriaListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: postPersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+      - { name: doctrine.event_listener, event: preRemove }
+
+  inspecciones.listener.inspeccion:
+    class: Inspecciones\InspeccionesBundle\EventListener\InspeccionListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+
+  inspecciones.listener.ordeninspeccion:
+    class: Inspecciones\InspeccionesBundle\EventListener\OrdenInspeccionListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+      - { name: doctrine.event_listener, event: postPersist }

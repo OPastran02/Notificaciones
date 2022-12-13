@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <style>
+            html *
+            {
+                color: #000 !important;
+                font-family: Arial !important;
+            }
+            /* Calibri */
+
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+
+            }
+            /*
+             header del pdf
+            */
+            #header {
+                margin: 2px;
+            }
+
+            #header2 {
+                font-weight:normal;
+                margin: 2px;
+            }
+            /*
+             titulo de los 5 campos
+            */
+            #Titulo {
+                margin-top: 0px;
+                margin-bottom: 0px;
+                font-weight:normal;
+            }       
+
+            .first-half {
+                float: left;
+                width: 50%;
+            }
+            .second-half {
+                float: right;
+                width: 50%;
+            }           
+            .page {
+                overflow: hidden;
+                page-break-after: always;
+            }
+
+            .bordeGrueso {
+                border: 2px solid black;
+            }
+        </style>
+    </head>
+    <body>
+
+        <table width="100%" style="font-size: .7em;">
+            {#
+            <tr>
+                <th width="20%" class="bordeGrueso">
+                    Gerencia Operativa de <br> Determinaciones Ambientales y Laboratorio
+                </th>
+                <th width="65%" class="bordeGrueso">
+                    PROTOCOLO DE ANÁLISIS
+                </th>
+                <th width="15%" class="bordeGrueso">
+                    R-117
+                </th>
+            </tr>
+            #}
+            <tr>
+                <th style="border-left-color: white; padding-right: 10px;" width="25%" class="bordeGrueso" align="center">
+                    <img src="{{ absolute_url(asset('img/GODAYL/APrA.png')) }}" width="70%" height="4%" alt="Logotipo APrA" align="center">
+                </th>
+                <th style="padding-top: 20px; padding-bottom: 20px;" width="25%" class="bordeGrueso">
+                    Gerencia Operativa de <br> Determinaciones Ambientales y Laboratorio
+                </th>
+                <th style="padding-top: 20px; padding-bottom: 20px;" width="25%" class="bordeGrueso">
+                    PROTOCOLO DE ANÁLISIS
+                </th>
+                <th style="border-right-color: white; padding-top: 20px; padding-bottom: 20px;" width="25%" class="bordeGrueso">
+                    R-117
+                </th>
+            </tr>
+            <tr>
+                <th style="border-color: white; padding-right: 20px; padding-left: 20px;">
+                    &nbsp;
+                </th>
+            </tr>
+            <tr>
+                <th style="border-left-color: white; border-right-color: white;" colspan="4" class="bordeGrueso">
+                    <br>
+                    ANÁLISIS DE {{ (resultados.programa.programa)|upper }}
+                    <br>
+                    <br>
+                </th>
+            </tr>
+        </table>
+
+        {#<br>
+        <br>
+        <br>#}
+
+        {% if resultados.registros is empty or not resultados.registros %}
+                <div class="row" align="center">
+                    <br>
+                    <br>
+                    <strong style="font-size: 1.5em; color: #848484;">
+                        Sin datos
+                    </strong>
+                </div>
+            {% else %}
+                
+                {% set legislaciones = [] %}
+                {% for area, datos in resultados.registros %}
+                    {% if (datos|first).legislaciones is not empty %}
+                        {% for idLegislacion, nombreLegislacion in (datos|first).legislaciones %}
+                            {% set legislaciones = legislaciones|merge([nombreLegislacion]) %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                {# Eliminar duplicados #} {# No sé si hace falta #}
+                {% set legislacionesSinDup = [] %}
+                {% for legislacion in legislaciones %}
+                    {% if legislacionesSinDup|length == 0 %}
+                            {% set legislacionesSinDup = legislacionesSinDup|merge([legislacion]) %}
+                        {% else %}
+                            {% set encontro = false %}
+                            {% for l in legislacionesSinDup if l == legislacion %}
+                                {% set encontro = true %}
+                            {% endfor %}
+
+                            {% if not encontro %}
+                                {% set legislacionesSinDup = legislacionesSinDup|merge([legislacion]) %}
+                            {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% set legislaciones = legislacionesSinDup %}
+
+                {# Sacar, también, las columnas de legislaciones #}
+
+                {# ------------------- DATOS -------------------- #}
+
+                <br>
+
+                <table width="100%" style="font-size: 13px;">
+                    <tr>
+                        <td style="border-color: white; padding-right: 20px; padding-left: 20px;" colspan="2">
+                            <strong>
+                                    Fecha de toma de muestra:
+                            </strong>
+                            <i>
+                                {{ resultados.muestra.fechaTomaMuestra|date('d/m/Y') }}
+                            </i>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="border-color: white; padding-right: 20px; padding-left: 20px;" colspan="2">
+                            <strong>
+                                Fecha de fin del análisis:
+                            </strong>
+                            <i>
+                                {{ resultados.fechaFinalizacionAnalisis|date('d/m/Y') }}
+                            </i>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="border-color: white; padding-right: 20px; padding-left: 20px;" width="45%">
+                            <strong>
+                                Número de muestra:
+                            </strong>
+                            <i>
+                                {{ numeroMuestraCompleto }}
+                            </i>
+                        </td>
+                        <td style="border-color: white; padding-right: 20px; padding-left: 20px;">
+                            {% if resultados.muestra.lugarExtraccion %}
+                                <strong>
+                                    Lugar de extracción:
+                                </strong>
+                                <i>
+                                    {{ resultados.muestra.lugarExtraccion }}
+                                </i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+
+                <table width="100%" style="font-size: 13px;">
+                    {% if resultados.muestra.auxiliares and resultados.muestra.auxiliares|first %}
+                        <tr>
+                            {% if resultados.muestra.auxiliares|length > 1 %}
+                                <td style="border-color: white; padding-left: 20px; vertical-align: top;" width="21%">
+                                    <strong>
+                                        Operadores
+                            {% else %}
+                                <td style="border-color: white; padding-left: 20px;" width="19%">
+                                    <strong>
+                                        Operador
+                            {% endif %}
+                                    de muestreo:
+                                </strong>
+                            </td>
+                            <td style="border-color: white;">
+                                <i>
+                                    {% if resultados.muestra.auxiliares|length > 1 %}
+                                        {% for operadorMuestreo in resultados.muestra.auxiliares %}
+                                            {% if not loop.last %}
+                                                {{ '. ' ~ operadorMuestreo.apellido ~ ', ' ~ operadorMuestreo.nombre }} <br>
+                                            {% else %}
+                                                {{ '. ' ~ operadorMuestreo.apellido ~ ', ' ~ operadorMuestreo.nombre }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ (resultados.muestra.auxiliares|first).apellido ~ ', ' ~ (resultados.muestra.auxiliares|first).nombre }}
+                                    {% endif %}
+                                </i>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </table>
+
+                <br>
+                <br>
+
+                {% set cantidadDeterminaciones = 0 %}
+                {% for a, da in resultados.registros %}
+                    {% set ra = (da|first).resultados %}
+                    {% for resu in ra %}
+                        {% set cantidadDeterminaciones = cantidadDeterminaciones + 1 %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% if cantidadDeterminaciones >= 46 %}
+                    <table style="width:100%; page-break-after: always;">
+                {% else %}
+                    <table style="width:100%">
+                {% endif %}
+                    <tr class="bordeGrueso" style="border-left-color: white; border-right-color: white;">
+                        <th width="30%" style="font-size: 12px; padding-right: 26px; padding-left: 26px; border-left-color: white; border-right-color: white;">
+                            DETERMINACIÓN
+                        </th>
+                        <th width="35%" style="font-size: 12px; padding-right: 13px; padding-left: 13px; border-left-color: white; border-right-color: white;">
+                            MÉTODO APLICADO
+                        </th>
+                        <th width="3%" style="font-size: 12px; padding-right: 13px; padding-left: 13px; border-left-color: white; border-right-color: white;">
+                            RESULTADO
+                        </th>
+                        <th width="5%" style="font-size: 12px; padding-right: 26px; padding-left: 26px; border-left-color: white; border-right-color: white;">
+                            UNIDAD
+                        </th>
+                        <th width="22%" style="font-size: 12px; padding-right: 26px; padding-left: 26px; border-left-color: white; border-right-color: white;">
+                            VALOR REFERENCIAL
+                        </th>
+                        <th width="5%" style="font-size: 12px; padding-right: 13px; padding-left: 13px; border-left-color: white; border-right-color: white;">
+                            FECHA DE EJECUCIÓN
+                        </th>
+                    </tr>
+
+                    {# DATOS #}
+
+                    {% for area, datosArea in resultados.registros %}
+                        {% set resultadosAreaMuestra = (datosArea|first).resultados %}
+                        {% for resultado in resultadosAreaMuestra %}
+                            <tr>
+                                <td style="font-size: 13px; border-left-color: white; border-right-color: white; border-top-color: white;">
+                                    {% if resultado.nombreDeterminacion == 'Escherichia coli' or resultado.nombreDeterminacion == 'Pseudomonas aeruginosa' %}
+                                        <i>
+                                            {{ resultado.nombreDeterminacion }}
+                                        </i>
+                                    {% elseif resultado.nombreDeterminacion == 'Detergentes' %}
+                                        {{ resultado.nombreDeterminacion ~ ' *' }}
+                                    {% else %}
+                                        {{ resultado.nombreDeterminacion }}
+                                        {% if area == 'CAMPO' %}
+                                            <i>in situ</i>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td style="font-size: 13px; text-align: center; border-left-color: white; border-right-color: white; border-top-color: white;">
+                                    {% if resultado.metodologia %}
+                                        {{ resultado.metodologia }}
+                                    {% else %}
+                                        {{ '-' }}
+                                    {% endif %}
+                                </td>
+                                <td style="font-size: 13px; text-align: center; border-left-color: white; border-right-color: white; border-top-color: white;">
+                                    {% if resultado.tipoDato == 'String' %}
+                                        {{ resultado.resultado|capitalize }}
+                                    {% else %}
+                                        {% if resultado.resultado == 0 %}
+                                            {% if resultado.limiteCuantificable != '' %}
+                                                {{ resultado.limiteCuantificable }}
+                                            {% else %}
+                                                {{ resultado.resultado }}
+                                            {% endif %}
+                                        {% else %} {# ↓ copy and paste from protocolo1.html.twig #}
+{% set numero = resultado.resultado|split('.') %}
+{% if numero|length == 1 %}
+        {# NÚMERO ENTERO #}
+        {% if resultado.resultado >= 1000 %}
+                {% set numero = resultado.resultado|split('') %}
+                {% set ultimoNumero = 0 %}
+                {% for n in numero if n != 0 %}
+                    {% set ultimoNumero = loop.index0 %}
+                {% endfor %}
+
+                {% if numero[ultimoNumero] != 0 %}
+                        {% set ceros = numero|slice((ultimoNumero + 1), ((numero|length) - 1)) %}
+
+                        {% if ceros is not empty %}
+                                {% if ceros|length >= 3 %}
+                                        {% set numero = numero|slice(0, (ultimoNumero + 1)) %}
+                                        {% set ceros = ceros|length %}
+
+                                        {% if numero|length > 1 %}
+                                            {# Extraer el primer elemento y, lo demás, ponerlo después de la coma #}
+                                            {% set numdec = numero|slice(1, (numero|length)-1) %}
+                                            {% set numero = numero|first ~ '.' ~ numdec|join %}
+                                            {% set ceros = ceros + 1 %}
+                                        {% else %}
+                                            {% set numero = numero|first %}
+                                        {% endif %}
+
+                                        {% if resultado.resultado > 0 %}
+                                            {{ numero }}x10<sup>{{ ceros }}</sup>
+                                        {% else %}
+                                            {{ '-' ~ numero }}x10<sup>{{ ceros }}</sup>
+                                        {% endif %}
+                                    {% else %}
+                                        {{ resultado.resultado }}
+                                {% endif %}
+                            {% else %}
+                                {{ resultado.resultado }}
+                        {% endif %}
+                    {% else %}
+                        {{ resultado.resultado }}
+                {% endif %}
+            {% else %}
+                {{ resultado.resultado }}
+        {% endif %}
+    {% else %}
+        {# NÚMERO CON DECIMALES #}
+        {% set decimales = (numero|last)|split('') %}
+        {% set ex = false %}
+        {% for d in decimales if d == 'E' %}
+            {% set ex = true %}
+        {% endfor %}
+        {# (me imagino que no serán tan hdp como para ponerme un exponente con decimales, porque no lo estaría considerando) #}
+
+        {% if ex %}
+                {{ resultado.resultado }}
+            {% else %}
+                {% if decimales|length >= 3 %}
+                        {% if resultado.resultado > -1 and resultado.resultado < 1 %}
+                                {# -1 < x < 1  (x != 0) #}
+                                {% set primerNumero = 0 %}
+                                {% for d in decimales if d != 0 and primerNumero == 0 %}
+                                    {% set primerNumero = loop.index0 %}
+                                {% endfor %}
+
+                                {% if numero[primerNumero] != 0 %}
+                                        {% set ceros = numero|slice(0, (primerNumero + 1)) %}
+
+                                        {% if ceros is not empty %}
+                                                {% if ceros|length >= 3 %}
+                                                        {% set numero = numero|slice((primerNumero + 1), ((numero|length) - 1)) %}
+                                                        {% set ceros = ceros|length %}
+                                                        {% if resultado.resultado > 0 %}
+                                                                {{ numero|join }}x10<sup>-{{ ceros }}</sup>
+                                                            {% else %}
+                                                                {{ '-' ~ numero|join }}x10<sup>-{{ ceros }}</sup>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {{ resultado.resultado }}
+                                                {% endif %}
+                                            {% else %}
+                                                {{ resultado.resultado }}
+                                        {% endif %}
+                                    {% else %}
+                                        {{ resultado.resultado }}
+                                {% endif %}
+                            {% else %}
+                                {# -1 > x > 1 #} {# POR DEFINIR #}
+                                {# NÚMEROS CON PARTE ENTERA != 0 #}
+                                {# NUMEROS GRANDES CON DECIMALES #}
+                                {# {% set entero = numero|first %} #}
+                                {{ resultado.resultado }}
+                        {% endif %}
+                    {% else %}
+                        {{ resultado.resultado }}
+                {% endif %}
+        {% endif %}
+{% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td style="font-size: 13px; text-align: center; border-left-color: white; border-right-color: white; border-top-color: white;">
+                                    {% if resultado.unidadMedida %}
+                                        {% if resultado.idDeterminacion == 100 %}
+                                            ds.m<sup>-1</sup>
+                                        {% else %}
+                                            {{ resultado.unidadMedida }}
+                                        {% endif %}
+                                    {% else %}
+                                        {{ '-' }}
+                                    {% endif %}
+                                </td>
+                                <td style="font-size: 13px; text-align: center; border-left-color: white; border-right-color: white; border-top-color: white;" colspan="2">
+                                    {% if resultado.valorLimiteSinClasificar %}
+                                        {{ resultado.valorLimiteSinClasificar }}
+                                        {% for referencia, legislacion in legislaciones %}
+                                            {% if resultado.legislacionSinClasificar %}
+                                                {% if legislacion == resultado.legislacionSinClasificar.legislacion %}
+                                                    <sup>{{ '(' ~ ((referencia)+1) ~ ')' }}</sup>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ '-' }}
+                                    {% endif %}
+                                </td>
+                                <td style="font-size: 13px; text-align: center; border-left-color: white; border-right-color: white; border-top-color: white;">
+                                    {% if resultado.fechaFinAnalisis %}
+                                        {{ resultado.fechaFinAnalisis|date('d/m/Y') }}
+                                    {% else %}
+                                        {{ '-' }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    
+                </table>
+
+                <br>
+
+                {# Legislaciones y referencias #}
+                <table style="width: 100%; border: 0; font-size: 13px;">
+                    {% if legislaciones is not empty %}
+                        {% for key, legislacion in legislaciones %}
+                            <tr>
+                                <td style="border-color: white;">
+                                    {{ ((key)+1) ~ '. ' ~ legislacion }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </table>
+
+                <br>
+
+                {% include 'LaboratorioPedidoBundle:Default:observaciones.html.twig' %}
+
+                <br>
+
+                {% include 'LaboratorioPedidoBundle:Default:firmas.html.twig' with { 'idPrograma': resultados.programa.id } %}
+
+        {% endif %}
+
+    </body>
+</html>

@@ -1,0 +1,53 @@
+services:
+  esblacimiento.listener.establecimiento:
+    class: Establecimiento\EstablecimientoBundle\EventListener\EstablecimientoListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+      - { name: doctrine.event_listener, event: postPersist }
+
+
+  esblacimiento.listener.actuacion:
+    class: Establecimiento\EstablecimientoBundle\EventListener\ActuacionListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preRemove }
+
+  esblacimiento.listener.direccion:
+    class: Establecimiento\EstablecimientoBundle\EventListener\DireccionListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: postPersist }
+      - { name: doctrine.event_listener, event: preRemove }
+  
+  esblacimiento.listener.direccionrs:
+    class: Establecimiento\EstablecimientoBundle\EventListener\DireccionRSListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: postPersist }
+      - { name: doctrine.event_listener, event: preRemove }
+
+  esblacimiento.listener.establecimientorazonsocial:
+    class: Establecimiento\EstablecimientoBundle\EventListener\EstablecimientoRazonSocialListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preRemove }      
+
+  esblacimiento.listener.razonsocial:
+    class: Establecimiento\EstablecimientoBundle\EventListener\RazonSocialListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+      - { name: doctrine.event_listener, event: preUpdate }
+      - { name: doctrine.event_listener, event: postPersist }
+
+  esblacimiento.listener.resultadoultimainspeccion:
+    class: Establecimiento\EstablecimientoBundle\EventListener\ResultadosUltimaInspeccionListener
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: doctrine.event_listener, event: preUpdate }

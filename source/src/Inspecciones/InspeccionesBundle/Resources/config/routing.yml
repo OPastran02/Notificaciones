@@ -1,0 +1,281 @@
+inspecciones_inspecciones_programacion_index:
+    path:     /programacion/index
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:index }
+
+inspecciones_inspecciones_buscar_por_programada:
+    path:     /programacion/buscarporprogramada/{fecha}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:buscarPorProgramadaArea, fecha:null }
+
+inspecciones_inspecciones_buscar_por_intimacion_inmediata:
+    path:     /programacion/buscarporinstimacioninmediata/{fecha}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:buscarPorIntimacionInmediata, fecha:null }
+
+inspecciones_inspecciones_buscar_por_reprogramados:
+    path:     /programacion/buscarporreprogramados/{tipo}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:buscarPorReprogramacion }
+
+inspecciones_inspecciones_buscar_por_inspeccionar_cada:
+    path:     /programacion/buscarporplazovencido/{fecha}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:buscarPorInspeccionarCada, fecha:null }
+
+inspecciones_inspecciones_buscar_por_nunca_inspeccionada:
+    path:     /programacion/buscarpornuncainspeccionada/{fecha}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:buscarPorNuncaInspeccionada, fecha:null }
+
+inspecciones_inspecciones_archivo_subido_programacion:
+    path:     /programacion/buscararchivo/{archivo}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:pdfAdjunto }
+
+inspecciones_inspecciones_borrar_archivo_subido_programacion:
+    path:     /programacion/borrararchivoprogramacion/{archivo}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:borrarPdfAdjunto }
+
+inspecciones_inspecciones_buscar_por_rubro_principal:
+    path:     /programacion/buscarporrubroprincipal/{idRubroPrincipal}/{fecha}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:buscarPorRubroPrincipal, idRubroPrincipal:null, fecha:null }
+
+inspecciones_inspecciones_buscar_por_cedula:
+    path:     /programacion/buscarporcedula/{idTipoCedula}/{fecha}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:buscarPorTipoCedula, idTipoCedula:null, fecha:null }
+
+inspecciones_inspecciones_asignar_idsap:
+    path:     /programacion/tabla/asignacion
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:asignarIdSap}
+
+inspecciones_inspecciones_reprogramar:
+    path:     /programacion/reprogramar/{idOrderInspeccion}/{crearNueva}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:reprogramar, crearNueva:true }
+
+inspecciones_inspecciones_programar:
+    path:     /programacion/programar/{idEstablecimiento}/{idOrden}/{edit}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:programarInspeccionEstablecimiento, edit:0, idOrden:0 }
+
+inspecciones_inspecciones_programar_sin_establecimiento:
+    path:     /programacion/programarsinestablecimiento/{idCalle}/{altura}/{piso}/{dpto}/{local}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:programarInspeccionSinEstablecimiento }
+
+inspecciones_inspecciones_normalizar_programar:
+    path:     /programacion/normalizar/{idCalle}/{altura}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:normalizarDireccionProgramar }
+
+inspecciones_inspecciones_buscar_direccion_programar:
+    path:     /programacion/buscardireccion/{idCalle}/{altura}/{smp}/{piso}/{dpto}/{local}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:buscarDireccion }
+
+inspecciones_inspecciones_edit_programacion:
+    path:     /programacion/editprogramacion/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:editProgramacion }
+
+inspecciones_inspecciones_asignar_idsap_programacion:
+    path:     /programacion/asignaridsap/{idOrderInspeccion}/{idSap}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:guardarProgramacionConIdSap }
+
+inspecciones_inspecciones_anular:
+    path:     /inspeccion/anular/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:anularInspeccion }
+
+inspecciones_inspecciones_eliminar:
+    path:     /inspeccion/eliminar/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:eliminarInspeccion }
+
+inspecciones_inspecciones_autorizar:
+    path:     /inspeccion/autorizar/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:autorizarInspeccion }
+
+inspecciones_inspecciones_save_checklist:
+    ##DESCOMENTAR CUANDO PASE A TABLET  Y QUITAR EL DE ABAJO
+    ##path:     /inspeccion/savechecklist/{idOrderInspeccion}
+    path:     /inspeccion/savechecklist/{idOrderInspeccion}/{checkList}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:saveCheckList }
+
+inspecciones_inspecciones_edit:
+    path:     /inspeccion/editasignacion/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:editInspeccionAsignacion }
+
+inspecciones_inspecciones_cierre:
+    path:     /inspeccion/cierre/{idOrderInspeccion}/{desvilcular}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:saveInspeccionCierre, desvilcular:0 }
+
+inspecciones_inspecciones_buscar_vincular:
+    path:     /inspeccion/buscar/vincular/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:buscarParaVincular}
+
+inspecciones_inspecciones_vincular:
+    path:     /inspeccion/vincular/{idOrderInspeccion}/{idEstalblecimiento}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:vincularOrdenInspeccionEstablecimiento}
+
+inspecciones_inspecciones_vincular_nuevo_establecimiento:
+    path:     /inspeccion/nuevoestablecimientovinculado/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:OrdenInspeccionNuevoEstablecimiento}
+
+inspecciones_inspecciones_visualizar_inspecciones:
+    path:     /inspeccion/visualizarinspecciones/{idOrdenInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:visualizarinspecciones }
+
+inspecciones_inspecciones_visualizar_resultados:
+    path:     /inspeccion/visualizarresultados/{idOrdenInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:verResultadosInspeccion }
+
+inspecciones_inspecciones_asignacion_checklist:
+    path:     /inspeccion/asignacion
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:pageAsignacion}
+
+inspecciones_inspecciones_asignacion_checklist_table:
+    path:     /inspeccion/tabla/Asignacion
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:tablaAsignacion}
+
+inspecciones_inspecciones_asignacion_checklist_excel:
+    path:     /inspeccion/excel/Asignacion
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:excelAsignacion}
+
+inspecciones_inspecciones_autorizacion_checklist:
+    path:     /inspeccion/autorizacion
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:pageAutorizacion}
+
+inspecciones_inspecciones_autorizacion_checklist_table:
+    path:     /inspeccion/tabla/autorizacion
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:tablaAutorizacion}
+
+inspecciones_inspecciones_autorizacion_checklist_excel:
+    path:     /inspeccion/excel/autorizacion
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:excelAutorizacion}
+
+inspecciones_inspecciones_cierre_checklist:
+    path:     /inspeccion/pagecierre
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:pageCierre}
+
+inspecciones_inspecciones_cierre_checklist_table:
+    path:     /inspeccion/tablaCierre
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:tablaCierre}
+
+inspecciones_inspecciones_cierre_checklist_excel:
+    path:     /inspeccion/excelCierre
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:excelCierre}
+
+inspecciones_inspecciones_final_checklist:
+    path:     /inspeccion/pagefinal
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:pageFinal}
+
+inspecciones_inspecciones_final_checklist_table:
+    path:     /inspeccion/tablaFinal
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:tablaFinal}
+
+inspecciones_inspecciones_final_checklist_excel:
+    path:     /inspeccion/excelFinal
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:excelFinal}
+
+inspecciones_inspecciones_reinspeccionpage_checklist:
+    path:     /inspeccion/pageReInspeccion
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:pageReInspeccion}
+
+inspecciones_inspecciones_reinspeccionpage_checklist_table:
+    path:     /inspeccion/tablaReInspeccion
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:tablaReInspeccion}
+
+inspecciones_inspecciones_reinspeccionpage_checklist_excel:
+    path:     /inspeccion/excelReInspeccion
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:excelReInspeccion}
+
+inspecciones_inspecciones_anulados_checklist:
+    path:     /inspeccion/pageanulados
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:pageAnulados}
+
+inspecciones_inspecciones_anulados_checklist_table:
+    path:     /inspeccion/tablaAnulados
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:tablaAnulados}
+
+inspecciones_inspecciones_anulados_checklist_excel:
+    path:     /inspeccion/excelAnulados
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:excelAnulados}
+
+inspecciones_inspecciones_decision:
+    path:     /decision
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:programarInspeccionDecision }
+
+inspecciones_inspecciones_tabla_reprogramacion:
+    path:     /programacion/tablareprogramacion
+    defaults: { _controller: InspeccionesInspeccionesBundle:Programacion:tablaReprogramacion }
+
+inspecciones_inspecciones_pdfinspeccion:
+    path:     /pdfinspeccion/checklist/{checklist}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:pdfChecklist }
+
+inspecciones_inspecciones_alertainspecciones:
+    path:     /inspeccion/alerta
+    defaults: { _controller: InspeccionesInspeccionesBundle:Notificaciones:alteraInspeccionVencida }
+
+inspecciones_inspecciones_resultados:
+    path:     /inspeccion/resultados/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:verResultadoInspeccion }
+
+inspecciones_inspecciones_pdfchecklist:
+    path:     /inspeccion/pdf/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:pdfResultadosChecklist }
+
+inspecciones_inspecciones_reinspeccionar:
+    path:     /inspeccion/reinpseccionar/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:reInspeccionar }
+
+inspecciones_inspecciones_reinspeccionarpage:
+    path:     /inspeccion/reinpseccionarpage/{idMotivoReInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:replyReInspeccion }
+
+inspecciones_inspecciones_control_inspeccion_table:
+    path:     /inspeccion/tabla/inspeccionesPendientes
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:inspeccionesPendientes}
+
+inspecciones_inspecciones_page_control_inspeccion_table:
+    path:     /inspeccion/pageInspeccionesPendientes
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:pageInspeccionesPendientes}
+
+inspecciones_inspecciones_excel_control_inspeccion_table:
+    path:     /inspeccion/excelInspeccionesPendientes
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:excelInspeccionesPendientes}
+
+inspecciones_inspecciones_alertareinspecciones:
+    path:     /inspeccion/alertareinspeccion
+    defaults: { _controller: InspeccionesInspeccionesBundle:Notificaciones:alteraReInspeccion }
+
+inspecciones_inspecciones_desestimarreinspeccion:
+    path:     /inspeccion/desestimareinspeccion/{idMotivoReInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:replyDesestimar }
+
+inspecciones_inspecciones_cierreautomatico:
+    path:     /inspeccion/cierreautomatico
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreAutomatico:ejecutarCierreAutomatico }
+
+inspecciones_inspecciones_observaciones_motivo_inspeccion:
+    path:     /inspeccion/obsmotivoinspeccion/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:verObservacionesMotivoInspeccion }
+
+inspecciones_inspecciones_enviar_a_revision:
+    path:     /inspeccion/revision/{idOrderInspeccion}/{motivo}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:enviarARevision }
+
+inspecciones_inspecciones_page_inspectores_sade_table:
+    path:     /inspeccion/pageInspectoresSade
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:pageInspectoresSade}
+
+inspecciones_inspecciones_inspectores_sade_table:
+    path:     /inspeccion/tabla/inspectoresSade
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:inspectoresSade}
+
+inspecciones_inspecciones_excel_inspectores_sade_table:
+    path:     /inspeccion/excelInspectoresSade
+    defaults: { _controller: InspeccionesInspeccionesBundle:CierreInspeccionVista:excelInspectoresSade}
+
+inspecciones_inspecciones_save_inspectores_sade_table:
+    path:     /inspeccion/saveInspectoresSade/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:saveInspectorSade}
+
+inspecciones_inspecciones_vincularifgra:
+    path:     /inspeccion/vincularifgra/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:vincularIfgraInspeccion }
+
+inspecciones_inspecciones_rechazarpdf:
+    path:     /inspeccion/rechazarpdf/{idOrderInspeccion}
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:rechazarPdfInspeccion }
+
+inspecciones_inspecciones_subirpdf:
+    path:     /inspeccion/subirpdf
+    defaults: { _controller: InspeccionesInspeccionesBundle:Inspeccion:subirCheckList }

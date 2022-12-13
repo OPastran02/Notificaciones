@@ -1,0 +1,120 @@
+{# SPINNER BUTTONS Y MATERIAL DESIGN #}
+<link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+
+ <!--DATEPICKER-->
+    <link href="{{ asset('public/assets/layouts/layout/css/datepicker.css')}}" rel="stylesheet" type="text/css">   
+
+{{ form_start(form, {'attr': {'id':'CambiarBolt','name':'CambiarBolt'}}) }}
+
+	<div class="alert alert-info">
+    	<strong>Info!</strong>
+    	{% if (((form.children|length)-1)/8) == 1 %}
+    			{{ 'Se encontró un acta' }}
+    		{% else %}
+    			{{ 'Se encontraron ' ~ ((form.children|length)-1)/8 ~ ' actas' }}
+    	{% endif %}
+    </div>
+
+	{# {{ dump(form.children[:((form.children|length)-1)]) }} #}
+
+	<div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <div class="caption font-purple-plum">
+                <i class="icon-speech font-purple-plum"></i>
+                <span class="caption-subject bold uppercase"> Resultados</span>
+                <!-- <span class="caption-helper">more samples...</span> -->
+            </div>
+            <div class="tools">
+                <a href="" class="collapse" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;"> ID </th>
+                            <th style="text-align: center;"> N° </th>
+                            <th style="text-align: center;"> Checklist </th>
+                            <th style="text-align: center;"> ID SAP </th>
+                            <th style="text-align: center;"> F. inspección </th>
+                            <th style="text-align: center;"> F. recepción </th>
+                            <th style="text-align: center;"> Área </th>
+                            <th style="text-align: center;"> Estado </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	{% for i in 0..((((form.children|length)-1)/8)-1) %}
+                    		<tr>
+	                            <td style="text-align: center;">
+	                            	{{ form.children["Id" ~ loop.index0].vars.value }}
+	                            </td>
+	                            <td style="text-align: center;">
+	                            	{{ form.children["numeroActa" ~ loop.index0].vars.value }}
+	                            </td>
+	                            <td style="text-align: center;">
+	                            	{{ form.children["Checklist" ~ loop.index0].vars.value }}
+	                            </td>
+	                            <td style="text-align: center;">
+	                            	{{ form.children["IdSap" ~ loop.index0].vars.value }}
+	                            </td>
+	                            <td style="text-align: center;">
+	                            	{{ form.children["FechaInspeccion" ~ loop.index0].vars.value }}
+	                            </td>
+	                            <td style="text-align: center;">
+	                            	{{ form.children["FechaRecepcion" ~ loop.index0].vars.value }}
+	                            </td>
+	                            <td style="text-align: center;">
+	                            	{{ form.children["Area" ~ loop.index0].vars.value }}
+	                            </td>
+	                            <td style="text-align: center;">
+	                            	{{ form_widget(form.children["estado" ~ loop.index0]) }}
+	                            </td>
+	                        </tr>
+                    	{% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% if is_granted('ROLE_ACTASFAJAS_EDIT') %}
+    	<div class="form-actions">
+            <div class="col-md-offset-5">
+                <button type="submit" data-loading-text="Loading..." class="btn red mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right">
+                    <span class="ladda-label">
+                        Guardar
+                    </span>
+                </button>
+            </div>
+        </div>
+    {% else %}
+        <div class="form-actions">
+            <div class="col-md-offset-5">
+                <button type="Button" data-loading-text="Loading..." class="btn grey-cascade mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" >
+                    <span class="ladda-label">
+                        sin permisos
+                    </span>
+                </button>
+            </div>
+        </div>
+    {% endif %}
+
+	{{form_widget(form, {
+		'attr': {
+			'class': 'hidden'
+		}
+	})}}
+
+{{ form_end(form)}}
+
+{# SPINNER BUTTONS #}
+<script src="{{ asset('public/assets/global/plugins/ladda/spin.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('public/assets/global/plugins/ladda/ladda.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('public/assets/pages/scripts/ui-buttons.min.js') }}" type="text/javascript"></script>
+<script>
+        jQuery(document).ready(function() {                                        
+           $('.fecha-picker').datepicker({ dateFormat: "dd-mm-yy" });
+        });
+</script>

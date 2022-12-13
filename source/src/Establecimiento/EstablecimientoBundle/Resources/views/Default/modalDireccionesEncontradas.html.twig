@@ -1,0 +1,51 @@
+
+<div class="col-md-12">
+	<div class="col-md-5">
+	<label class="control-label" style="text-align: center;">
+		Id Establecimiento
+
+	</label>
+	</div>
+	<div class="col-md-5">
+		<label class="control-label" style="text-align: center;">
+			Razon Social
+		</label>
+	</div>
+	<div class="col-md-2">
+		<label class="control-label" style="text-align: center;">
+			Ver
+		</label>
+	</div>
+</div>
+<hr>
+{% for establecimiento in establecimientos %}
+	<div class="col-md-12">
+		<div class="col-md-5">
+			<label class="control-label" style="text-align: center;">
+				{{establecimiento.id}}
+			</label>			
+		</div>
+		<div class="col-md-5">					
+			<label class="control-label" style="text-align: center;">
+				{{establecimiento.razonSocial}}
+			</label>		
+		</div>
+		<div class="col-md-2">
+			<a href="{{ path('establecimiento_establecimiento_homepage' , { 'id' : establecimiento.id|encriptar }) }}" target="_blank" class="btn btn-xs default green">
+				<i class="fa fa-search"></i>ver
+			</a>
+		</div>
+	</div>
+	<hr>
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
+

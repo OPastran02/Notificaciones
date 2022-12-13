@@ -1,0 +1,11 @@
+reportes_reportes_homepage:
+  path:     /reportes
+  defaults: { _controller: ReportesReportesBundle:Reportes:filtroReportes }
+
+reportes_reportes_seleccion:
+  path:     /reportes/seleccion
+  defaults: { _controller: ReportesReportesBundle:Reportes:filtroReportesSeleccion }
+
+reportes_reportes_Dashboard:
+  path:     /reportes/demo
+  defaults: { _controller: ReportesReportesBundle:DashBoard:DashBoard }

@@ -1,0 +1,503 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+	
+	{{ parent() }}
+	<link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ asset('public/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+
+	{# SELECT2 #}
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+	{# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+
+	{# TOASTR NOTIFICATIONS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
+
+   <!--DATEPICKER-->
+    <link href="{{ asset('public/assets/layouts/layout/css/datepicker.css')}}" rel="stylesheet" type="text/css">  
+{% endblock %}
+
+{% block pagecontent %}
+
+	{% for flash_message in app.session.flashBag.get('success') %}
+	    <input class="successFlashMessage" value="{{ flash_message }}" hidden>
+	{% endfor %}
+
+	{% for flash_message in app.session.flashBag.get('alert') %}
+	    <input class="alertFlashMessage" value="{{ flash_message }}" hidden>
+	{% endfor %}
+
+	{% for flash_message in app.session.flashBag.get('error') %}
+	    <input class="errorFlashMessage" value="{{ flash_message }}" hidden>
+	{% endfor %}
+
+	{{ form_start(form, { 'attr': {'class': 'form-horizontal', 'onsubmit': 'return isValidForm()'} }) }}
+
+		<div class="form-body">
+			<div class="col-md-12">
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+			            <div class="caption font-purple-sharp">
+			                <span aria-hidden="true" class="icon-note"></span>
+			                <span class="caption-subject font-purple-sharp bold uppercase">
+			                	Acta {{ form.serie.vars.value ~ '-' ~ form.numero.vars.value }}
+			                </span>
+			        	</div>
+			    	</div>
+			        <div class="portlet-body">
+
+	                    {{ form_widget(form.serie, {
+                        	'attr': {
+                        		'class': 'hidden'
+                        	}
+                        }) }}
+
+                        {{ form_widget(form.numero, {
+                        	'attr': {
+                        		'class': 'hidden'
+                        	}
+                        }) }}
+
+	                    <div class="form-group form-md-line-input has-info">
+
+	                        {{ form_label(form.actautilizada.fechaInspeccion, 'Fecha de inspección', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+                            <div class="col-md-2">
+                                <div class="input-icon">
+                                    {{ form_widget(form.actautilizada.fechaInspeccion, {
+                                        'attr': {
+                                            'class': 'form-control fecha-picker',
+                                            'placeholder': 'Fecha inspección'
+                                        }
+                                    }) }}
+                                    <div class="form-control-focus"> </div>
+                                    <span class="help-block">
+                                        fecha de inspección
+                                    </span>
+                                    <i class="fa fa-calendar-check-o"></i>
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.actautilizada.fechaInspeccion) }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {{ form_label(form.actautilizada.fechaRecepcion, 'Fecha de recepción', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+	                        <div class="col-md-2">
+	                        	<div class="input-icon">
+		                            {{ form_widget(form.actautilizada.fechaRecepcion, {
+		                            	'attr': {
+		                            		'class': 'form-control fecha-picker',
+		                            		'placeholder': 'Fecha recepción'
+		                            	}
+		                            }) }}
+		                            <div class="form-control-focus"> </div>
+                                    <span class="help-block">
+                                        fecha de recepción
+                                    </span>
+                                    <i class="fa fa-calendar"></i>
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.actautilizada.fechaRecepcion) }}
+                                    </span>
+                                </div>
+	                        </div>
+
+	                    </div>
+
+	                    <div class="form-group form-md-line-input has-info">
+	                    	
+	                        {{ form_label(form.actautilizada.areas, 'Área', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+	                        <div class="col-md-2">
+	                            {{ form_widget(form.actautilizada.areas, {'attr':{'class':'form-control select2'} }) }}
+	                            <div class="form-control-focus"> </div>
+								<span class="help-block">
+                                    seleccione área DGContA
+                                </span>
+                                <span class="help-block help-block-error" style="color: red;">
+									{{ form_errors(form.actautilizada.areas) }}
+								</span>
+	                        </div>
+
+	                        <div class="col-md-1"> </div>
+
+	                        {{ form_label(form.actautilizada.actaMotivo, 'Motivos', {
+                                'label_attr': {
+                                    'class': 'col-md-1 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+                            <div class="col-md-5">
+                                {{ form_widget(form.actautilizada.actaMotivo, {
+                                    'attr': {
+                                        'class': 'form-control select2'
+                                    }
+                                }) }}
+                                <span class="help-block help-block-error" style="color: red;">
+                                    {{ form_errors(form.actautilizada.actaMotivo) }}
+                                </span>
+                            </div>
+	                    </div>
+
+	                    <div class="form-group form-md-line-input has-info">
+
+	                        {{ form_label(form.actautilizada.checklist, 'Número de checklist', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+	                        <div class="col-md-2">
+	                        	<div class="input-icon">
+		                            {{ form_widget(form.actautilizada.checklist, {
+		                            	'attr': {
+		                            		'class': 'form-control',
+		                            		'placeholder': 'Nro. checklist'
+		                            	}
+		                            }) }}
+		                            <div class="form-control-focus"> </div>
+                                    <span class="help-block">
+                                        ingrese nro. de checklist
+                                    </span>
+                                    <i class="fa fa-file-text-o"></i>
+                                    <span class="help-block help-block-error" style="color: red;">
+                                        {{ form_errors(form.actautilizada.checklist) }}
+                                    </span>
+                                </div>
+	                        </div>
+
+	                        {# --------------------------------------- #}
+
+	                        {{ form_label(form.actautilizada.sap, 'ID de SAP', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+	                        <div class="col-md-2">
+	                            {{ form_widget(form.actautilizada.sap, {
+	                            	'attr': {
+	                            		'class': 'form-control',
+	                            		'placeholder': 'Número ID SAP'
+	                            	}
+	                            }) }}
+	                            <div class="form-control-focus"> </div>
+	                            <span class="help-block">
+                                    ingrese número ID SAP
+                                </span>
+								<span class="help-block help-block-error" style="color: red;">
+									{{ form_errors(form.actautilizada.sap) }}
+								</span>
+	                        </div>
+
+	                    </div>
+
+	                    <div class="form-group form-md-line-input has-info">
+	                    		{{ form_label(form.estado, 'Estado', {
+                                    'label_attr': {
+                                        'class': 'col-md-2 control-label',
+                                        'style': 'color: grey;'
+                                    }
+                                }) }}
+		                        <div class="col-md-2">
+		                            {{ form_widget(form.estado, {'attr':{'class':'form-control select2'} }) }}
+		                            <div class="form-control-focus"> </div>
+									<span class="help-block">
+                                        seleccione estado
+                                    </span>
+                                    <span class="help-block help-block-error" style="color: red;">
+										{{ form_errors(form.estado) }}
+									</span>
+		                        </div>
+
+		                        {# --------------------------------------- #}
+
+	                        {{ form_label(form.actautilizada.comprobado, '¿Comprobado?', {
+	                            'label_attr': {
+	                                'class': 'col-md-2 control-label',
+	                                'style': 'color: grey;'
+	                            }
+	                        }) }}
+	                        <div class="col-md-1">
+	                            {{ form_widget(form.actautilizada.comprobado, {
+	                                'attr': {
+	                                    'class': 'make-switch switch-large',
+	                                    'type': 'checkbox',
+	                                    'data-label-icon': 'fa fa-youtube',
+	                                    'data-on-text': 'SÍ',
+	                                    'data-off-text':'NO'}
+	                            }) }}
+	                            <span style="color: red;">
+	                                {{ form_errors(form.actautilizada.comprobado) }}
+	                            </span>
+	                        </div>
+
+	                    </div>
+	                    <div class="form-group form-md-line-input has-info">
+	                    	{{ form_label(form.actautilizada.dominioL, 'Patente', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+	                        <div class="col-md-1">
+	                            {{ form_widget(form.actautilizada.dominioL, {
+	                            	'attr': {
+	                            		'class': 'form-control',
+	                            		'placeholder': 'Letras'
+	                            	}
+	                            }) }}
+	                            <div class="form-control-focus"> </div>
+	                            <span class="help-block">
+                                    ingrese letras de patente
+                                </span>
+								<span class="help-block help-block-error" style="color: red;">
+									{{ form_errors(form.actautilizada.dominioL) }}
+								</span>
+	                        </div>
+
+	                        {# --------------------------------------- #}
+
+	                        
+	                        <div class="col-md-1">
+	                            {{ form_widget(form.actautilizada.dominioR, {
+	                            	'attr': {
+	                            		'class': 'form-control',
+	                            		'placeholder': 'Número'
+	                            	}
+	                            }) }}
+	                            <div class="form-control-focus"> </div>
+	                            <span class="help-block">
+                                    ingrese numero de patente
+                                </span>
+								<span class="help-block help-block-error" style="color: red;">
+									{{ form_errors(form.actautilizada.dominioR) }}
+								</span>
+	                        </div>
+
+	                        {# --------------------------------------- #}
+
+	                        {{ form_label(form.actautilizada.interno, 'Interno', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+	                        <div class="col-md-2">
+	                            {{ form_widget(form.actautilizada.interno, {
+	                            	'attr': {
+	                            		'class': 'form-control',
+	                            		'placeholder': 'Interno'
+	                            	}
+	                            }) }}
+	                            <div class="form-control-focus"> </div>
+	                            <span class="help-block">
+                                    ingrese interno
+                                </span>
+								<span class="help-block help-block-error" style="color: red;">
+									{{ form_errors(form.actautilizada.interno) }}
+								</span>
+	                        </div>
+
+	                    </div>
+
+	                    <div class="form-group form-md-line-input has-info">
+	                    	{{ form_label(form.actautilizada.marca, 'Marca', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+	                        <div class="col-md-2">
+	                            {{ form_widget(form.actautilizada.marca, {
+	                            	'attr': {
+	                            		'class': 'form-control',
+	                            		'placeholder': 'Marca'
+	                            	}
+	                            }) }}
+	                            <div class="form-control-focus"> </div>
+	                            <span class="help-block">
+                                    ingrese marca
+                                </span>
+								<span class="help-block help-block-error" style="color: red;">
+									{{ form_errors(form.actautilizada.marca) }}
+								</span>
+	                        </div>
+
+	                        {# --------------------------------------- #}
+
+	                        {{ form_label(form.actautilizada.modelo, 'Modelo', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+	                        <div class="col-md-2">
+	                            {{ form_widget(form.actautilizada.modelo, {
+	                            	'attr': {
+	                            		'class': 'form-control',
+	                            		'placeholder': 'Modelo'
+	                            	}
+	                            }) }}
+	                            <div class="form-control-focus"> </div>
+	                            <span class="help-block">
+                                    ingrese modelo
+                                </span>
+								<span class="help-block help-block-error" style="color: red;">
+									{{ form_errors(form.actautilizada.modelo) }}
+								</span>
+	                        </div>
+	                    </div>
+
+	                    <div class="form-group form-md-line-input has-info">
+	                    	{{ form_label(form.actautilizada.ruido, 'Ruido', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+	                        <div class="col-md-2">
+	                            {{ form_widget(form.actautilizada.ruido, {
+	                            	'attr': {
+	                            		'class': 'form-control',
+	                            		'placeholder': 'Ruido'
+	                            	}
+	                            }) }}
+	                            <div class="form-control-focus"> </div>
+	                            <span class="help-block">
+                                    ingrese ruido
+                                </span>
+								<span class="help-block help-block-error" style="color: red;">
+									{{ form_errors(form.actautilizada.ruido) }}
+								</span>
+	                        </div>
+
+	                        {# --------------------------------------- #}
+
+	                        {{ form_label(form.actautilizada.humo, 'Humo', {
+                                'label_attr': {
+                                    'class': 'col-md-2 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+	                        <div class="col-md-2">
+	                            {{ form_widget(form.actautilizada.humo, {
+	                            	'attr': {
+	                            		'class': 'form-control',
+	                            		'placeholder': 'Huumo'
+	                            	}
+	                            }) }}
+	                            <div class="form-control-focus"> </div>
+	                            <span class="help-block">
+                                    ingrese humo
+                                </span>
+								<span class="help-block help-block-error" style="color: red;">
+									{{ form_errors(form.actautilizada.humo) }}
+								</span>
+	                        </div>
+
+	                    </div>
+
+
+			        </div>
+			    </div>
+			</div>
+	    </div>
+    {% if is_granted('ROLE_ACTASFAJAS_EDIT') %}
+        <div class="form-actions">
+			<div class="col-md-offset-5">
+				<button type="submit" data-loading-text="Loading..." class="btn purple mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" id="usuario_usuario_save" name="usuario_usuario[save]">
+                    <span class="ladda-label">
+                    	Guardar
+                    </span>
+                </button>
+			</div>
+		</div>
+    {% else %}
+        <div class="form-actions">
+			<div class="col-md-offset-5">
+				<button type="Button" data-loading-text="Loading..." class="btn grey-cascade mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" >
+                    <span class="ladda-label">
+                    	sin permisos
+                    </span>
+                </button>
+			</div>
+		</div>
+    {% endif %}
+
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+	{{ parent() }}
+
+	{# SELECT2 #}
+    <script src="{{ asset('public/assets/global/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/components-select2.min.js') }}" type="text/javascript"></script>
+
+	{# SPINNER BUTTONS #}
+    <script src="{{ asset('public/assets/global/plugins/ladda/spin.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/ladda/ladda.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-buttons.min.js') }}" type="text/javascript"></script>
+
+    {# TOASTR NOTIFICATIONS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('Js/CoreBundle/ui-toastr.js') }}" type="text/javascript"></script>
+
+	<script type="text/javascript">
+        var routesUsuario = {
+            myroutes:{
+                usuarios:"{{ path('usuario_usuario_homepage') }}",
+                tablaUsuario:"{{ path('usuario_usuario_tablaUsuario') }}",   
+                resetPassword:"{{ path('usuario_usuario_resetPassword') }}"       
+            },
+        };
+    </script>
+	<script src="{{asset('Js/Usuario/UsuarioBundle/Usuario.js')}}" type="text/javascript"></script>
+
+	<script type="text/javascript">
+
+		function isValidForm()
+		{
+			var checklist = $('#faltas_faltasbundle_faja_checklist').val();
+			var idSap = $('#faltas_faltasbundle_faja_idSap').val();
+
+			if(checklist == '' && idSap == '')
+			{
+				alert('"Número de checklist" e "ID de SAP" no pueden estar vacíos al mismo tiempo. Complete uno o el otro o, en su defecto, ambos');
+
+				return false;
+			}
+			else
+				return true;
+		}
+    	
+    	jQuery(document).ready(function() {   		                    		   
+		   $('.fecha-picker').datepicker({ dateFormat: "dd-mm-yy" });
+		});
+    
+    </script>
+
+{% endblock %}

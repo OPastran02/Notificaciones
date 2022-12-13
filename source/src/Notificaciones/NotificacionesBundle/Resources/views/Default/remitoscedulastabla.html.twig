@@ -1,0 +1,36 @@
+<table class="table table-striped table-bordered table-hover" id="sample_1">
+	<thead>
+		<tr>
+			<th>
+				numero Cedula
+			</th>
+			<th>
+				tipo Cedula
+			</th>
+			<th>
+				Fecha Envio
+			</th>
+			<th>
+				Domicilio
+			</th>
+		</tr>
+	</thead>
+	<tbody id="lista">
+		{% for tabla in arrayremitos %}
+			    <tr>
+			      <td>
+			        {{tabla.numero}}
+			      </td>
+			       <td>
+			        {{tabla.tipoCedula}}
+			      </td>
+			       <td>
+			        {{tabla.fechaEnvioFirma.date|slice(0,10)}}
+			      </td>
+			       <td>
+			        {{tabla.direccionNotificada}}
+			      </td>
+			    </tr>
+  		{% endfor %}
+	</tbody>
+</table>

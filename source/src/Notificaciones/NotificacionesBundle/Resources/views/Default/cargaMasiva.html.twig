@@ -1,0 +1,276 @@
+{% extends '::base.html.twig' %}
+
+
+{% block stylesheets %}
+    
+    {{ parent() }}
+
+    {# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# SELECT2 #}
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# EXTENDED MODALS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css') }}" rel="stylesheet" type="text/css" />
+    
+    {# DROPZONE #}
+    <link href="{{ asset('public/assets/global/plugins/dropzone/dropzone.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/dropzone/basic.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# TOASTR NOTIFICATIONS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+
+{% block pagecontent %}
+
+	{{ form_start(form) }}
+
+		<div class="form-body">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption font-yellow">
+                            <span aria-hidden="true" class="icon-note"></span>
+                            <span class="caption-subject font-yellow bold uppercase">
+                                Carga masiva
+                            </span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+
+                    	<div class="form-group form-md-line-input has-info">
+
+                        	<div class="col-md-4"></div>
+
+                            <div class="col-md-2">
+                                {{ form_widget(form.archivo) }}
+                                <span class="help-block help-block-error" style="color: red;">
+                                    {{ form_errors(form.archivo) }}
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <br>
+
+                        <div class="form-group form-md-line-input has-info">
+
+                        	<div class="col-md-2"></div>
+
+                            <div class="col-md-1 control-label" style="color: grey;"> Tipo </div>
+                            <div class="col-md-2">
+                                {{ form_widget(form.tipo, {
+                                    'attr': {
+                                        'class': 'form-control select2'
+                                    }
+                                }) }}
+                                <span class="help-block help-block-error" style="color: red;">
+                                    {{ form_errors(form.tipo) }}
+                                </span>
+                            </div>
+
+                            <div class="col-md-1"></div>
+
+                            <div class="col-md-1 control-label" style="color: grey;"> Modelo </div>
+                            <div class="col-md-2">
+                                {{ form_widget(form.modelo, {
+                                    'attr': {
+                                        'class': 'form-control select2'
+                                    }
+                                }) }}
+                                <span class="help-block help-block-error" style="color: red;">
+                                    {{ form_errors(form.modelo) }}
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <br>
+
+                        <div class="form-group form-md-line-input has-info">
+
+                            <div class="col-md-1"></div>
+
+                            <div class="col-md-1 control-label" style="color: grey;"> Plazo 1 </div>
+                            <div class="col-md-1">
+                                {{ form_widget(form.plazo1, {
+                                    'attr': {
+                                        'class': 'form-control'
+                                    }
+                                }) }}
+                                <div class="form-control-focus"> </div>
+                                <span class="help-block">
+                                    plazo 1
+                                </span>
+                                <span class="help-block help-block-error" style="color: red;">
+                                    {{ form_errors(form.plazo1) }}
+                                </span>
+                            </div>
+
+                            <div class="col-md-2"></div>
+
+                            <div class="col-md-1 control-label" style="color: grey;"> Plazo 2 </div>
+                            <div class="col-md-1">
+                                {{ form_widget(form.plazo2, {
+                                    'attr': {
+                                        'class': 'form-control'
+                                    }
+                                }) }}
+                                <div class="form-control-focus"> </div>
+                                <span class="help-block">
+                                    plazo 2
+                                </span>
+                                <span class="help-block help-block-error" style="color: red;">
+                                    {{ form_errors(form.plazo2) }}
+                                </span>
+                            </div>
+
+                            <div class="col-md-2"></div>
+
+                            <div class="col-md-1 control-label" style="color: grey;"> Fojas </div>
+                            <div class="col-md-1">
+                                {{ form_widget(form.fojas, {
+                                    'attr': {
+                                        'class': 'form-control'
+                                    }
+                                }) }}
+                                <div class="form-control-focus"> </div>
+                                <span class="help-block">
+                                    plazo 2
+                                </span>
+                                <span class="help-block help-block-error" style="color: red;">
+                                    {{ form_errors(form.fojas) }}
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <br>
+
+                        <div class="form-group form-md-line-input has-info">
+
+                            <div class="col-md-1"></div>
+
+                            {{ form_label(form.citacion, 'Citación', {
+                                'label_attr': {
+                                    'class': 'col-md-1 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+                            <div class="col-md-1">
+                                {{ form_widget(form.citacion, {
+                                    'attr': {
+                                        'class': 'make-switch switch-large',
+                                        'type':'checkbox',
+                                        'data-label-icon':'fa fa-youtube',
+                                        'data-on-text':'<i class="fa fa-check"></i>',
+                                        'data-off-text':'<i class="fa fa-times"></i>'
+                                    }
+                                }) }}
+                                <span style="color: red;">
+                                    {{ form_errors(form.citacion) }}
+                                </span>
+                            </div>
+
+                            <div class="col-md-2"></div>
+
+                            {{ form_label(form.nocturnidad, 'Nocturnidad', {
+                                'label_attr': {
+                                    'class': 'col-md-1 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+                            <div class="col-md-1">
+                                {{ form_widget(form.nocturnidad, {
+                                    'attr': {
+                                        'class': 'make-switch switch-large',
+                                        'type':'checkbox',
+                                        'data-label-icon':'fa fa-youtube',
+                                        'data-on-text':'<i class="fa fa-check"></i>',
+                                        'data-off-text':'<i class="fa fa-times"></i>'
+                                    }
+                                }) }}
+                                <span style="color: red;">
+                                    {{ form_errors(form.nocturnidad) }}
+                                </span>
+                            </div>
+
+                            <div class="col-md-2"></div>
+
+                            {{ form_label(form.vencer, 'Vencimiento', {
+                                'label_attr': {
+                                    'class': 'col-md-1 control-label',
+                                    'style': 'color: grey;'
+                                }
+                            }) }}
+                            <div class="col-md-1">
+                                {{ form_widget(form.vencer, {
+                                    'attr': {
+                                        'class': 'make-switch switch-large',
+                                        'type':'checkbox',
+                                        'data-label-icon':'fa fa-youtube',
+                                        'data-on-text':'<i class="fa fa-check"></i>',
+                                        'data-off-text':'<i class="fa fa-times"></i>'
+                                    }
+                                }) }}
+                                <span style="color: red;">
+                                    {{ form_errors(form.vencer) }}
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <div class="col-md-offset-5">
+                <button type="submit" data-loading-text="Loading..." class="btn yellow mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right">
+                    <span class="ladda-label">
+                        Procesar
+                    </span>
+                </button>
+            </div>
+        </div>
+
+	{{ form_end(form) }}
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    {# SPINNER BUTTONS #}
+    <script src="{{ asset('public/assets/global/plugins/ladda/spin.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/ladda/ladda.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-buttons.min.js') }}" type="text/javascript"></script>
+
+    {# SELECT2 #}
+    <script src="{{ asset('public/assets/global/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/components-select2.min.js') }}" type="text/javascript"></script>
+
+    {# EXTENDED MODALS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-extended-modals.min.js') }}" type="text/javascript"></script>
+
+    {# DROPZONE #}
+    <script src="{{ asset('public/assets/global/plugins/dropzone/dropzone.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/form-dropzone.min.js') }}" type="text/javascript"></script>
+
+    {# TOASTR NOTIFICATIONS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('Js/CoreBundle/ui-toastr.js') }}" type="text/javascript"></script>
+
+{% endblock %}

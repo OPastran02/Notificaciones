@@ -1,0 +1,43 @@
+establecimiento_establecimiento_tablacedulas:
+    path:     /establecimiento/cedulas/{id}
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:Establecimiento:tablaListCedulas}
+
+establecimiento_establecimiento_tabladisposiciones:
+    path:     /establecimiento/disposiciones/{id}
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:Establecimiento:tablaListDisposiciones}
+
+establecimiento_establecimiento_tablainspecciones:
+    path:     /establecimiento/inspecciones/{id}
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:Establecimiento:tablaListInspecciones}
+
+establecimiento_establecimiento_unir:
+    path:     /establecimiento/unir
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:Establecimiento:unirEstablecimiento }
+
+establecimiento_establecimiento_homepage:
+    path:     /establecimiento/{id}
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:Establecimiento:establecimiento, id:0 }    
+
+establecimiento_establecimiento_razonsocial:
+    path:     /razonsocial/{id}
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:RazonSocial:razonSocial, id:0 }
+
+establecimiento_establecimiento_buscarrazonsocial:
+    path:     /searchrazonsocial/{cuit}/{id}
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:RazonSocial:buscarRazonSocial}
+
+establecimiento_establecimiento_buscarsmp:
+    path:     /searchsmp/{idCalle}/{altura}/{idEstablecimiento}
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:Establecimiento:buscarPorSMP}
+
+establecimiento_establecimiento_historialCambios:
+    path:     /establecimiento/historial/{idUsuario}
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:Establecimiento:historialCambios}
+
+establecimiento_establecimiento_razonsocial_for_front:
+    path:     /razones/sociales/{search}
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:RazonSocial:getRazonesSociales }
+
+establecimiento_establecimiento_razonsocial_table_for_front:
+    path:     /razones/socialestable/{search}
+    defaults: { _controller: EstablecimientoEstablecimientoBundle:RazonSocial:getRazonesSocialesTable }

@@ -1,0 +1,2194 @@
+{% extends '::base.html.twig' %}
+
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    {# SPINNER BUTTONS Y MATERIAL DESIGN #}
+    <link href="{{ asset('public/assets/global/css/components-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/ladda/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# SELECT2 #}
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+    {# TIMEPICKER #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/clockface/css/clockface.css') }}" rel="stylesheet" type="text/css" />
+
+    {# EXTENDED MODALS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css') }}" rel="stylesheet" type="text/css" />
+
+    {# TOASTR NOTIFICATIONS #}
+    <link href="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
+
+       <!--DATEPICKER-->
+    <link href="{{ asset('public/assets/layouts/layout/css/datepicker.css')}}" rel="stylesheet" type="text/css">
+
+    <link href="{{ asset('public/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+        .select2 {
+            width:100%!important;
+        }
+    </style>
+
+{% endblock %}
+
+
+{% block pagecontent %}
+
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <input class="successFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashBag.get('alert') %}
+        <input class="alertFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+    {% for flash_message in app.session.flashBag.get('error') %}
+        <input class="errorFlashMessage" value="{{ flash_message }}" hidden>
+    {% endfor %}
+
+    {# INICIO form ESTABLECIMIENTO #}
+
+    {{ form_start(form, { 'attr': {'class':'form-horizontal'} }) }}
+
+        <div class="form-body">
+            <div class="col-md-12">
+                <div class="alert alert-block alert-danger fade in hidden" id="notaClausura">
+                    <h4 class="block">Clausura Vigente</h4>
+                    <p> El establecimiento tiene una clausura vigente. Para verla, dé 
+                        <a id="linkDispo" href="{{ path('notificaciones_notificaciones_edit_disposicion', { 'idDisposicion' : '0' }) }}"> click aqui </a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title tabbable-line">
+                        <div class="caption">                            
+                            <span class="caption-subject bold font-yellow-crusta uppercase">
+                                Establecimiento {{form.vars.data.id}}
+                            </span>
+                            {% if form.vars.data.id > 0 %}
+                                {% if is_granted('ROLE_PEDIDOS_EDIT') %}
+                                    <div class="btn-group">
+                                        <a class="btn yellow btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"> Nuevo Pedido
+                                            <i class="fa fa-angle-down"></i>
+                                        </a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li>
+                                                <a href="{{ path('notificaciones_notificaciones_new_cedula', { 'idEstablecimiento' : form.vars.data.id | encriptar }) }}">
+                                                    <i class="i"></i> Cedula</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('notificaciones_notificaciones_new_disposicion', {'idTipo':'1', 'idEstablecimiento' : form.vars.data.id|encriptar }) }}">
+                                                    <i class="i"></i> Disposicion Hacer Saber</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('notificaciones_notificaciones_new_disposicion', {'idTipo':'2', 'idEstablecimiento' : form.vars.data.id|encriptar }) }}">
+                                                    <i class="i"></i> Informe Clausura</a>
+                                            </li>
+                                            {% if app.user.laboratorio >= 2 %}
+                                                <li>
+                                                    <a href="{{ path('laboratorio_pedido_pedido', {'id':'0', 'idEstablecimiento' : form.vars.data.id|encriptar }) }}">
+                                                        <i class="i"></i>
+                                                        Laboratorio
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li class="disabled">
+                                                    <a href="javascript:;">
+                                                        <i class="i"></i>
+                                                        Laboratorio
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                {% elseif app.user.laboratorio >= 2 %}
+                                    <div class="btn-group">
+                                        <a class="btn yellow btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"> Nuevo Pedido
+                                            <i class="fa fa-angle-down"></i>
+                                        </a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li>
+                                                <a href="{{ path('laboratorio_pedido_pedido', {'id':'0', 'idEstablecimiento' : form.vars.data.id|encriptar }) }}">
+                                                    <i class="i"></i>
+                                                    Laboratorio
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {% else %}
+                                    <div class="btn-group">
+                                        <a class="btn grey-cascade btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"> Nuevo Pedido
+                                            <i class="fa fa-angle-down"></i>
+                                        </a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li>
+                                                No tiene los permisos necesarios
+                                            </li>
+                                        </ul>
+                                    </div>                                
+                                {% endif %}    
+                            {% endif %} 
+                        </div>                        
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#portlet_tab1" data-toggle="tab"> Carátula </a>
+                            </li>
+                            <li>
+                                <a href="#portlet_tab2" data-toggle="tab"> Resultados Última Inspección </a>
+                            </li>
+                            <li>
+                                <a href="#portlet_tab3" data-toggle="tab"> Observaciones </a>
+                            </li>
+                            <li>
+                                <a href="#portlet_tab4" data-toggle="tab"> Inspecciones </a>
+                            </li>
+                            <li>
+                                <a href="#portlet_tab5" data-toggle="tab"> Cédulas </a>
+                            </li>
+                            <li>
+                                <a href="#portlet_tab6" data-toggle="tab"> Disposiciones </a>
+                            </li>
+                            <li>
+                                <a href="#portlet_tab7" data-toggle="tab"> Historial </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="tab-content">
+                            <!-- INICIO PESTAÑA Carátula -->
+                            <div class="tab-pane active" id="portlet_tab1">
+
+                                    <table class="table table-hover" id="direcciones" data-prototype="{{ form_widget(form.direcciones.vars.prototype)|e('html_attr') }}" style="empty-cells: hide;">
+                                        <thead>
+                                            <tr class="uppercase">
+                                                <th style="text-align: center; width: 5%">Calle</th>
+                                                <th style="text-align: center; width: 1%">Altura</th>
+                                                <th style="text-align: center; width: 1%">Piso</th>
+                                                <th style="text-align: center; width: 1%">Dpto</th>
+                                                <th style="text-align: center; width: 1%">Local</th>
+                                                <th style="text-align: center; width: 1%">Comuna</th>
+                                                <th style="text-align: center; width: 1%"></th>
+                                            </tr>
+                                        </thead>
+
+                                        {# {{ dump(form.direcciones.children) }} #}
+
+                                        <tbody>
+                                            {% for direccion in form.direcciones %}
+                                                <tr class='listAdress'>
+                                                    <td>
+                                                        <input required="required" class="form-control input-sm" readonly="readonly" style="text-align: center;" value="{{ direccion.calle.vars.data.calle }}" type="text">
+                                                        {{ form_widget(direccion.calle, {
+                                                            'attr': {
+                                                                'class': 'hidden'
+                                                            }
+                                                        }) 
+                                                        }}
+                                                    </td>
+                                                    <td>
+                                                        {{ form_row(direccion.altura, {
+                                                            'attr': {
+                                                                'readonly': 'readonly'
+                                                            }
+                                                        }) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ form_row(direccion.piso, {
+                                                            'attr': {
+                                                                'readonly':'readonly'
+                                                            }
+                                                        }) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ form_row(direccion.dpto, {
+                                                            'attr': {
+                                                                'readonly':'readonly'
+                                                            }
+                                                        }) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ form_row(direccion.local, {
+                                                            'attr': {
+                                                                'readonly':'readonly'
+                                                            }
+                                                        }) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ form_row(direccion.comuna, {
+                                                            'attr': {
+                                                                'readonly':'readonly'
+                                                            }
+                                                        }) }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                    {{ form_widget(form.direcciones, {
+                                        'attr': {
+                                            'hidden': 'true'
+                                        }
+                                    }) }}
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        <div class="col-md-1"> </div>
+
+                                        <div class="col-md-5">
+                                            {% if form.actuaciones.children is empty %}
+                                                    {% set nombreActuacion = '' %}
+                                            {% else %}
+                                                    {% set ultimaActuacion = (form.actuaciones | first) %}
+
+                                                    {% set tipo = ultimaActuacion.tipo.vars.data.tipoActuacion %}
+                                                    {% set numero = ultimaActuacion.numero.vars.value %}
+                                                    {% set reparticion = ultimaActuacion.reparticion.vars.data.reparticion %}
+                                                    {% set anio = ultimaActuacion.anio.vars.value %}
+
+                                                    {% set nombreActuacion = tipo ~ '-' ~ numero ~ '-' ~ reparticion ~ '-' ~ anio %}
+                                            {% endif %}
+
+                                            <div class="input-group input-group-sm">
+                                                <div class="input-group-control">
+                                                    <input class="form-control input-sm" readonly placeholder="Actualmente no hay actuaciones" type="text" id="act" value="{{ nombreActuacion }}" style="border-bottom-color: #c9b51e;">
+                                                </div>
+                                                <span class="input-group-btn btn-right">
+                                                    <button type="button" class="btn yellow mt-ladda-btn ladda-button btn-circle btn-outline" data-style="zoom-in" data-spinner-color="#333" data-target="#modalActuaciones" data-toggle="modal">
+                                                        <span class="ladda-label">
+                                                            <i class="icon-folder-alt"></i>
+                                                            &nbsp; Actuaciones
+                                                        </span>
+                                                        <span class="ladda-spinner"></span>
+                                                        <div class="ladda-progress" style="width: 0px;"></div>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {# --------------------------------------- #}
+
+                                        <div class="col-md-5">
+                                            {% if form.razonesSociales.children is empty %}
+                                                    {% set nombreRS = '' %}
+                                                {% else %}
+                                                    {% set nombreUno = ((form.razonesSociales|first).razonSocial.vars.data.nombre1) %}
+                                                    {% set nombreDos = ((form.razonesSociales|first).razonSocial.vars.data.nombre2) %}
+
+                                                    {% if (nombreUno is defined) or (nombreDos is defined) %}
+                                                            {% set tipo = ((form.razonesSociales|first).razonSocial.vars.data.tipo) %}
+                                                            {% if tipo == 'F' %}
+                                                                    {% set nombreRS = nombreUno ~ ' ' ~ nombreDos %}
+                                                                {% else %}
+                                                                    {% set nombreRS = nombreUno %}
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {% set nombreRS = '' %}
+                                                    {% endif %}
+                                            {% endif %}
+
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-btn btn-left">
+                                                    <button type="button" class="btn blue mt-ladda-btn ladda-button btn-circle  btn-outline" data-style="zoom-in" data-spinner-color="#333" data-target="#modalRazonesSociales" data-toggle="modal">
+                                                        <span class="ladda-label">
+                                                            <i class="icon-layers"></i>
+                                                            &nbsp; Razones sociales
+                                                        </span>
+                                                        <span class="ladda-spinner"></span>
+                                                        <div class="ladda-progress" style="width: 0px;"></div>
+                                                    </button>
+                                                </span>
+                                                <div class="input-group-control">
+                                                    <input class="form-control input-sm" readonly placeholder="Actualmente no hay razón social" id="rz" type="text" value="{{nombreRS}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        <div class="col-md-1"> </div>
+
+                                        {{ form_label(form.estado, 'Estado',{
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-2">
+                                            {{ form_widget(form.estado, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.estado) }}
+                                            </span>
+                                        </div>
+                                        
+                                        {{ form_label(form.exEESS, '¿EX-EESS?', {
+                                            'label_attr': {
+                                                'class': 'col-md-1 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.exEESS, {
+                                                'attr': {
+                                                    'class': 'make-switch switch-large',
+                                                    'type': 'checkbox',
+                                                    'data-label-icon': 'fa fa-youtube',
+                                                    'data-on-text': 'SÍ',
+                                                    'data-off-text':'NO'}
+                                            }) }}
+                                            <span style="color: red;">
+                                                {{ form_errors(form.exEESS) }}
+                                            </span>
+                                        </div>                                        
+                                        {{ form_label(form.favorito, 'Favorito', {
+                                            'label_attr': {
+                                                'class': 'col-md-1 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.favorito, {
+                                                'attr': {
+                                                    'class': 'make-switch switch-large',
+                                                    'type': 'checkbox',
+                                                    'data-label-icon': 'fa fa-youtube',
+                                                    'data-on-text': 'SÍ',
+                                                    'data-off-text':'NO'}
+                                            }) }}
+                                            <span style="color: red;">
+                                                {{ form_errors(form.favorito) }}
+                                            </span>
+                                        </div>                                            
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.rubroPrincipal, 'Rubro principal', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-4">
+                                            {{ form_widget(form.rubroPrincipal, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.rubroPrincipal) }}
+                                            </span>
+                                        </div>
+
+                                        {# --------------------------------------- #}
+
+                                        {{ form_label(form.rubroExtendido, 'Extendido', {
+                                            'label_attr': {
+                                                'class': 'col-md-1 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-4">
+                                            {{ form_widget(form.rubroExtendido, {
+                                                'attr': {
+                                                    'class': 'form-control'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                rubro extendido del establecimiento
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.rubroExtendido) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.rubro, 'Rubro', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-9">
+                                            {{ form_widget(form.rubro, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.rubro) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        <div class="col-md-2"> </div>
+
+                                        {{ form_label(form.email, 'E-mail', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-5">
+                                            <div class="input-icon">
+                                                {{ form_widget(form.email, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'E-mail',
+                                                        'type': 'text'
+                                                    }
+                                                }) }}
+                                                <div class="form-control-focus"> </div>
+                                                <span class="help-block">
+                                                    dirección de e-mail del establecimiento
+                                                </span>
+                                                <i class="fa fa-envelope"></i>
+                                                <span class="help-block help-block-error" style="color: red;">
+                                                    {{ form_errors(form.email) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        <div class="col-md-2"> </div>
+
+                                        {{ form_label(form.bandera, 'Bandera', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-3">
+                                            <div class="input-icon">
+                                                {{ form_widget(form.bandera, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'Bandera'
+                                                    }
+                                                }) }}
+                                                <div class="form-control-focus"> </div>
+                                                <span class="help-block">
+                                                    bandera del establecimiento
+                                                </span>
+                                                <i class="fa fa-flag"></i>
+                                                <span class="help-block help-block-error" style="color: red;">
+                                                    {{ form_errors(form.bandera) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        <div class="col-md-2"> </div>
+
+                                        {{ form_label(form.telefono, 'Teléfono', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-2">
+                                            <div class="input-icon">
+                                                {{ form_widget(form.telefono, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'Teléfono'
+                                                    }
+                                                }) }}
+                                                <div class="form-control-focus"> </div>
+                                                <span class="help-block">
+                                                    nro. tel. establecimiento
+                                                </span>
+                                                <i class="fa fa-phone"></i>
+                                                <span class="help-block help-block-error" style="color: red;">
+                                                    {{ form_errors(form.telefono) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {# {{dump(form.razonesSociales)}} #}
+
+                            </div>
+                            <!-- FIN PESTAÑA Carátula -->
+
+                            <!-- INICIO PESTAÑA Última inspección -->
+                            <div class="tab-pane" id="portlet_tab2">
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.proximaInspeccion, 'Próxima inspección', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-2">
+                                            <div class="input-icon">
+                                                {{ form_widget(form.resultadosUltimaInspeccion.proximaInspeccion, {
+                                                    'attr': {
+                                                        'class': 'form-control fecha-picker',
+                                                        'placeholder': 'Próxima inspección'
+                                                    }
+                                                }) }}
+                                                <div class="form-control-focus"> </div>
+                                                <span class="help-block">
+                                                    fecha próx. inspección
+                                                </span>
+                                                <i class="fa fa-calendar"></i>
+                                                <span class="help-block help-block-error" style="color: red;">
+                                                    {{ form_errors(form.resultadosUltimaInspeccion.proximaInspeccion) }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {# --------------------------------------- #}
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.inspeccionarCara, 'Inspeccionar cada...', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-2">
+                                            <div class="input-icon">
+                                                {{ form_widget(form.resultadosUltimaInspeccion.inspeccionarCara, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'Inspeccionar cada...'
+                                                    }
+                                                }) }}
+                                                <div class="form-control-focus"> </div>
+                                                <span class="help-block">
+                                                    escriba cantidad de días
+                                                </span>
+                                                <i class="fa fa-clock-o"></i>
+                                                <span class="help-block help-block-error" style="color: red;">
+                                                    {{ form_errors(form.resultadosUltimaInspeccion.inspeccionarCara) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.tipoResiduos, 'Tipo de residuos', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-9">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.tipoResiduos, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.tipoResiduos) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.superficieCubierta, 'Superficie cubierta', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.superficieCubierta, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'placeholder': 'Sup. cub.'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                unidad: [m<sup>2</sup>]
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.superficieCubierta) }}
+                                            </span>
+                                        </div>
+
+                                        <div class="col-md-1"></div>
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.superficieTotal, 'Superficie total', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.superficieTotal, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'placeholder': 'Sup. total'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                unidad: [m<sup>2</sup>]
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.superficieTotal) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    {# {{ dump(form.resultadosUltimaInspeccion.inscripto326.vars.choices[0]) }} #}
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.inscripto326, 'Inscripción Res. 326', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.inscripto326, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.inscripto326) }}
+                                            </span>
+                                        </div>
+
+                                        <div class="col-md-1"></div>
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.estado326, 'Estado Res. 326', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-2">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.estado326, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                estado actual de la res. 326
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.estado326) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.cantTanques, 'Cantidad de tanques', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.cantTanques, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'placeholder': 'Tanques'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                ¿cuántos?
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.cantTanques) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.tanquesActivos, 'Activos', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.tanquesActivos, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'placeholder': 'Activos'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                ¿cuántos?
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.tanquesActivos) }}
+                                            </span>
+                                        </div>
+
+                                        <div class="col-md-1"></div>
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.tanquesCegadosInertizados, 'Cegados/inertizados', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.tanquesCegadosInertizados, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'placeholder': 'Ceg./Inert.'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                ¿cuántos?
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.tanquesCegadosInertizados) }}
+                                            </span>
+                                        </div>
+
+                                        <div class="col-md-1"></div>
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.tanquesErradicados, 'Erradicados', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.tanquesErradicados, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'placeholder': 'Erradicados'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                ¿cuántos?
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.tanquesErradicados) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        <div class="col-md-1"></div>
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.curl, 'CURT', {
+                                            'label_attr': {
+                                                'class': 'col-md-1 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-2">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.curl, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'placeholder': 'Nro. CURT'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                no. CURL
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.curl) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.caudalVuelcoMax, 'Caudal máx. de vuelco', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-2">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.caudalVuelcoMax, {
+                                                'attr': {
+                                                    'class': 'form-control',
+                                                    'placeholder': 'C. máximo'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                unidad: [m<sup>3</sup>/d]
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.caudalVuelcoMax) }}
+                                            </span>
+                                        </div>
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.generaEfluentesLiquidosInd, '¿Genera efluentes?', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.generaEfluentesLiquidosInd, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.generaEfluentesLiquidosInd) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {# {{ dump(form.resultadosUltimaInspeccion.horaVuelvoInicial) }} #}
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.horaVuelvoInicial, 'Horario de vuelco inicial', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.horaVuelvoInicial, {
+                                                'attr': {
+                                                    'class': 'form-control timepicker timepicker-24',
+                                                    'style': 'text-align: center;'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                inicio
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.horaVuelvoInicial) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.horaVuelcoFinal, 'Horario de vuelco final', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.horaVuelcoFinal, {
+                                                'attr': {
+                                                    'class': 'form-control timepicker timepicker-24',
+                                                    'style':'text-align: center;'
+                                                }
+                                            }) }}
+                                            <div class="form-control-focus"> </div>
+                                            <span class="help-block">
+                                                final
+                                            </span>
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.horaVuelcoFinal) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.tramiteEfluentes, 'Trámite de efluentes', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-2">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.tramiteEfluentes, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.tramiteEfluentes) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.tramiteEfluentesEstado, 'Estado trámite', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.tramiteEfluentesEstado, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.tramiteEfluentesEstado) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.reCirculacionAgua, 'Re-circulación de agua', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.reCirculacionAgua, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.reCirculacionAgua) }}
+                                            </span>
+                                        </div>
+
+                                        <div class="col-md-2"></div>
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.cTMMC, 'CTM-MC', {
+                                            'label_attr': {
+                                                'class': 'col-md-1 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.cTMMC, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.cTMMC) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.destinoVuelcoEfluentes, 'Destino vuelco', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-2">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.destinoVuelcoEfluentes, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.destinoVuelcoEfluentes) }}
+                                            </span>
+                                        </div>
+
+                                        {# --------------------------------------- #}
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.realizaTratamientoEfluentesPrevioVuelco, 'Trat. previo al vuelco', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.realizaTratamientoEfluentesPrevioVuelco, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.realizaTratamientoEfluentesPrevioVuelco) }}
+                                            </span>
+                                        </div>
+
+                                        {# --------------------------------------- #}
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.protocoloVuelcaLimitesPermitidos, '¿Vuelca dentro de lo permitido?', {
+                                            'label_attr': {
+                                                'class': 'col-md-3 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.protocoloVuelcaLimitesPermitidos, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.protocoloVuelcaLimitesPermitidos) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.generaBarros, '¿Genera barros?', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.generaBarros, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.generaBarros) }}
+                                            </span>
+                                        </div>
+
+                                        {# --------------------------------------- #}
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.tipoTratamiento, 'Tipo de tratamiento', {
+                                            'label_attr': {
+                                                'class': 'col-md-3 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-4">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.tipoTratamiento, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.tipoTratamiento) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.muestreoLaboratorio, 'Muestreo de laboratorio', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.muestreoLaboratorio, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.muestreoLaboratorio) }}
+                                            </span>
+                                        </div>
+
+                                        {{ form_label(form.resultadosUltimaInspeccion.resultadosLaboratorioLimitesPermisibles, '¿Resultados dentro de lo permitido?', {
+                                            'label_attr': {
+                                                'class': 'col-md-3 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.resultadosLaboratorioLimitesPermisibles, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.resultadosLaboratorioLimitesPermisibles) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        {{ form_label(form.resultadosUltimaInspeccion.videoInspeccionoUIT, '¿Se video-inspeccionó con UIT?', {
+                                            'label_attr': {
+                                                'class': 'col-md-2 control-label',
+                                                'style': 'color: grey;'
+                                            }
+                                        }) }}
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.resultadosUltimaInspeccion.videoInspeccionoUIT, {
+                                                'attr': {
+                                                    'class': 'form-control select2'
+                                                }
+                                            }) }}
+                                            <span class="help-block help-block-error" style="color: red;">
+                                                {{ form_errors(form.resultadosUltimaInspeccion.videoInspeccionoUIT) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                            </div>
+                            <!-- FIN PESTAÑA Última inspección -->
+
+                            <!-- INICIO PESTAÑA Observaciones -->
+                            <div class="tab-pane" id="portlet_tab3">
+
+                                    <div class="form-group form-md-line-input has-info">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-10">                                        
+                                            {{ form_widget(form.observaciones) }}
+                                            <div class="form-control-focus"> </div>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+
+                            </div>
+                            <!-- FIN PESTAÑA Observaciones -->
+
+                            <!-- INICIO PESTAÑA Inspecciones -->
+                            <div class="tab-pane" id="portlet_tab4">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="portlet light portlet-fit portlet-datatable bordered">
+                                                <div class="portlet-body">
+                                                    <div class="table-container">
+                                                        <table class="table table-striped table-bordered table-hover table-checkable" id="TablaInspecciones">
+                                                                <thead>
+                                                                    <tr role="row" class="heading">
+                                                                        <th width="15%"></th>
+                                                                        <th width="15%">Id Sap</th>
+                                                                        <th width="15%">CheckList</th>
+                                                                        <th width="15%">Fecha Inspeccion</th>
+                                                                        <th width="15%">Area</th>
+                                                                        <th width="15%">Inspectores</th>
+                                                                    </tr>
+                                                                    <tr role="row" class="filter">
+                                                                        <th>
+                                                                             <div class="col-md-12">
+                                                                                <button class="btn btn-circle green-haze btn-outline btn-block sbold uppercase filter-submit">
+                                                                                <i class="fa fa-search"></i> Buscar </button>
+                                                                            </div>
+                                                                             <div class="col-md-12">
+                                                                                  <button class="btn btn-circle red-mint btn-outline btn-block sbold uppercase filter-cancel">
+                                                                                  <i class="fa fa-times"></i> Reiniciar</button>
+                                                                              </div> 
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="text" class="form-control form-filter col-md-12" name="order_1" id="1order_1" placeholder="Escriba un número..." />
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="text" class="form-control form-filter col-md-12" name="order_2" id="1order_2" placeholder="Escriba un número..."/>
+                                                                        </th> 
+                                                                        <th>
+                                                                            <input type="text" class="form-control form-filter fecha-picker" name="order_3" id="1order_3" placeholder="desde"></input>    
+                                                                             <input type="text" class="form-control form-filter fecha-picker" name="order_3_2" id="order_3_2" placeholder="hasta"></input>
+                                                                        </th>  
+                                                                        <th>
+                                                                            <select type="text" class="form-control form-filter select2" name="order_4" id="order_4">
+                                                                                  <option></option>
+                                                                                  {% for e in area %}
+                                                                                  <option>{{ e.area }}</option>
+                                                                              {% endfor %}
+                                                                            </select> 
+                                                                        </th>
+                                                                        <th>
+                                                                            <select type="text" class="form-control form-filter select2" name="order_5" id="order_5">
+                                                                                  <option></option>
+                                                                                  {% for e in inspectores %}
+                                                                                  <option>{{ e.nombre }}</option>
+                                                                              {% endfor %}
+                                                                            </select> 
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody> 
+
+                                                                </tbody>                                            
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End: life time stats -->
+                                        </div>
+                                    </div>
+
+                            </div>
+                            <!-- FIN PESTAÑA Inspecciones -->
+
+                            <!-- INICIO PESTAÑA Cédulas -->
+                            <div class="tab-pane" id="portlet_tab5">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="portlet light portlet-fit portlet-datatable bordered">
+                                                <div class="portlet-body">
+                                                    <div class="table-container">
+                                                        <table class="table table-striped table-bordered table-hover table-checkable" id="TablaCedulas">
+                                                                <thead>
+                                                                    <tr role="row" class="heading">
+                                                                        <th width="20%"></th>
+                                                                        <th width="20%">Numero</th>
+                                                                        <th width="20%">Tipo</th>
+                                                                        <th width="20%">Fecha Notificacion</th>
+                                                                        <th width="20%">Estado</th>
+                                                                    </tr>
+                                                                    <tr role="row" class="filter">
+                                                                        <th>
+                                                                             <div class="col-md-12">
+                                                                                <button class="btn btn-circle green-haze btn-outline btn-block sbold uppercase filter-submit">
+                                                                                <i class="fa fa-search"></i> Buscar </button>
+                                                                            </div>
+                                                                             <div class="col-md-12">
+                                                                                  <button class="btn btn-circle red-mint btn-outline btn-block sbold uppercase filter-cancel">
+                                                                                  <i class="fa fa-times"></i> Reiniciar</button>
+                                                                              </div>  
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="text" class="form-control form-filter col-md-12" name="order_1" id="2order_1" placeholder="Escriba un número..." />
+                                                                        </th>
+                                                                        <th>
+                                                                            <select type="text" class="form-control form-filter select2" name="order_2" id="2order_2">
+                                                                                  <option></option>
+                                                                                  {% for e in tipoCedula %}
+                                                                                  <option>{{ e.tipoCedula }}</option>
+                                                                              {% endfor %}
+                                                                            </select> 
+                                                                        </th> 
+                                                                        <th>
+                                                                            <input type="text" class="form-control form-filter fecha-picker" name="order_3" id="2order_3" placeholder="desde"></input>    
+                                                                             <input type="text" class="form-control form-filter fecha-picker" name="order_3_2" id="3order_3_2" placeholder="hasta"></input>
+                                                                        </th>  
+                                                                        <th>
+                                                                            <select type="text" class="form-control form-filter select2" name="order_4" id="2order_4">
+                                                                                  <option></option>
+                                                                                  {% for e in estadoCedula %}
+                                                                                  <option>{{ e.estado }}</option>
+                                                                              {% endfor %}
+                                                                            </select>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody> 
+
+                                                                </tbody>                                            
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End: life time stats -->
+                                        </div>
+                                    </div>
+
+                            </div>
+                            <!-- FIN PESTAÑA Cédulas -->
+
+                            <!-- INICIO PESTAÑA Observaciones -->
+                            <div class="tab-pane" id="portlet_tab6">
+                            
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="portlet light portlet-fit portlet-datatable bordered">
+                                                <div class="portlet-body">
+                                                    <div class="table-container">
+                                                        <table class="table table-striped table-bordered table-hover table-checkable" id="TablaDisposiciones">
+                                                                <thead>
+                                                                    <tr role="row" class="heading">
+                                                                        <th width="20%"></th>
+                                                                        <th width="20%">Número</th>
+                                                                        <th width="20%">Fecha Notificación</th>
+                                                                        <th width="20%">Tipo Disposición</th>
+                                                                        <th width="20%">Estado</th>
+                                                                        <th width="20%">Levantada</th>
+                                                                    </tr>
+                                                                    <tr role="row" class="filter">
+                                                                        <th>
+                                                                             <div class="col-md-12">
+                                                                                <button class="btn btn-circle green-haze btn-outline btn-block sbold uppercase filter-submit">
+                                                                                <i class="fa fa-search"></i> Buscar </button>
+                                                                            </div>
+                                                                             <div class="col-md-12">
+                                                                                  <button class="btn btn-circle red-mint btn-outline btn-block sbold uppercase filter-cancel">
+                                                                                  <i class="fa fa-times"></i> Reiniciar</button>
+                                                                              </div>  
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="text" class="form-control form-filter col-md-12" name="order_1" id="order_1" placeholder="Escriba un número..." />
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="text" class="form-control form-filter fecha-picker" name="order_2" id="order_2" placeholder="desde"></input>    
+                                                                             <input type="text" class="form-control form-filter fecha-picker" name="order_2_2" id="order_2_2" placeholder="hasta"></input>
+                                                                        </th>  
+                                                                        <th>
+                                                                          <select type="text" class="form-control form-filter select2" name="order_3" id="order_3">
+                                                                                  <option></option>
+                                                                                  {% for e in tipoDisposicion %}
+                                                                                  <option>{{ e.tipoDispo }}</option>
+                                                                              {% endfor %}
+                                                                          </select> 
+                                                                        </th>                                                                         
+                                                                        <th>
+                                                                          <select type="text" class="form-control form-filter input-sm select2" name="order_4" id="order_4">
+                                                                                  <option></option>
+                                                                                  {% for e in estadoCedula %}
+                                                                                  <option>{{ e.estado }}</option>
+                                                                              {% endfor %}
+                                                                          </select> 
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="text" class="form-control form-filter col-md-12" name="order_5" id="order_5" placeholder="Escriba un número..." />
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody> 
+
+                                                                </tbody>                                            
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End: life time stats -->
+                                        </div>
+                                    </div>
+                                    
+                            </div>
+                            <!-- FIN PESTAÑA Disposiciones -->
+                            <div class="tab-pane" id="portlet_tab7">
+                                <!-- END PAGE HEADER-->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet light portlet-fit bg-inverse ">
+                                            <div class="portlet-body">
+                                                <div class="timeline  white-bg ">
+                                                    <!-- TIMELINE ITEM -->
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="portlet light portlet-fit bg-inverse ">
+                                                                <div class="portlet-body">
+                                                                    <div class="timeline  white-bg ">
+                                                                    {% if historial is defined %}
+                                                                    {% for e in historial %}
+                                                                        <div class="timeline-item">
+                                                                            <div class="timeline-badge">
+                                                                                <img class="timeline-badge-userpic" src="{{ asset('public/assets/pages/media/users/'~e.usuarioMotificador.usuario~'.JPG') }}"> </div>
+                                                                            <div class="timeline-body">
+                                                                                <div class="timeline-body-arrow"> </div>
+                                                                                <div class="timeline-body-head">
+                                                                                    <div class="timeline-body-head-caption">
+                                                                                        <a href="{{path('establecimiento_establecimiento_historialCambios', { 'idUsuario' : e.usuarioMotificador.id|encriptar })}}" class="timeline-body-title font-blue-madison">{{e.usuarioMotificador.apellido}}, {{e.usuarioMotificador.nombre}}</a>
+                                                                                        <span class="timeline-body-time font-grey-cascade">acción realizada a las {{e.fecha|date("H:i:s")}} del día {{e.fecha|date("d-m-Y")}}</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="timeline-body-content">
+                                                                                    {% if e.valorAnterior != "CODEDGCONTANUEVO01" %}
+                                                                                        <span class="font-grey-cascade"> 
+                                                                                        El usuario cambio del Módulo <b>{{e.tabla}}</b> 
+                                                                                        id:<b>{{e.idTabla}}</b>
+                                                                                        </br> el campo <b>{{e.campo}}</b> 
+                                                                                        </br>Valor anterior: <b>{{e.valorAnterior}}</b> 
+                                                                                        </br>Valor nuevo: <b>{{e.valorNuevo}}</b> 
+                                                                                        </span>
+                                                                                    {% else %}
+                                                                                       <span class="font-grey-cascade"> El usuario Creo un/a nuevo/a <b>{{e.campo}}</b> en el módulo <b>{{e.tabla}}</b> 
+                                                                                       Id:<b>{{e.idTabla}}</b> 
+                                                                                       </br>el valor nuevo es: {{e.valorNuevo}}</span>   
+                                                                                    {% endif %} 
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                    {% endif %}
+                                                                        <!-- END TIMELINE ITEM -->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- END TIMELINE ITEM -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if is_granted('ROLE_ESTABLECIMIENTO_EDIT') %}
+            <div class="form-actions">
+                <div class="col-md-offset-5">
+                    <button type="submit" data-loading-text="Loading..." class="btn yellow mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right" id="establecimiento_establecimiento_save" name="establecimiento_establecimiento[save]">
+                        <span class="ladda-label">
+                            Guardar
+                        </span>
+                    </button>
+                </div>
+            </div>
+        {% else %}
+            <div class="form-actions">
+                <div class="col-md-offset-5">
+                    <button type="button" data-loading-text="Loading..." class="btn grey mt-ladda-btn ladda-button mt-progress-demo btn-circle" data-style="slide-right">
+                        <span class="ladda-label">
+                            No Habilitado
+                        </span>
+                    </button>
+                </div>
+            </div>
+        {% endif %}    
+
+
+        <div id="modaldireccionessmp" class="modal fade" tabindex="-1">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Esta direccion podría corresponder a alguno de estos establecimiento, VERIFIQUE</h4>
+            </div>
+            <div class="modal-body" id="direccionessmpbody">                
+            
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-outline btn-circle dark">Cerrar</button>
+            </div>
+        </div>
+
+
+        {# ---------------------------------------------------------------------------------------- #}
+
+        
+        {# INICIO MODAL ACTUACIONES #}
+
+        <div id="modalActuaciones" class="modal container fade" tabindex="-1">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Actuaciones</h4>
+            </div>
+            <div class="modal-body">
+
+                <table class="table table-hover" id="listaActuaciones" data-prototype="{{ form_widget(form.actuaciones.vars.prototype)|e('html_attr') }}" style="empty-cells: hide;">
+                    <thead>
+                        <tr class="uppercase">
+                            <th style="text-align: center; width: 5%">Tipo</th>
+                            <th style="text-align: center; width: 1%">N°</th>
+                            <th style="text-align: center; width: 1%">Reparticion</th>
+                            <th style="text-align: center; width: 1%">Año</th>
+                            <th style="text-align: center; width: 1%">Clasificación</th>
+                            <th style="text-align: center; width: 1%"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for actuacion in form.actuaciones %}
+                            <tr class='datosActuacion'>
+                                <td>
+                                    {{ form_row(actuacion.tipo, {
+                                        'attr': {
+                                            'readonly': 'readonly'
+                                        }
+                                    }) }}
+                                </td>
+                                <td>
+                                    {{ form_row(actuacion.numero, {
+                                        'attr': {
+                                            'readonly': 'readonly'
+                                        }
+                                    }) }}
+                                </td>
+                                <td>
+                                    {{ form_row(actuacion.reparticion, {
+                                        'attr': {
+                                            'readonly': 'readonly'
+                                        }
+                                    }) }}
+                                </td>
+                                <td>
+                                    {{ form_row(actuacion.anio, {
+                                        'attr': {
+                                            'readonly': 'readonly'
+                                        }
+                                    }) }}
+                                </td>
+                                <td>
+                                    {{ form_row(actuacion.clasificacionActuacion, {
+                                        'attr': {
+                                            'readonly': 'readonly'
+                                        }
+                                    }) }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {{ form_widget(form.actuaciones, {
+                    'attr': {
+                        'hidden': 'true'
+                    }
+                }) }}
+            
+            </div>
+            <div class="modal-footer">
+                {# <button class="btn btn-outline btn-circle blue" data-toggle="modal" href="#modalActuaciones2">Agregar actuación</button> #}
+                <button type="button" data-dismiss="modal" class="btn btn-outline btn-circle dark">Cerrar</button>
+            </div>
+        </div>
+
+        {# FIN MODAL ACTUACIONES #}
+
+
+        {# ---------------------------------------------------------------------------------------- #}
+
+
+        {# INICIO MODAL RAZONES SOCIALES #}
+
+        <div id="modalInfo" class="modal container fade" tabindex="-1">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Full Width</h4>
+            </div>
+            <div class="modal-body" id="ordenInspeccion">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="submit" data-toggle="modal" onClick="javascript:$('#modalInfo').submit();"  class="btn btn-outline btn-circle blue" >Guardar</button>
+                <button type="button" data-dismiss="modal" class="btn btn-outline btn-circle dark">Cerrar</button>
+            </div>
+        </div>
+
+        <div id="modalRazonesSociales" class="modal container fade" tabindex="-1" data-focus-on="input:first">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Razones sociales</h4>
+            </div>
+            <div class="modal-body">
+
+                <table class="table table-hover" id="listaRazonesSociales" data-prototype="{{ form_widget(form.razonesSociales.vars.prototype)|e('html_attr') }}" style="empty-cells: hide;">
+                    <thead>
+                        <tr class="uppercase">
+                            <th style="text-align: center; width: 5%">Nombre</th>
+                            <th style="text-align: center; width: 1%">F. inicio</th>
+                            <th style="text-align: center; width: 1%">F. fin</th>
+                            <th style="text-align: center; width: 1%"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for razonSocial in form.razonesSociales %}
+                            <tr class='datosRS'>
+                                <td>
+                                    <a target="_blank" href="{{ path('establecimiento_establecimiento_razonsocial', { 'id' : razonSocial.vars.data.razonSocial.id|encriptar }) }}">
+                                        {{ form_widget(razonSocial.razonSocial, {
+                                            'attr': {
+                                                'class': 'hidden'
+                                            }
+                                            }) 
+                                        }}
+
+                                        {% set nombreUno = (razonSocial.razonSocial.vars.data.nombre1) %}
+                                        {% set nombreDos = (razonSocial.razonSocial.vars.data.nombre2) %}
+                                        
+                                        {% if (nombreUno is defined) or (nombreDos is defined) %}
+                                                {% set nombreRS = nombreUno ~ ' ' ~ nombreDos %}
+                                            {% else %}
+                                                {% set nombreRS = '' %}
+                                        {% endif %}
+
+                                        {{ nombreRS }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{ form_widget(razonSocial.fechaInicio, {
+                                            'attr': {
+                                                'class': 'hidden'
+                                            }
+                                            }) 
+                                        }}
+
+                                    {{ razonSocial.fechaInicio.vars.value }}
+                                </td>
+                                <td>
+                                    {{ form_widget(razonSocial.fechaFin, {
+                                            'attr': {
+                                                'class': 'hidden'
+                                            }
+                                            }) 
+                                        }}
+                                    {{ razonSocial.fechaFin.vars.value }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a type="button" class="btn btn-circle blue" href="javascript:nuevaPestaniaRS();">
+                    Crear razón social nueva
+                </a>
+                <button type="button" data-dismiss="modal" class="btn btn-outline btn-circle dark">Cerrar</button>
+            </div>
+        </div>
+
+        {# FIN MODAL RAZONES SOCIALES #}
+
+
+        {# --------------------------------------- #}
+
+        {# Como no se muestran todos los elementos de la/s razón/es social/es,sí o sí, hay que esconder esa parte del formulario para que no joda #}       
+
+        {{ form_widget(form.razonesSociales, {
+            'attr': {
+                'hidden': 'true'
+            }
+        }) }}
+        
+
+    {{ form_end(form) }}
+
+    {# FIN form ESTABLECIMIENTO #}
+
+    <div id="modalInfo" class="modal container fade" tabindex="-1">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Full Width</h4>
+        </div>
+        <div class="modal-body" id="ordenInspeccion">
+            
+        </div>
+        <div class="modal-footer">
+            <button type="submit" data-toggle="modal" onClick="javascript:$('#modalInfo').submit();"  class="btn btn-outline btn-circle blue" >Guardar</button>
+            <button type="button" data-dismiss="modal" class="btn btn-outline btn-circle dark">Cerrar</button>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    {# SPINNER BUTTONS #}
+    <script src="{{ asset('public/assets/global/plugins/ladda/spin.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/ladda/ladda.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-buttons.min.js') }}" type="text/javascript"></script>
+
+    {# SELECT2 #}
+    <script src="{{ asset('public/assets/global/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/components-select2.min.js') }}" type="text/javascript"></script>
+
+    {# TIMEPICKER #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/clockface/js/clockface.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/components-date-time-pickers.min.js') }}" type="text/javascript"></script>
+
+    {# EXTENDED MODALS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/pages/scripts/ui-extended-modals.min.js') }}" type="text/javascript"></script>
+
+    {# TABLES #}
+    <script src="{{asset('public/assets/global/scripts/datatable.js')}}" type="text/javascript"></script>
+    <script src="{{asset('public/assets/global/plugins/datatables/datatables.min.js')}}" type="text/javascript"></script>       
+    <script src="{{asset('public/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js')}}" type="text/javascript"></script>
+    <script src="{{asset('public/assets/pages/scripts/table-datatables-ajax.min.js')}}" type="text/javascript"></script>
+
+    <script src="{{asset('Js/Establecimiento/EstablecimientoBundle/TablaCedulas.js')}}" type="text/javascript"></script>
+    <script src="{{asset('Js/Establecimiento/EstablecimientoBundle/TablaDisposiciones.js')}}" type="text/javascript"></script>
+    <script src="{{asset('Js/Establecimiento/EstablecimientoBundle/TablaInspecciones.js')}}" type="text/javascript"></script>
+    <script src="{{asset('Js/Establecimiento/EstablecimientoBundle/Establecimiento.js')}}" type="text/javascript"></script>
+    <script src="{{asset('Js/Establecimiento/EstablecimientoBundle/Direcciones.js')}}" type="text/javascript"></script>
+
+    {# TOASTR NOTIFICATIONS #}
+    <script src="{{ asset('public/assets/global/plugins/bootstrap-toastr/toastr.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('Js/CoreBundle/ui-toastr.js') }}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+    {# {% if form.vars.data.id > 0 %} #}
+        var routesUsuario = {
+            myroutes:{
+              TablaCedulas:"{{ path('establecimiento_establecimiento_tablacedulas' , { 'id' : form.vars.data.id|encriptar }) }}",
+              TablaDisposiciones:"{{ path('establecimiento_establecimiento_tabladisposiciones' , { 'id' : form.vars.data.id|encriptar }) }}",
+              TablaInspecciones:"{{ path('establecimiento_establecimiento_tablainspecciones' , { 'id' : form.vars.data.id|encriptar }) }}",
+              VerificarClausura:"{{ path('notificaciones_notificaciones_esta_clausurado', { 'idEstablecimiento' : form.vars.data.id|encriptar }) }}",
+              gif: "{{ asset('public/assets/global/img/loading-spinner-grey.gif') }}",
+            },
+        };
+
+        var routeDireccionSMP = "{{ path('establecimiento_establecimiento_buscarsmp' , { 'idCalle' : '0' , 'altura' : '-1' ,'idEstablecimiento' : form.vars.data.id|encriptar }) }} }}";
+    {# {% endif %} #}
+
+        
+
+        //DIRECCIONES ↓
+
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        var $addDireccionLink = $('<a href="javascript:;" id="newAdress" class="btn white btn-block"><i class="fa fa-plus"></i></a>');
+        var $newLinkLi = $('<tr></tr>').append($addDireccionLink);
+
+
+        //ACTUACIONES ↓
+
+        var $actuacionesCollection;
+
+        // setup an "add a tag" link
+        var $addActuacionLink = $('<a href="javascript:;" id="nuevaActuacion" class="btn white btn-block"><i class="fa fa-plus"></i></a>');
+        var $botonNuevaActuacion = $('<tr></tr>').append($addActuacionLink);
+
+
+        //RAZONES SOCIALES ↓
+
+        var $collectionRS;
+
+        var idAct;
+
+        // setup an "add a tag" link
+        var $addRSLink = $('<a href="javascript:;" id="nuevaRS" class="btn white btn-block"><i class="fa fa-plus"></i></a>');
+        var $botonNuevaRS = $('<tr></tr>').append($addRSLink);
+
+        
+        jQuery(document).ready(function() {
+            $('.fecha-picker').datepicker({ dateFormat: "dd-mm-yy" });
+
+            //'select2'
+            $("#establecimiento_establecimientobundle_establecimiento_estado").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_rubroPrincipal").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_rubro").select2({
+                placeholder: "seleccionar"
+            });            
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_inscripto326").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_estado326").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_generaEfluentesLiquidosInd").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_tramiteEfluentes").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_tramiteEfluentesEstado").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_reCirculacionAgua").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_cTMMC").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_destinoVuelcoEfluentes").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_realizaTratamientoEfluentesPrevioVuelco").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_protocoloVuelcaLimitesPermitidos").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_generaBarros").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_tipoTratamiento").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_muestreoLaboratorio").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_resultadosLaboratorioLimitesPermisibles").select2({
+                placeholder: "seleccionar"
+            });
+
+            $("#establecimiento_establecimientobundle_establecimiento_resultadosUltimaInspeccion_videoInspeccionoUIT").select2({
+                placeholder: "seleccionar"
+            });            
+
+            //TABLAS
+            Establecimiento.init();
+            
+            TablaInspecciones.init(routesUsuario.myroutes.TablaInspecciones);
+            $("#order_4").select2({
+                placeholder: "seleccionar"
+            });
+            $("#order_5").select2({
+                placeholder: "seleccionar"
+            });
+
+            TablaCedulas.init(routesUsuario.myroutes.TablaCedulas);
+            $("#2order_2").select2({
+                placeholder: "seleccionar"
+            });
+            $("#2order_4").select2({
+                placeholder: "seleccionar"
+            });
+
+            TablaDisposiciones.init(routesUsuario.myroutes.TablaDisposiciones);
+            $("#3order_2").select2({
+                placeholder: "seleccionar"
+            });
+            $("#3order_4").select2({
+                placeholder: "seleccionar"
+            });
+
+            $('#establecimiento_establecimientobundle_establecimiento_rubro').select2({
+                language: "SpanishLocale",
+                placeholder: "Select a State",
+                minimumInputLength: 3,
+                allowClear: true
+            });
+            //FIN TABLAS
+
+            //---------------------------------------
+            
+            //INICIO READY DIRECCIONES
+
+            // Get the ul that holds the collection of tags
+            $collectionHolder = $('table#direcciones');
+
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+            // add a delete link to all of the existing tag form li elements
+            $collectionHolder.find('.listAdress').each(function() {
+                addTagFormDeleteLink($(this));
+                //console.log(this);
+            });
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $('#newAdress').on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();            
+                // add a new tag form (see next code block)
+                addAdressForm($collectionHolder, $newLinkLi,'listAdress');
+                ComponentsSelect2.init();
+            });
+
+            //FIN READY DIRECCIONES
+
+            //---------------------------------------
+            
+            //INICIO READY ACTUACIONES
+
+            // Get the ul that holds the collection of tags
+            $actuacionesCollection = $('table#listaActuaciones');
+
+            // add the "add a tag" anchor and li to the tags ul
+            $actuacionesCollection.append($botonNuevaActuacion);
+            // add a delete link to all of the existing tag form li elements
+            $actuacionesCollection.find('.datosActuacion').each(function() {
+                addTagFormDeleteLink($(this));
+                //console.log(this);
+            });
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $actuacionesCollection.data('index', $actuacionesCollection.find(':input').length);
+
+            $('#nuevaActuacion').on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();            
+                // add a new tag form (see next code block)
+                idAct = addAdressForm($actuacionesCollection, $botonNuevaActuacion,'datosActuacion');
+                idAct = idAct.replace('id="','').replace('"','');               
+
+
+                ComponentsSelect2.init();
+            });            
+
+            $('#modalActuaciones').on('hide', function () {
+                var posicion = 25;                
+
+                idAct = 'establecimiento_establecimientobundle_establecimiento_actuaciones';                
+
+                var ant = $('#act').val();
+
+                if(ant == '' || ant == null || ant == 'undefined'){
+                    for (var i = posicion ; i >= 0; i--) {
+                        if(i == 0){
+                            if($('#'+idAct+'_'+i+'_numero').val()){
+                                var dataRep = $('#'+idAct+'_'+i+'_reparticion').select2('data');
+                                var dataTipo = $('#'+idAct+'_'+i+'_tipo').select2('data');
+
+                                $('#act').val(
+                                    dataTipo[0].text +'-'+$('#'+idAct+'_'+i+'_numero').val()+'-'+ dataRep[0].text +'-'+ $('#'+idAct+'_'+i+'_anio').val()
+                                ); 
+                            }else{
+                                $('#act').val("");
+                            }
+                        }/*else{
+
+                            if($('#'+idAct+'_'+i+'_numero').val()){
+                                var dataRep = $('#'+idAct+'_'+i+'_reparticion').select2('val');
+                                var dataTipo = $('#'+idAct+'_'+i+'_tipo').select2('val');
+
+                                $('#act').val(
+                                    dataTipo[0].text +'-'+$('#'+idAct+'_'+i+'_numero').val()+'-'+ dataRep[0].text +'-'+ $('#'+idAct+'_'+i+'_anio').val()
+                                ); 
+
+                                break;
+                            }     
+                        }*/               
+                    }
+                }
+                
+            });
+
+            $('#modalRazonesSociales').on('hide', function () {
+                var posicion = 25;                
+
+                var idRazonSocial = 'establecimiento_establecimientobundle_establecimiento_razonesSociales';
+
+                var rz = $('#rz').val();
+
+                if(rz == '' || rz == null || rz == 'undefined'){
+                    for (var i = posicion ; i >= 0; i--) {
+                        if(i == 0){
+                            if($('#'+idRazonSocial+'_'+i+'_fechaInicio').val()){                            
+                                var dataRep = $('#'+idRazonSocial+'_'+i+'_razonSocial').select2('data');
+                                
+                                $('#rz').val(dataRep[0].text);
+                            }else{
+                                $('#rz').val("");                            
+                            }
+                        }/*else{
+                            if($('#'+idRazonSocial+'_'+i+'_fechaInicio').val()){
+                                
+                                var dataRep = $('#'+idRazonSocial+'_'+i+'_razonSocial').select2().text();
+
+                                    $('#rz').val(dataRep); 
+
+                                break;
+                            }    
+                        }*/                                            
+                    }    
+                }
+
+                
+
+                
+            });
+
+
+            /*$('#act').value(
+                    $('#establecimiento_establecimientobundle_establecimiento_actuaciones_0_numero').value()
+                    );*/
+
+            //FIN READY ACTUACIONES
+
+            //---------------------------------------
+            
+            //INICIO READY RAZONES SOCIALES
+
+            // Get the ul that holds the collection of tags
+            $collectionRS = $('table#listaRazonesSociales');
+
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionRS.append($botonNuevaRS);
+            // add a delete link to all of the existing tag form li elements
+            $collectionRS.find('.datosRS').each(function() {
+                addTagFormDeleteLink($(this));
+                //console.log(this);
+            });
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionRS.data('index', $collectionRS.find(':input').length);
+
+            $('#nuevaRS').on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();            
+                // add a new tag form (see next code block)
+                var idRS = addAdressForm($collectionRS, $botonNuevaRS,'datosRS');
+                idRS = idRS.replace('id="','').replace('"','');
+                ComponentsSelect2.init();
+
+                $('.fecha-picker').datepicker({ dateFormat: "dd-mm-yy" });
+                $("#"+idRS).on("change", function(element) {
+                    var elementClass = element.target.className;
+                    if(elementClass.includes('fecha-picker')){
+                        var FechaInspeccion1= ConvertirStringToDate(element.target.value);
+
+                        if(!FechaInspeccion1){
+                            alert("Fecha Incorrecta, por favor utilice el calendario");
+                            element.target.value='';
+                        }
+                    }
+                });
+
+                $("#"+idRS).on("paste", function(e) {
+                    e.preventDefault();
+                });
+
+
+                function ConvertirStringToDate(fechaString)
+                {
+                    var fechas = fechaString.split('/');
+                    if (fechas.length != 3)
+                        fechas = fechaString.split('-');
+                    var d = fechas[0];
+                    var m = fechas[1];
+                    var y = fechas[2];
+                    return m > 0 && m < 13 && y > 0 && y < 32768 && d > 0 && d <= (new Date(y, m, 0)).getDate();
+                }
+                idRS = idRS + '_razonSocial';                
+
+                setTimeout(function() {
+                    $("#"+idRS).select2({
+                        minimumInputLength: 2,                        
+                        cache: false,
+                        ajax: {
+                            url: function (term) { 
+                                var url = "{{ path('establecimiento_establecimiento_razonsocial_for_front', {'search' : 0} ) }}";
+                                return (url+'/'+term.term).replace("/0","");
+                            },
+                            dataType: 'json',
+                            type: "GET",
+                            quietMillis: 50,
+                            data: (params) => {                            
+                                return {
+                                    
+                                }
+                            },
+                            processResults: (data) => {     
+                            console.log(data);
+                                  return {
+                                      results: $.map(data, function(obj) {
+                                          return {id: obj.id, text: obj.name};
+                                      }),
+                                  };
+                            },
+                        }
+                    });
+
+                }, 100);
+                
+
+            });
+
+
+            //establecimiento_establecimientobundle_establecimiento_razonesSociales_6
+            //establecimiento_establecimientobundle_establecimiento_razonesSociales_6_razonSocial
+
+            //FIN READY RAZONES SOCIALES            
+
+        });
+
+
+        function addAdressForm($collectionHolder, $newLinkLi,$adress) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+            //console.log(prototype);
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+            //console.log(index);
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+            //console.log(newForm);
+            var arrayHtml = newForm.split("<div>");
+            //console.log(arrayHtml);
+            var Html1 = '';
+            var Html2 = '';       
+            
+            for (var i = 0 ; i <= arrayHtml.length - 1; i++) {
+                if(i == 0){
+                    Html1 = arrayHtml[i].replace(/<div /g, '').replace(/>/,'');
+                    //console.log(Html1);
+                }else if(i <= arrayHtml.length - 1){
+                    Html2 = Html2 + "<td>" + arrayHtml[i].replace(/<\/div>/g, "<\/td>");
+                    //console.log(Html2);
+                }else{
+                    newForm += arrayHtml[i];
+                    //console.log(newForm);
+                }            
+            }
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li            
+            var $newFormLi = $('<tr class="'+$adress+'"'+Html1+'></tr>').append(Html2);
+            
+            $newLinkLi.before($newFormLi);
+            //console.log($newFormLi);
+            addTagFormDeleteLink($newFormLi);
+
+            return Html1;
+            
+        }
+        
+
+        function addTagFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<td style="text-align: center; vertical-align: middle;"><a href="javascript:;" class="btn btn-circle btn-xs red"><i class="glyphicon glyphicon-trash"> </i></a></td>');
+            $tagFormLi.append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // remove the li for the tag form
+                $tagFormLi.remove();
+            });
+        }
+
+        //--------------------------
+
+        function nuevaPestaniaRS()
+        {
+            window.open('{{ path("establecimiento_establecimiento_razonsocial") }}', '_blank');
+        }       
+
+    </script>
+
+{% endblock %}
