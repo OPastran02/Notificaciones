@@ -29,16 +29,6 @@ usig_datos_utiles: https://ws.usig.buenosaires.gob.ar/datos_utiles
 usig_reversegeocoding: https://ws.usig.buenosaires.gob.ar/geocoder/2.2/reversegeocoding
 usig_smp: https://ws.usig.buenosaires.gob.ar/geocoder/2.2/smp
 oauth2_url: https://oauth2-server-hml.apps.buenosaires.gob.ar
-session_max_idle_time: 900
-CORS_ALLOW_ORIGIN: 'gestionambiental-qa.gcba.gob.ar'
-key: c2lnYXdlYg==
-secret: 36c9d22119bb1fd03331e0648149ddc3
-region: sa-east-1
-base_url: https://prd.hcpi.gcba.gob.ar:443
-version: latest
-path: sigaweb
-client_id : 987cd29992d940bab701f9c5cbf43265
-client_secret : b030c2E3cecd47cEB751Abd7beeb9DDC
 
 Por ultimo ejecutar el script de la nueva estructura de la base de datos, dentro de la carpeta donde está 
 alojado la base de datos (database)
