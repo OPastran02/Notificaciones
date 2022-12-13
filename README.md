@@ -22,7 +22,7 @@ php bin/console cache:clear --env=prod --no-debug
 
 Posteriormente, en caso de que no esten, se deben incorporar las siguientes variables al archivo de configuración "source/app/config/parameters.yml" :
 
-google_url: https://maps.google.com/maps/api/js?key=AIzaSyC1PG9ZpURqkIlWRLc7A3jkOqbgAWfSOzc&sensor=false
+google_url: https://maps.google.com/maps/a....
 usig_normalizar_geocodificar: https://ws.usig.buenosaires.gob.ar/rest/normalizar_y_geocodificar_direcciones
 usig_convertir_coords: https://ws.usig.buenosaires.gob.ar/rest/convertir_coordenadas
 usig_datos_utiles: https://ws.usig.buenosaires.gob.ar/datos_utiles
